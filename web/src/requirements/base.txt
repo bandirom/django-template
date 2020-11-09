@@ -1,0 +1,28 @@
+Django>=3.1.3
+django-filter==2.4.0
+
+# for PostgreSql database
+psycopg2==2.8.5
+
+# for django-admin
+django-modeladmin-reorder==0.3.1
+
+# Ddos defender: required redis
+django-defender==0.8.0
+
+# for RestAPI
+djangorestframework==3.11.1
+drf-yasg==1.17.1 # Swagger
+
+# for auth system
+django-rest-auth[with_social]==0.9.5
+djangorestframework-jwt==1.11.0
+
+# For backend working
+celery==4.4.7
+
+# for react
+django-cors-headers==3.5.0
+
+# API keys
+djangorestframework-api-key==2.0.0

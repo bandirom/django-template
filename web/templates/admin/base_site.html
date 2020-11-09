@@ -1,0 +1,41 @@
+{% extends "admin/base.html" %}
+{% load static i18n  %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>&emsp;
+    <a target="_blank" style="color:black" href="{% url 'schema-swagger-ui' %}">
+        <img width="25" src="{% static 'drf-yasg/swagger-ui-dist/favicon-32x32.png' %}">&nbsp;<b>Swagger</b>
+    </a>
+</h1>
+{% endblock %}
+
+{% block extrahead %}
+<link rel="shortcut icon" href="{% static 'tags/favicon.png' %}"/>
+{% endblock %}
+
+{% block javascripts %}
+{{ block.super }}
+{% endblock %}
+
+{% block userlinks %}
+
+{% if site_url %}
+<a href="{{ site_url }}">{% translate 'View site' %}</a> /
+{% endif %}
+{% if user.is_active and user.is_staff %}
+{% url 'django-admindocs-docroot' as docsroot %}
+{% if docsroot %}
+<a href="{{ docsroot }}">{% trans 'Documentation' %}</a> /
+{% endif %}
+{% endif %}
+{% if user.has_usable_password %}
+<a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> /
+{% endif %}
+<a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a>
+{% endblock %}
+
+{% block stylesheets %}
+{{ block.super }}
+{% endblock %}
