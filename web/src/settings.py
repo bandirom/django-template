@@ -21,6 +21,8 @@ SUPER_USER_EMAIL = os.environ.get('SUPER_USER_EMAIL')
 SUPER_USER_PASSWORD = os.environ.get('SUPER_USER_PASSWORD')
 
 INSTALLED_APPS = [
+    'main.apps.MainConfig',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -35,7 +37,6 @@ INSTALLED_APPS = [
     'drf_yasg',
     'corsheaders',
 
-    'main.apps.MainConfig',
 ]
 
 MIDDLEWARE = [
