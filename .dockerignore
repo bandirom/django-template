@@ -1,4 +1,4 @@
 .git
 .cache
 .ash_history
-/web/src/requirements
+.coverage
