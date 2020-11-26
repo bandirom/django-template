@@ -67,7 +67,7 @@ COPY ./web $APP_HOME
 
 RUN pip install flake8
 
-RUN flake8 --ignore=E501,F401,F403,W504 .
+RUN flake8 .
 # chown all the files to the www user
 RUN chown -R www:www $APP_HOME
 RUN chown -R www:www /entrypoint.sh
