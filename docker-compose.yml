@@ -9,7 +9,7 @@ services:
     volumes:
       - ./web/:/usr/src/web/
     ports:
-      - 8010:8000
+      - 8005:8000
     env_file:
       - docker/dev/env/.env
       - docker/.env.stemsc_data
