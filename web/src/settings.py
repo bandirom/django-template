@@ -20,6 +20,8 @@ SUPER_USER_USERNAME = os.environ.get('SUPER_USER_USERNAME')
 SUPER_USER_EMAIL = os.environ.get('SUPER_USER_EMAIL')
 SUPER_USER_PASSWORD = os.environ.get('SUPER_USER_PASSWORD')
 
+MICROSERVICE_TITLE = os.environ.get('MICROSERVICE_TITLE')
+
 INSTALLED_APPS = [
     'main.apps.MainConfig',
 
@@ -54,8 +56,7 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework_api_key.permissions.HasAPIKey',
-        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated',
 
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
