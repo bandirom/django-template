@@ -9,10 +9,10 @@ services:
     volumes:
       - ./web/:/usr/src/web/
     ports:
-      - 8005:8000
+      - 8009:8000
     env_file:
       - docker/dev/env/.env
-      - docker/.env.stemsc_data
+      - docker/prod/env/.data.env
     depends_on:
       - db
       - redis

@@ -8,13 +8,14 @@ FROM python:3.9.0-alpine as builder
 # set work directory
 WORKDIR /usr/src/web
 
-# install psycopg2 dependencies
 RUN apk update \
+	# install psycopg2 dependencies
     && apk add postgresql-dev gcc python3-dev musl-dev \
     # install openssl dependencies
     && apk add openssl libffi-dev openssl-dev \
     # install Pillow dependencies
-    && apk add jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev
+    && apk add jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev \
+	&& pip install --upgrade pip
 
 # install dependencies
 COPY ./web/src/requirements  /usr/src/web/requirements
@@ -29,16 +30,15 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/web/wheels -r /usr/s
 FROM python:3.9.0-alpine
 
 # create the app user
-RUN addgroup -S www && adduser -S www -G www
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
 	PYTHONUNBUFFERED=1 \
 	TZ=Europe/Kyiv \
 	LANG=C.UTF-8 \
-	APP_HOME=/home/www/web
+	APP_HOME=/home/ubuntu/web
 
-RUN mkdir $APP_HOME
+RUN mkdir -p $APP_HOME && addgroup -S ubuntu && adduser -S ubuntu -G ubuntu
 
 WORKDIR $APP_HOME
 
@@ -60,7 +60,7 @@ COPY ./web $APP_HOME
 
 RUN flake8 --ignore=E501,F401,F403,W504 .
 # chown all the files to the www user
-RUN chown -R www:www $APP_HOME && chown -R www:www /entrypoint.sh && chmod +x /entrypoint.sh
+RUN chown -R ubuntu:ubuntu $APP_HOME && chown -R ubuntu:ubuntu /entrypoint.sh && chmod +x /entrypoint.sh
 
 ## change to the www user
 #USER www

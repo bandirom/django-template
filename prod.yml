@@ -7,14 +7,14 @@ services:
       dockerfile: docker/prod/web/Dockerfile
     entrypoint: /entrypoint.sh
     volumes:
-      - ./web/:/home/www/web
-      - static_volume:/home/www/web/static
-      - media_volume:/home/www/web/media
+      - ./web/:/home/ubuntu/web
+      - static_volume:/home/ubuntu/web/static
+      - media_volume:/home/ubuntu/web/media
     expose:
       - 8000
     env_file:
       - docker/prod/env/.env
-      - docker/.env.stemsc_data
+      - docker/prod/env/.data.env
     depends_on:
       - db
       - redis
@@ -51,7 +51,6 @@ services:
     image: jrcs/letsencrypt-nginx-proxy-companion
     env_file:
       - ./docker/prod/env/.env.proxy-companion
-      - ./docker/.env.stemsc_data
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - certs:/etc/nginx/certs

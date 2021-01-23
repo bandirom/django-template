@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck disable=SC2086
 
 if [ "$DATABASE" = "postgres" ]
 then
@@ -8,13 +9,9 @@ then
       sleep 0.1
     done
 
-    echo "PostgreSQL started for StemSC"
+    echo "PostgreSQL started"
 fi
-
-cd /usr/src/web
 
 python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver 0.0.0.0:8000
-exec "$@"
-

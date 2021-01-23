@@ -1,15 +1,15 @@
 location /static/ {
 	autoindex on;
-	alias /var/www/html/static/;
+	alias /var/ubuntu/html/static/;
 	add_header Access-Control-Allow-Origin *;
 }
 
 location /media/ {
 	autoindex on;
-	alias /var/www/html/media/;
+	alias /var/ubuntu/html/media/;
 	add_header Access-Control-Allow-Origin *;
 }
 
 location = /favicon.png {
-	alias /var/www/html/static/app/favicon.png;
+	alias /var/www/ubuntu/static/app/favicon.png;
 }

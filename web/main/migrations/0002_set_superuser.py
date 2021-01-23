@@ -9,15 +9,14 @@ def set_superuser(apps, schema_editor):
     user_obj = apps.get_model("main", "User")
     user = user_obj(
         id=0,
-        username=settings.SUPER_USER_USERNAME,
-        email=settings.SUPER_USER_EMAIL,
-        first_name='StemSC',
+        email=settings.SUPERUSER_EMAIL,
+        first_name='Super',
         last_name='Admin',
         is_staff=True,
         is_active=True,
         is_superuser=True,
+        password=make_password(settings.SUPERUSER_PASSWORD)
     )
-    user.password = make_password(settings.SUPER_USER_PASSWORD)
     user.save()
 
 

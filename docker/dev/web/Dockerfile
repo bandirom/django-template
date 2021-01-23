@@ -2,15 +2,13 @@
 FROM python:3.9.0-alpine
 MAINTAINER nazarii.romanchenko@stemsc.com
 
-ENV HOME /usr/src/web
-# set work directory
-WORKDIR $HOME
-
-# set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
 	PYTHONUNBUFFERED=1 \
 	TZ=Europe/Kyiv \
-	LANG=C.UTF-8
+	LANG=C.UTF-8 \
+	HOME=/usr/src/web
+
+WORKDIR $HOME
 
 # install dependencies
 RUN apk update \
@@ -19,12 +17,9 @@ RUN apk update \
     && apk add jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev \
 	&& pip install --upgrade pip
 
+COPY ./docker/dev/web/entrypoint.sh /entrypoint.sh
 COPY ./web/src/requirements  ./requirements
 
-RUN pip install -r ./requirements/local.txt
-# copy entrypoint.sh
-COPY ./docker/dev/web/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-
-# copy project
+RUN pip install -r ./requirements/local.txt
 COPY ./web /usr/src/web/

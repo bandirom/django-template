@@ -12,15 +12,14 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 DEBUG = int(os.environ.get("DEBUG", default=1))
 
-ALLOWED_HOSTS: list = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS: list = os.environ.get("DJANGO_ALLOWED_HOSTS").split(",")
 
 AUTH_USER_MODEL = 'main.User'
 
-SUPER_USER_USERNAME = os.environ.get('SUPER_USER_USERNAME')
-SUPER_USER_EMAIL = os.environ.get('SUPER_USER_EMAIL')
-SUPER_USER_PASSWORD = os.environ.get('SUPER_USER_PASSWORD')
+SUPERUSER_EMAIL = os.environ.get('SUPERUSER_EMAIL', 'test@test.com')
+SUPERUSER_PASSWORD = os.environ.get('SUPERUSER_PASSWORD', 'tester26')
 
-MICROSERVICE_TITLE = os.environ.get('MICROSERVICE_TITLE')
+MICROSERVICE_TITLE = os.environ.get('MICROSERVICE_TITLE', 'MicroserviceTemplate')
 
 INSTALLED_APPS = [
     'main.apps.MainConfig',
@@ -60,7 +59,7 @@ REST_FRAMEWORK = {
 
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': (

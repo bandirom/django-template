@@ -1,4 +1,3 @@
 
 -r ./base.txt
-flake8
-gunicorn
+gunicorn==20.0.4

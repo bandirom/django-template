@@ -3,3 +3,6 @@
 
 # For SQL debug
 django-silk>=4.1.0
+
+
+coverage==5.3
