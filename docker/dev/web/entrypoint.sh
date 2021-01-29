@@ -1,16 +1,11 @@
 #!/bin/sh
 # shellcheck disable=SC2086
 
-if [ "$DATABASE" = "postgres" ]
-then
-    echo "Waiting for postgres..."
-
-    while ! nc -z $SQL_HOST $SQL_PORT; do
-      sleep 0.1
-    done
-
-    echo "PostgreSQL started"
-fi
+echo "Waiting for postgres..."
+while ! nc -z $SQL_HOST $SQL_PORT; do
+  sleep 0.1
+done
+echo "PostgreSQL started"
 
 python manage.py makemigrations
 python manage.py migrate

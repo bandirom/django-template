@@ -19,7 +19,7 @@ AUTH_USER_MODEL = 'main.User'
 SUPERUSER_EMAIL = os.environ.get('SUPERUSER_EMAIL', 'test@test.com')
 SUPERUSER_PASSWORD = os.environ.get('SUPERUSER_PASSWORD', 'tester26')
 
-MICROSERVICE_TITLE = os.environ.get('MICROSERVICE_TITLE', 'MicroserviceTemplate')
+MICROSERVICE_TITLE = os.environ.get('MICROSERVICE_TITLE', 'Template')
 
 INSTALLED_APPS = [
     'main.apps.MainConfig',
@@ -56,7 +56,6 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',

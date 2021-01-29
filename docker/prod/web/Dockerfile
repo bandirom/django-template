@@ -3,7 +3,7 @@
 ###########
 
 # pull official base image
-FROM python:3.9.0-alpine as builder
+FROM python:3.9.1-alpine as builder
 
 # set work directory
 WORKDIR /usr/src/web
@@ -63,4 +63,4 @@ RUN flake8 --ignore=E501,F401,F403,W504 .
 RUN chown -R ubuntu:ubuntu $APP_HOME && chown -R ubuntu:ubuntu /entrypoint.sh && chmod +x /entrypoint.sh
 
 ## change to the www user
-#USER www
+#USER ubuntu
