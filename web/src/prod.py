@@ -3,7 +3,6 @@ from .settings import *
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 CORS_ALLOWED_ORIGINS = [
-    "https://justa.stemsc.com",
     "http://localhost",
     "http://localhost:8000",
     "http://localhost:3000",
