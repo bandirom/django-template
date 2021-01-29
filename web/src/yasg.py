@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Tag Service API",
+        title="Service API",
         default_version='v1',
 
     ),
