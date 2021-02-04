@@ -15,6 +15,7 @@ services:
     env_file:
       - docker/prod/env/.env
       - docker/prod/env/.data.env
+      - docker/prod/env/.prod.env
     depends_on:
       - db
       - redis
