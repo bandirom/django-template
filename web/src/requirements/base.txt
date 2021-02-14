@@ -1,4 +1,4 @@
-Django>=3.1.5
+Django>=3.1.6
 django-filter==2.4.0
 
 # for PostgreSql database
@@ -11,7 +11,7 @@ django-defender==0.8.0
 redis==3.5.3
 
 # for RestAPI
-djangorestframework==3.11.1
+djangorestframework==3.12.2
 drf-yasg==1.20.0 # Swagger
 
 # for auth system
@@ -23,7 +23,7 @@ djangorestframework-simplejwt==4.6.0
 celery==5.0.5
 
 # for react
-django-cors-headers==3.6.0
+django-cors-headers==3.7.0
 
 # API keys
 djangorestframework-api-key==2.0.0
@@ -31,3 +31,9 @@ djangorestframework-api-key==2.0.0
 # For testing
 flake8==3.8.4
 
+# Async Support
+uvicorn[standard]==0.13.3
+httpx==0.16.1
+
+# Cashe Support
+django-cacheops==5.1
