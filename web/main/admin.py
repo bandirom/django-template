@@ -5,8 +5,6 @@ from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 
-from rest_framework.authtoken.admin import Token
-
 User = get_user_model()
 
 
@@ -39,4 +37,3 @@ admin.site.site_url = '/'
 admin.site.index_title = title
 
 admin.site.unregister(Group)
-admin.site.unregister(Token)
