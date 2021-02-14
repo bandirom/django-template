@@ -21,6 +21,14 @@ SUPERUSER_PASSWORD = os.environ.get('SUPERUSER_PASSWORD', 'tester26')
 
 MICROSERVICE_TITLE = os.environ.get('MICROSERVICE_TITLE', 'Template')
 
+REDIS_URL = os.environ.get('REDIS_URL')
+CELERY_BROKER_URL = REDIS_URL + '/0'
+CELERY_RESULT_BACKEND = REDIS_URL + '/0'
+DEFENDER_REDIS_URL = REDIS_URL + '/1'
+DEFENDER_USE_CELERY = False
+
+ENABLE_SILK = int(os.environ.get('ENABLE_SILK', False))
+
 INSTALLED_APPS = [
     'main.apps.MainConfig',
 
@@ -33,7 +41,6 @@ INSTALLED_APPS = [
 
     'defender',
     'rest_framework',
-    'rest_framework.authtoken',
     'rest_framework_api_key',
     'drf_yasg',
     'corsheaders',
@@ -88,15 +95,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'src.wsgi.application'
+ASGI_APPLICATION = 'src.asgi.application'
 
 DATABASES = {
     "default": {
         "ENGINE": os.environ.get("SQL_ENGINE"),
-        "NAME": os.environ.get("SQL_DATABASE"),
-        "USER": os.environ.get("SQL_USER"),
-        "PASSWORD": os.environ.get("SQL_PASSWORD"),
-        "HOST": os.environ.get("SQL_HOST"),
-        "PORT": os.environ.get("SQL_PORT"),
+        "NAME": os.environ.get("POSTGRES_DB"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": os.environ.get("POSTGRES_HOST"),
+        "PORT": os.environ.get("POSTGRES_PORT"),
     },
 }
 
