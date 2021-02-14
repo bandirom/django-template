@@ -12,6 +12,7 @@ services:
       - 8009:8000
     env_file:
       - docker/dev/env/.env
+      - docker/dev/env/.db.env
       - docker/prod/env/.data.env
     depends_on:
       - db
@@ -24,11 +25,24 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - docker/dev/env/db.env
+      - docker/dev/env/.db.env
   redis:
     image: redis:6.0.1-alpine
     restart: always
-
+  celery:
+    build:
+      context: .
+      dockerfile: docker/dev/web/Dockerfile
+    command: celery -A src worker -l info
+    volumes:
+      - ./web/:/usr/src/web/
+    env_file:
+      - docker/dev/env/.env
+      - docker/dev/env/.db.env
+      - docker/prod/env/.data.env
+    depends_on:
+      - redis
+    restart: always
 
 volumes:
   postgres_data:
