@@ -27,7 +27,7 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/web/wheels -r /usr/s
 #########
 
 # pull official base image
-FROM python:3.9.0-alpine
+FROM python:3.9.1-alpine
 
 # create the app user
 
@@ -46,7 +46,7 @@ WORKDIR $APP_HOME
 RUN apk update \
     && apk add postgresql-dev gcc python3-dev musl-dev \
     # install openssl dependencies
-    && apk add openssl libffi-dev openssl-dev \
+    && apk add openssl libffi-dev openssl-dev build-base\
     # install Pillow dependencies
     && apk add jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev
 
