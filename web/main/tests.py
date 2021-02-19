@@ -7,7 +7,7 @@ class UserModelTests(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.user = User.objects.create_user('username', 'user@test.com', 'pass')
+        cls.user = User.objects.create_user('user@test.com', 'pass')
 
     def test_user_str(self):
         email = str(self.user)
