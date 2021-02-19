@@ -4,5 +4,14 @@
 # For SQL debug
 django-silk>=4.1.0
 
+# Test coverage
+coverage==5.4
 
-coverage==5.3
+# command line utility for displaying the installed python packages in form of a dependency tree
+pipdeptree==2.0.0
+
+# Utility for organizing Python imports using PEP8
+importanize==0.7.0
+
+# Vulture finds unused code in Python programs.
+vulture==2.3
