@@ -28,6 +28,7 @@ DEFENDER_REDIS_URL = REDIS_URL + '/1'
 DEFENDER_USE_CELERY = False
 
 ENABLE_SILK = int(os.environ.get('ENABLE_SILK', False))
+ADMIN_URL = os.environ.get('ADMIN_URL', 'admin')
 
 INSTALLED_APPS = [
     'main.apps.MainConfig',
