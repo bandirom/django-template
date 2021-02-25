@@ -17,7 +17,7 @@ schema_view = get_schema_view(
     openapi.Info(
         title="Service API",
         default_version='v1',
-        description='Microservice for Customer StemSC'
+        description='Microservice description'
     ),
     **schema_view_param,
 )
