@@ -1,5 +1,5 @@
+from .settings import USE_HTTPS
 from .settings import *
-from os import environ
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
@@ -12,7 +12,7 @@ CORS_ALLOWED_ORIGINS = [
 X_FRAME_OPTIONS = "DENY"
 
 # Only via HTTPS
-if int(os.environ.get('USE_HTTPS', 1)):
+if USE_HTTPS:
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
     SECURE_SSL_REDIRECT = True

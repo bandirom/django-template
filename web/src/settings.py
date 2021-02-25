@@ -26,8 +26,8 @@ CELERY_BROKER_URL = REDIS_URL + '/0'
 CELERY_RESULT_BACKEND = REDIS_URL + '/0'
 DEFENDER_REDIS_URL = REDIS_URL + '/1'
 DEFENDER_USE_CELERY = False
-
-ENABLE_SILK = int(os.environ.get('ENABLE_SILK', False))
+USE_HTTPS = int(os.environ.get('USE_HTTPS', 0))
+ENABLE_SILK = int(os.environ.get('ENABLE_SILK', 0))
 ADMIN_URL = os.environ.get('ADMIN_URL', 'admin')
 
 INSTALLED_APPS = [
