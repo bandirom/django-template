@@ -10,11 +10,9 @@ WORKDIR /usr/src/web
 
 RUN apk update \
 	# install psycopg2 dependencies
-    && apk add postgresql-dev gcc python3-dev musl-dev \
-    # install openssl dependencies
-    && apk add openssl libffi-dev openssl-dev \
+    && apk add postgresql-dev gcc python3-dev musl-dev openssl libffi-dev openssl-dev \
     # install Pillow dependencies
-    && apk add jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev \
+    jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev \
 	&& pip install --upgrade pip
 
 # install dependencies
@@ -34,7 +32,7 @@ FROM python:3.9.1-alpine
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
 	PYTHONUNBUFFERED=1 \
-	TZ=Europe/Kyiv \
+	TZ=Europe/Kiev \
 	LANG=C.UTF-8 \
 	APP_HOME=/home/ubuntu/web
 
@@ -44,23 +42,18 @@ WORKDIR $APP_HOME
 
 # install psycopg2 dependencies
 RUN apk update \
-    && apk add postgresql-dev gcc python3-dev musl-dev \
-    # install openssl dependencies
-    && apk add openssl libffi-dev openssl-dev build-base\
+    && apk add postgresql-dev gcc python3-dev musl-dev openssl libffi-dev openssl-dev build-base \
     # install Pillow dependencies
-    && apk add jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev
+    jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev
 
 COPY --from=builder /usr/src/web/wheels /wheels
 COPY --from=builder /usr/src/web/requirements $APP_HOME/requirements
 RUN pip install --upgrade pip && pip install --no-cache /wheels/*
 
-# copy entrypoint.sh
-COPY ./docker/prod/web/entrypoint.sh /entrypoint.sh
-COPY ./web $APP_HOME
+COPY --chown=ubuntu:ubuntu ./docker/prod/web/entrypoint.sh /entrypoint.sh
+COPY --chown=ubuntu:ubuntu ./web $APP_HOME
 
-RUN flake8 --ignore=E501,F401,F403,W504 .
-# chown all the files to the www user
-RUN chown -R ubuntu:ubuntu $APP_HOME && chown -R ubuntu:ubuntu /entrypoint.sh && chmod +x /entrypoint.sh
+RUN flake8 . && chmod +x /entrypoint.sh
 
 ## change to the www user
 #USER ubuntu

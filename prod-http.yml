@@ -14,6 +14,8 @@ services:
     depends_on:
       - web
     restart: always
+    networks:
+      - separated_network
   web:
     build:
       context: .
@@ -25,6 +27,8 @@ services:
       - media_volume:/home/ubuntu/web/media
     expose:
       - 8000
+    environment:
+      - USE_HTTPS=0
     env_file:
       - docker/prod/env/.env
       - docker/prod/env/.db.env
@@ -33,6 +37,8 @@ services:
       - db
       - redis
     restart: always
+    networks:
+      - separated_network
   celery:
     build:
       context: .
@@ -47,6 +53,8 @@ services:
     depends_on:
       - redis
     restart: always
+    networks:
+      - separated_network
   db:
     image: postgres:12.0-alpine
     volumes:
@@ -54,13 +62,19 @@ services:
     env_file:
       - docker/prod/env/.db.env
     restart: always
+    networks:
+      - separated_network
   redis:
     image: redis:6.0.1-alpine
     restart: always
-
+    networks:
+      - separated_network
 
 volumes:
   postgres_data:
   static_volume:
   media_volume:
 
+networks:
+  separated_network:
+    driver: bridge
