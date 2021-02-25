@@ -1,0 +1,8 @@
+version: '3.7'
+
+services:
+  notify:
+    volumes:
+      - ./docker/debug/web/entrypoint.sh:/entrypoint.sh
+    environment:
+      - ENABLE_SILK=0
