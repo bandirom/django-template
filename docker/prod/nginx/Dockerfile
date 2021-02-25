@@ -1,10 +1,7 @@
 FROM nginx:1.18.0-alpine
 
-ENV HOME /home/www/web
-WORKDIR $HOME
-RUN mkdir -p $HOME/media/profiles/ && rm /etc/nginx/conf.d/default.conf
+RUN rm /etc/nginx/conf.d/default.conf
+COPY ./docker/prod/nginx/nginx.conf ./docker/prod/nginx/proxy.conf /etc/nginx/conf.d/
 
 # If you need to push default images like profile avatar or smth else, use the command below
-#COPY ./web/media/profiles/default.jpg $HOME/media/profiles/default.jpg
-
-COPY ./docker/prod/nginx/nginx.conf /etc/nginx/conf.d
+# COPY ./web/media/profiles/default.jpg /home/ubuntu/web/media/profiles/default.jpg

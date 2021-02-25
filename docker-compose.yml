@@ -33,7 +33,7 @@ services:
     build:
       context: .
       dockerfile: docker/dev/web/Dockerfile
-    command: celery -A src worker -l info
+    command: celery -A src worker -l info -Q celery
     volumes:
       - ./web/:/usr/src/web/
     env_file:
