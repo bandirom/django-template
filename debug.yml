@@ -2,6 +2,8 @@ version: '3.7'
 
 services:
   notify:
+    ports:
+    - 9009:8000
     volumes:
       - ./docker/debug/web/entrypoint.sh:/entrypoint.sh
     environment:
