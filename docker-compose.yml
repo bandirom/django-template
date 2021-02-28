@@ -18,6 +18,8 @@ services:
       - db
       - redis
     restart: always
+    networks:
+      - separated_network
   db:
     image: postgres:12.0-alpine
     hostname: postgres
@@ -26,9 +28,15 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - docker/dev/env/.db.env
+    networks:
+      - separated_network
   redis:
     image: redis:6.0.1-alpine
     restart: always
+    volumes:
+      - redis_data:/data
+    networks:
+      - separated_network
   celery:
     build:
       context: .
@@ -43,6 +51,14 @@ services:
     depends_on:
       - redis
     restart: always
+    networks:
+      - separated_network
+
 
 volumes:
   postgres_data:
+  redis_data:
+
+networks:
+  separated_network:
+    driver: bridge
