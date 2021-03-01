@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/prod/nginx/Dockerfile
+    ports:
+      - 9000:80
+  web:
+    environment:
+      - USE_HTTPS=0
