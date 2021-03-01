@@ -37,8 +37,8 @@ services:
       context: .
       dockerfile: docker/prod/nginx-proxy/Dockerfile
     volumes:
-      - static_volume:/var/www/html/static
-      - media_volume:/var/www/html/media
+      - static_volume:/var/ubuntu/html/static
+      - media_volume:/var/ubuntu/html/media
       - certs:/etc/nginx/certs
       - html:/usr/share/nginx/html
       - vhost:/etc/nginx/vhost.d
