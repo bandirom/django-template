@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=bandirom
+      - RABBITMQ_DEFAULT_PASS=password
+      - RABBITMQ_DEFAULT_VHOST=host
+    networks:
+      - queue_network
+    restart: always
+
+
+volumes:
+  rabbitmq:
+
+networks:
+  queue_network:
+    driver: bridge
+    name: template_queue_network
