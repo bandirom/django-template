@@ -9,8 +9,5 @@ celerybeat*
 .ash_history
 .coverage
 web/.cache
-.ash_history
-.coverage
 .cache
-celerybeat*
 web/media/*
