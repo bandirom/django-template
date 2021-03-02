@@ -32,3 +32,10 @@
     SUPERUSER_PASSWORD=secretp@ssword
     MICROSERVICE_TITLE=MyProject
 
+#### Run the local develop server:
+
+    docker-compose up -d --build
+    docker-compose logs -f
+    
+##### Server will bind 8009 port. You can got access to server by browser [http://localhost:8009](http://localhost:8009)
+
