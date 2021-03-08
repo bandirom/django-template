@@ -7,7 +7,7 @@ services:
     volumes:
       - letsencrypt:/etc/letsencrypt
       - ./docker/prod/nginx/certbot.conf:/etc/nginx/user.conf.d/nginx_template.conf:ro
-      - ./docker/prod/nginx/proxy.conf:/etc/nginx/user.conf.d/proxy.conf:ro
+      - ./docker/prod/nginx/conf.d/proxy.conf:/etc/nginx/user.conf.d/proxy.conf:ro
     ports:
       - 443:443/tcp
       - 80:80/tcp
