@@ -17,7 +17,7 @@ RUN apk update \
 
 # install dependencies
 COPY ./web/src/requirements  /usr/src/web/requirements
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/web/wheels -r /usr/src/web/requirements/production.txt
+RUN pip install --upgrade pip && pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/web/wheels -r /usr/src/web/requirements/production.txt
 
 
 #########
@@ -34,26 +34,27 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 	PYTHONUNBUFFERED=1 \
 	TZ=Europe/Kiev \
 	LANG=C.UTF-8 \
-	APP_HOME=/home/ubuntu/web
+	APP_HOME=/home/ubuntu/web \
+	USER=ubuntu \
+	UID=178
 
-RUN mkdir -p $APP_HOME && addgroup -S ubuntu && adduser -S ubuntu -G ubuntu
 
-WORKDIR $APP_HOME
-
-# install psycopg2 dependencies
 RUN apk update \
     && apk add postgresql-dev gcc python3-dev musl-dev openssl libffi-dev openssl-dev build-base \
     # install Pillow dependencies
-    jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev
+    jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev \
+	&& addgroup -S $USER \
+	&& adduser -S $USER -G $USER --disabled-password --uid "$UID"
+
+WORKDIR $APP_HOME
 
 COPY --from=builder /usr/src/web/wheels /wheels
-COPY --from=builder /usr/src/web/requirements $APP_HOME/requirements
-RUN pip install --upgrade pip && pip install --no-cache /wheels/*
+COPY --chown=$USER:$USER --from=builder /usr/src/web/requirements $APP_HOME/requirements
+RUN pip install --no-cache /wheels/*
 
-COPY --chown=ubuntu:ubuntu ./docker/prod/web/entrypoint.sh /entrypoint.sh
-COPY --chown=ubuntu:ubuntu ./web $APP_HOME
+COPY --chown=$USER:$USER ./docker/prod/web/entrypoint.sh /entrypoint.sh
+COPY --chown=$USER:$USER ./web $APP_HOME
 
-RUN flake8 . && chmod +x /entrypoint.sh
+RUN flake8 . && chmod +x /entrypoint.sh && chown -R $USER:$USER static
 
-## change to the www user
-#USER ubuntu
+USER $USER

@@ -25,9 +25,8 @@ COPY ./web/src/requirements  ./requirements
 RUN pip install -r ./requirements/local.txt
 
 COPY --chown=$USER:$USER ./docker/dev/web/entrypoint.sh /entrypoint.sh
-
-RUN chmod +x /entrypoint.sh
-
 COPY --chown=$USER:$USER ./web $HOME
+
+RUN flake8 . && chmod +x /entrypoint.sh && chown -R $USER:$USER static
 
 USER $USER
