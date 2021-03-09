@@ -13,7 +13,7 @@ SWAGGER_SETTINGS = {
         'Api-Key': {
             'type': 'apiKey',
             'name': 'Authorization',
-            'description': 'Value example: Api-Key l29AEBgf.a5w4OXxlVZHRTUgCN9HKNaRJMFZhERbV',
+            'description': 'Value example: <API_KEY_HEADER> <API_KEY>',
             'in': 'header'
         },
 

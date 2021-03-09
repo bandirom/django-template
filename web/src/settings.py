@@ -31,6 +31,9 @@ USE_HTTPS = int(os.environ.get('USE_HTTPS', 0))
 ENABLE_SILK = int(os.environ.get('ENABLE_SILK', 0))
 ADMIN_URL = os.environ.get('ADMIN_URL', 'admin')
 
+API_KEY_HEADER = os.environ.get('API_KEY_HEADER')
+API_KEY = os.environ.get('API_KEY')
+
 INSTALLED_APPS = [
     'main.apps.MainConfig',
 
