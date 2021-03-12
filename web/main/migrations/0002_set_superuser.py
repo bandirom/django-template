@@ -8,7 +8,6 @@ from django.conf import settings
 def set_superuser(apps, schema_editor):
     user_obj = apps.get_model("main", "User")
     user = user_obj(
-        id=0,
         email=settings.SUPERUSER_EMAIL,
         first_name='Super',
         last_name='Admin',
