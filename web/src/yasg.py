@@ -15,7 +15,7 @@ if settings.USE_HTTPS:
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Service API",
+        title=settings.MICROSERVICE_TITLE + " API",
         default_version='v1',
         description='Microservice description'
     ),
