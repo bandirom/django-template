@@ -55,6 +55,8 @@ RUN pip install --no-cache /wheels/*
 COPY --chown=$USER:$USER ./docker/prod/web/entrypoint.sh /entrypoint.sh
 COPY --chown=$USER:$USER ./web $APP_HOME
 
-RUN flake8 . && chmod +x /entrypoint.sh && chown -R $USER:$USER static
+RUN chmod +x /entrypoint.sh && mkdir -p static && chown -R $USER:$USER static
+
+RUN flake8 .
 
 USER $USER
