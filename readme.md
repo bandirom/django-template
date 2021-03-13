@@ -39,3 +39,8 @@
     
 ##### Server will bind 8009 port. You can get access to server by browser [http://localhost:8009](http://localhost:8009)
 
+
+### Will be added 
+   
+* Docker-compose health check
+* PgBouncer
