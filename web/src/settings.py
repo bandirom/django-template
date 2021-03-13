@@ -31,6 +31,8 @@ USE_HTTPS = int(os.environ.get('USE_HTTPS', 0))
 ENABLE_SILK = int(os.environ.get('ENABLE_SILK', 0))
 ADMIN_URL = os.environ.get('ADMIN_URL', 'admin')
 
+SWAGGER_URL = os.environ.get('SWAGGER_URL')
+
 API_KEY_HEADER = os.environ.get('API_KEY_HEADER')
 API_KEY = os.environ.get('API_KEY')
 
@@ -46,7 +48,6 @@ INSTALLED_APPS = [
 
     'defender',
     'rest_framework',
-    'rest_framework_api_key',
     'drf_yasg',
     'corsheaders',
 
@@ -70,7 +71,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': (
@@ -110,6 +110,7 @@ DATABASES = {
         "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
         "HOST": os.environ.get("POSTGRES_HOST"),
         "PORT": os.environ.get("POSTGRES_PORT"),
+        "CONN_MAX_AGE": 0,
     },
 }
 

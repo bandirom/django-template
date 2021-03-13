@@ -8,10 +8,8 @@ from django.contrib.auth.decorators import login_required
 schema_view_param = {
     'public': True,
     'permission_classes': (permissions.IsAdminUser,),
+    'url': getattr(settings, 'SWAGGER_URL', None)
 }
-
-if settings.USE_HTTPS:
-    schema_view_param['url'] = getattr(settings, 'CURRENT_HOST', 'http://localhost')
 
 schema_view = get_schema_view(
     openapi.Info(
