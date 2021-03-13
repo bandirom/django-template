@@ -6,7 +6,11 @@ services:
       context: .
       dockerfile: docker/prod/nginx/Dockerfile
     ports:
-      - 9000:80
+      - 9000:9000
   web:
     environment:
+      - DEBUG=1
       - USE_HTTPS=0
+      - SWAGGER_URL=http://localhost:9000
+    volumes:
+      - ./web:/home/ubuntu/web
