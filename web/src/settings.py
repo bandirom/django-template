@@ -6,6 +6,7 @@ from .additional_settings.defender_settings import *
 from .additional_settings.swagger_settings import *
 from .additional_settings.jwt_settings import *
 from .additional_settings.cacheops_settings import *
+from .additional_settings.logging_settings import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
