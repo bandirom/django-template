@@ -53,15 +53,6 @@ LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
-        "saleor": {
-            "level": "DEBUG",
-            "propagate": True
-        },
-        "saleor.graphql.errors.handled": {
-            "handlers": ["default"],
-            "level": "ERROR",
-            "propagate": False,
-        },
     },
 
 }
