@@ -40,3 +40,9 @@ django-cacheops==5.1
 
 # ImageField
 pillow==8.1.1
+
+# JsonLogger
+python-json-logger==2.0.1
+
+# Translation
+django-rosetta==0.9.5
