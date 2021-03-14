@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'corsheaders',
-
+    'rosetta',
 ]
 
 MIDDLEWARE = [
@@ -64,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'defender.middleware.FailedLoginMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 
 ]
 
@@ -155,3 +156,8 @@ LOCALE_PATHS = (
 LANGUAGES = (
     ('en', _('English')),
 )
+
+ROSETTA_MESSAGES_SOURCE_LANGUAGE_CODE = LANGUAGE_CODE
+ROSETTA_MESSAGES_SOURCE_LANGUAGE_NAME = 'English'
+ROSETTA_SHOW_AT_ADMIN_PANEL = True
+ROSETTA_ENABLE_TRANSLATION_SUGGESTIONS = False
