@@ -10,12 +10,12 @@ User = get_user_model()
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
-    ordering = ()
-    list_display = ('email', 'first_name', 'last_name',)
+    ordering = ('-id',)
+    list_display = ('email', 'get_full_name', 'is_active')
 
     fieldsets = (
-        (None, {'fields': ('password',)}),
-        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
+        (_('Personal info'), {'fields': ('id', 'first_name', 'last_name', 'email')}),
+        (_('Secrets'), {'fields': ('password',)}),
         (_('Permissions'), {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
         }),
@@ -27,6 +27,7 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('email', 'password1', 'password2'),
         }),
     )
+    readonly_fields = ('id',)
 
 
 title = settings.MICROSERVICE_TITLE
