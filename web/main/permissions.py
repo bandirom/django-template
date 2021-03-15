@@ -9,5 +9,4 @@ class HasApiKeyOrIsAuthenticated(IsAuthenticated):
             token = list(key.split(" "))
             if token[0] == settings.API_KEY_HEADER and token[1] == settings.API_KEY:
                 return True
-        print("HELLO from Template")
         return super(HasApiKeyOrIsAuthenticated, self).has_permission(request, view)
