@@ -4,9 +4,10 @@ from django.utils.translation import gettext_lazy as _
 
 from .additional_settings.defender_settings import *
 from .additional_settings.swagger_settings import *
-from .additional_settings.jwt_settings import *
 from .additional_settings.cacheops_settings import *
 from .additional_settings.logging_settings import *
+from .additional_settings.celery_settings import *
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -24,10 +25,7 @@ SUPERUSER_PASSWORD = os.environ.get('SUPERUSER_PASSWORD', 'tester26')
 MICROSERVICE_TITLE = os.environ.get('MICROSERVICE_TITLE', 'Template')
 
 REDIS_URL = os.environ.get('REDIS_URL')
-CELERY_BROKER_URL = REDIS_URL + '/0'
-CELERY_RESULT_BACKEND = REDIS_URL + '/0'
-DEFENDER_REDIS_URL = REDIS_URL + '/1'
-DEFENDER_USE_CELERY = False
+
 USE_HTTPS = int(os.environ.get('USE_HTTPS', 0))
 ENABLE_SILK = int(os.environ.get('ENABLE_SILK', 0))
 ADMIN_URL = os.environ.get('ADMIN_URL', 'admin')
@@ -55,9 +53,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
