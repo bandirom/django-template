@@ -1,14 +1,17 @@
 from django.conf import settings
 from django.urls import path
+from django.contrib.auth.decorators import login_required
+from rest_framework.authentication import SessionAuthentication
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from django.contrib.auth.decorators import login_required
+
 
 schema_view_param = {
     'public': True,
     'permission_classes': (permissions.IsAdminUser,),
-    'url': getattr(settings, 'SWAGGER_URL', None)
+    'url': getattr(settings, 'SWAGGER_URL', None),
+    'authentication_classes': (SessionAuthentication,)
 }
 
 schema_view = get_schema_view(
