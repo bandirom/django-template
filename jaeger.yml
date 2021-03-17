@@ -1,6 +1,7 @@
 # OpenTracing helps developers trace a request in a complicated distributed systems
 # to figure out bottlenecks and and slow components in the request path
 # which need optimizations, fixes or deeper debugging
+# For using GUI: http://localhost:16686
 
 version: '3.7'
 
