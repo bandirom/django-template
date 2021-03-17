@@ -20,6 +20,10 @@ services:
     restart: always
     networks:
       - separated_network
+    extra_hosts:
+      DOCKER_GATEWAY_HOST: 172.17.0.1  # Linux OS get access from docker container to localhost
+      # host.docker.internal - For docker in Windows. No other action is required.
+      # If You need to connect to PostgreSql in localhost, just use host.docker.internal instead of localhost
   db:
     image: postgres:13.2-alpine
     hostname: postgres
