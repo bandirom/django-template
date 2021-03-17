@@ -165,6 +165,9 @@ if JAEGER_AGENT_HOST := os.environ.get('JAEGER_AGENT_HOST'):
     from jaeger_client import Config
     from jaeger_client.config import DEFAULT_REPORTING_PORT
     from django_opentracing import DjangoTracing
+    """If you don't need to trace all requests, comment middleware and set OPENTRACING_TRACE_ALL = False
+        More information https://github.com/opentracing-contrib/python-django/#tracing-individual-requests
+    """
     MIDDLEWARE.insert(1, 'django_opentracing.OpenTracingMiddleware')
     OPENTRACING_TRACE_ALL = True
     tracer = Config(
