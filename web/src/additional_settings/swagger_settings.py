@@ -16,7 +16,13 @@ SWAGGER_SETTINGS = {
             'description': 'Value example: <API_KEY_HEADER> <API_KEY>',
             'in': 'header'
         },
-
+        'Language': {
+            'type': 'apiKey',
+            'name': 'Accept-Language',
+            'in': 'header',
+            'description': 'Your language code. Example: ua,ru,en',
+            'default': 'en'
+        },
     },
     'USE_SESSION_AUTH': True,
     'JSON_EDITOR': False,
