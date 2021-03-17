@@ -168,7 +168,7 @@ if JAEGER_AGENT_HOST := os.environ.get('JAEGER_AGENT_HOST'):
     """If you don't need to trace all requests, comment middleware and set OPENTRACING_TRACE_ALL = False
         More information https://github.com/opentracing-contrib/python-django/#tracing-individual-requests
     """
-    MIDDLEWARE.insert(1, 'django_opentracing.OpenTracingMiddleware')
+    MIDDLEWARE.insert(0, 'django_opentracing.OpenTracingMiddleware')
     OPENTRACING_TRACE_ALL = True
     tracer = Config(
         config={
