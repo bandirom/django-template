@@ -1,0 +1,24 @@
+# OpenTracing helps developers trace a request in a complicated distributed systems
+# to figure out bottlenecks and and slow components in the request path
+# which need optimizations, fixes or deeper debugging
+
+version: '3.7'
+
+services:
+  web:
+    environment:
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_LOGGING=1
+  jaeger:
+    image: jaegertracing/all-in-one
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "9411:9411"
+    restart: unless-stopped
+    networks:
+      - separated_network

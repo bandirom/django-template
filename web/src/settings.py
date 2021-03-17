@@ -159,3 +159,24 @@ ROSETTA_MESSAGES_SOURCE_LANGUAGE_CODE = LANGUAGE_CODE
 ROSETTA_MESSAGES_SOURCE_LANGUAGE_NAME = 'English'
 ROSETTA_SHOW_AT_ADMIN_PANEL = True
 ROSETTA_ENABLE_TRANSLATION_SUGGESTIONS = False
+
+
+if JAEGER_AGENT_HOST := os.environ.get('JAEGER_AGENT_HOST'):
+    from jaeger_client import Config
+    from jaeger_client.config import DEFAULT_REPORTING_PORT
+    from django_opentracing import DjangoTracing
+    MIDDLEWARE.insert(1, 'django_opentracing.OpenTracingMiddleware')
+    OPENTRACING_TRACE_ALL = True
+    tracer = Config(
+        config={
+            "sampler": {"type": "const", "param": 1},
+            "local_agent": {
+                "reporting_port": os.environ.get("JAEGER_AGENT_PORT", DEFAULT_REPORTING_PORT),
+                "reporting_host": JAEGER_AGENT_HOST,
+            },
+            "logging": int(os.environ.get('JAEGER_LOGGING', False)),
+        },
+        service_name=MICROSERVICE_TITLE,
+        validate=True,
+    ).initialize_tracer()
+    OPENTRACING_TRACING = DjangoTracing(tracer)
