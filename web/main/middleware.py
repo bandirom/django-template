@@ -14,5 +14,5 @@ class RemoteUserMiddleware(MiddlewareMixin):
 
 class HealthCheckMiddleware(MiddlewareMixin):
     def process_request(self, request):
-        if request.META["PATH_INFO"] == settings.LB_HEALTH_CHECK_URL:
+        if request.META["PATH_INFO"] == settings.HEALTH_CHECK_URL:
             return HttpResponse("pong")
