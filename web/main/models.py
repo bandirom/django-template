@@ -22,6 +22,5 @@ class User(AbstractUser):
     def __str__(self):
         return self.email
 
-    def get_full_name(self):
+    def full_name(self):
         return super().get_full_name()
-    get_full_name.short_description = _('Full name')
