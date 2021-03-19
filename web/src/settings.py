@@ -38,8 +38,6 @@ API_KEY = os.environ.get('API_KEY')
 HEALTH_CHECK_URL = os.environ.get('HEALTH_CHECK_URL')
 
 INSTALLED_APPS = [
-    'main.apps.MainConfig',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,12 +45,23 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+]
+
+THIRD_PARTY_APPS = [
     'defender',
     'rest_framework',
     'drf_yasg',
     'corsheaders',
-    'rosetta',
+
 ]
+
+LOCAL_APPS = [
+    'main.apps.MainConfig',
+
+]
+
+INSTALLED_APPS += THIRD_PARTY_APPS + LOCAL_APPS
+
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
