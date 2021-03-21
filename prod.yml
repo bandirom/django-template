@@ -1,84 +1,75 @@
 version: '3.7'
 
 services:
+  nginx:
+    volumes:
+      - static_volume:/home/ubuntu/web/static
+      - media_volume:/home/ubuntu/web/media
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - web
+    restart: always
+    networks:
+      - separated_network
   web:
     build:
       context: .
       dockerfile: docker/prod/web/Dockerfile
     entrypoint: /entrypoint.sh
     volumes:
-      - ./web/:/home/ubuntu/web
       - static_volume:/home/ubuntu/web/static
       - media_volume:/home/ubuntu/web/media
     expose:
       - 8000
+    environment:
+      - USE_HTTPS=0
     env_file:
-      - docker/prod/env/.db.env
       - docker/prod/env/.env
+      - docker/prod/env/.db.env
       - docker/prod/env/.data.env
-      - docker/prod/env/.prod.env
     depends_on:
       - db
       - redis
-    restart: unless-stopped
-  db:
-    image: postgres:13.2-alpine
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    env_file:
-      - docker/dev/env/.db.env
-    restart: unless-stopped
-  redis:
-    image: redis:6.0.1-alpine
     restart: always
+    networks:
+      - separated_network
   celery:
     build:
       context: .
       dockerfile: docker/prod/web/Dockerfile
     command: celery -A src worker -l info -Q celery
     env_file:
-      - docker/prod/env/.db.env
       - docker/prod/env/.env
+      - docker/prod/env/.db.env
       - docker/prod/env/.data.env
     depends_on:
       - redis
     restart: always
     networks:
       - separated_network
-  nginx-proxy:
-    container_name: nginx-proxy
-    build:
-      context: .
-      dockerfile: docker/prod/nginx-proxy/Dockerfile
+  db:
+    image: postgres:13.2-alpine
     volumes:
-      - static_volume:/var/ubuntu/html/static
-      - media_volume:/var/ubuntu/html/media
-      - certs:/etc/nginx/certs
-      - html:/usr/share/nginx/html
-      - vhost:/etc/nginx/vhost.d
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-    ports:
-      - 80:80
-      - 443:443
-    depends_on:
-      - web
-    restart: always
-  nginx-proxy-letsencrypt:
-    image: jrcs/letsencrypt-nginx-proxy-companion
+      - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./docker/prod/env/.env.proxy-companion
+      - docker/prod/env/.db.env
+    restart: always
+    networks:
+      - separated_network
+  redis:
+    image: redis:6.0.1-alpine
+    restart: always
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - certs:/etc/nginx/certs
-      - html:/usr/share/nginx/html
-      - vhost:/etc/nginx/vhost.d
-    depends_on:
-      - nginx-proxy
+      - redis_data:/data
+    networks:
+      - separated_network
 
 volumes:
   postgres_data:
+  redis_data:
   static_volume:
   media_volume:
-  certs:
-  html:
-  vhost:
+
+networks:
+  separated_network:
+    driver: bridge
