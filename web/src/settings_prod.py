@@ -1,6 +1,7 @@
 from .settings import USE_HTTPS
 from .settings import *
 
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 CORS_ALLOWED_ORIGINS = [
