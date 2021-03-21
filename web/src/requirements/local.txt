@@ -15,3 +15,7 @@ importanize==0.7.0
 
 # Vulture finds unused code in Python programs.
 vulture==2.3
+
+# Debug Toolbar
+django-debug-toolbar==3.2
+django-debug-toolbar-request-history==0.1.3

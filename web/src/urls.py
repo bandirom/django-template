@@ -22,3 +22,6 @@ if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     if settings.ENABLE_SILK:
         urlpatterns += [path('silk/', include('silk.urls', namespace='silk'))]
+    if settings.ENABLE_DEBUG_TOOLBAR:
+        from debug_toolbar import urls
+        urlpatterns += [path('__debug__/', include(urls))]

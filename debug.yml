@@ -7,4 +7,5 @@ services:
     volumes:
       - ./docker/debug/web/entrypoint.sh:/entrypoint.sh
     environment:
-      - ENABLE_SILK=0
+      - ENABLE_SILK=1
+      - ENABLE_DEBUG_TOOLBAR=1

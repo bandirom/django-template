@@ -28,6 +28,9 @@ REDIS_URL = os.environ.get('REDIS_URL')
 
 USE_HTTPS = int(os.environ.get('USE_HTTPS', 0))
 ENABLE_SILK = int(os.environ.get('ENABLE_SILK', 0))
+ENABLE_DEBUG_TOOLBAR = int(os.environ.get('ENABLE_DEBUG_TOOLBAR', 0))
+INTERNAL_IPS = []
+
 ADMIN_URL = os.environ.get('ADMIN_URL', 'admin')
 
 SWAGGER_URL = os.environ.get('SWAGGER_URL')
@@ -65,6 +68,7 @@ INSTALLED_APPS += THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'main.middleware.HealthCheckMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
