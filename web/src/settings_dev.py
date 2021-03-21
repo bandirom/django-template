@@ -1,5 +1,7 @@
 from .settings import INSTALLED_APPS, MIDDLEWARE, ENABLE_SILK, INTERNAL_IPS
 from .settings import *
+
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 CORS_ORIGIN_ALLOW_ALL = True
 
