@@ -9,11 +9,11 @@ FROM python:3.9.1-alpine as builder
 WORKDIR /usr/src/web
 
 RUN apk update \
-	# install psycopg2 dependencies
+	  # install psycopg2 dependencies
     && apk add postgresql-dev gcc python3-dev musl-dev openssl libffi-dev openssl-dev \
     # install Pillow dependencies
     jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev \
-	&& pip install --upgrade pip
+    && pip install --upgrade pip
 
 # install dependencies
 COPY ./web/src/requirements  /usr/src/web/requirements
@@ -26,8 +26,6 @@ RUN pip install --upgrade pip && pip wheel --no-cache-dir --no-deps --wheel-dir 
 
 # pull official base image
 FROM python:3.9.1-alpine
-
-# create the app user
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -43,8 +41,8 @@ RUN apk update \
     && apk add postgresql-dev gcc python3-dev musl-dev openssl libffi-dev openssl-dev build-base \
     # install Pillow dependencies
     jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev \
-	&& addgroup -S $USER \
-	&& adduser -S $USER -G $USER --disabled-password --uid "$UID"
+    && addgroup -S $USER \
+    && adduser -S $USER -G $USER --disabled-password --uid "$UID"
 
 WORKDIR $APP_HOME
 
