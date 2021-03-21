@@ -15,8 +15,10 @@ services:
       - docker/dev/env/.db.env
       - docker/prod/env/.data.env
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_started
+      redis:
+        condition: service_started
     restart: always
     networks:
       - separated_network
@@ -24,16 +26,28 @@ services:
       DOCKER_GATEWAY_HOST: 172.17.0.1  # Linux OS get access from docker container to localhost
       # host.docker.internal - For docker in Windows. No other action is required.
       # If You need to connect to PostgreSql in localhost, just use host.docker.internal instead of localhost
+    healthcheck:
+      test: curl -sS http://localhost:8009/$$HEALTH_CHECK_URL || echo 1
+      interval: 5s
+      timeout: 10s
+      retries: 3
   db:
     image: postgres:13.2-alpine
     hostname: postgres
     restart: unless-stopped
+    ports:
+      - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - docker/dev/env/.db.env
     networks:
       - separated_network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   redis:
     image: redis:6.0.1-alpine
     restart: always
@@ -41,6 +55,11 @@ services:
       - redis_data:/data
     networks:
       - separated_network
+    healthcheck:
+      test: [ "CMD", "redis-cli","ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
   celery:
     build:
       context: .
@@ -53,7 +72,8 @@ services:
       - docker/dev/env/.db.env
       - docker/prod/env/.data.env
     depends_on:
-      - redis
+      redis:
+        condition: service_started
     restart: always
     networks:
       - separated_network
