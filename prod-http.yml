@@ -39,8 +39,8 @@ services:
       dockerfile: docker/prod/web/Dockerfile
     command: celery -A src worker -l info -Q celery
     env_file:
-      - docker/dev/env/.env
-      - docker/dev/env/.db.env
+      - docker/prod/env/.env
+      - docker/prod/env/.db.env
       - docker/prod/env/.data.env
     depends_on:
       - redis
