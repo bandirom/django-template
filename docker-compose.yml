@@ -27,7 +27,7 @@ services:
       # host.docker.internal - For docker in Windows. No other action is required.
       # If You need to connect to PostgreSql in localhost, just use host.docker.internal instead of localhost
     healthcheck:
-      test: curl -sS http://localhost:8009/$$HEALTH_CHECK_URL || echo 1
+      test: curl --fail http://localhost:8009/$$HEALTH_CHECK_URL || exit 1
       interval: 5s
       timeout: 10s
       retries: 3
@@ -35,8 +35,6 @@ services:
     image: postgres:13.2-alpine
     hostname: postgres
     restart: unless-stopped
-    ports:
-      - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
