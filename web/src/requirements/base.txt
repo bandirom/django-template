@@ -50,3 +50,6 @@ django-rosetta==0.9.5
 # Jaeger OpenTracing
 jaeger-client==4.4.0
 django_opentracing==1.1.0
+
+# Monitoring System
+sentry-sdk==1.0.0

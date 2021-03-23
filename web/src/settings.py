@@ -27,6 +27,7 @@ MICROSERVICE_TITLE = os.environ.get('MICROSERVICE_TITLE', 'Template')
 REDIS_URL = os.environ.get('REDIS_URL')
 
 USE_HTTPS = int(os.environ.get('USE_HTTPS', 0))
+ENABLE_SENTRY = int(os.environ.get('ENABLE_SENTRY', 0))
 ENABLE_SILK = int(os.environ.get('ENABLE_SILK', 0))
 ENABLE_DEBUG_TOOLBAR = int(os.environ.get('ENABLE_DEBUG_TOOLBAR', 0))
 INTERNAL_IPS = []
@@ -198,3 +199,21 @@ if JAEGER_AGENT_HOST := os.environ.get('JAEGER_AGENT_HOST'):
         validate=True,
     ).initialize_tracer()
     OPENTRACING_TRACING = DjangoTracing(tracer)
+
+if (SENTRY_DSN := os.environ.get('SENTRY_DSN')) and ENABLE_SENTRY:
+    # More information on site https://sentry.io/
+    from sentry_sdk import init
+    from sentry_sdk.integrations.django import DjangoIntegration
+    init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()],
+
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for performance monitoring.
+        # We recommend adjusting this value in production.
+        traces_sample_rate=1.0,
+
+        # If you wish to associate users to errors (assuming you are using
+        # django.contrib.auth) you may enable sending PII data.
+        send_default_pii=True
+    )
