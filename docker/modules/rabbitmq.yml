@@ -1,0 +1,40 @@
+# Message Broker RabbitMQ for Celery queues
+
+version: '3.7'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+    env_file:
+      - docker/modules/rabbitmq/.env
+    networks:
+      - queue_network
+    restart: always
+    healthcheck:
+      test: rabbitmq-diagnostics -q status
+      interval: 10s
+      timeout: 30s
+      retries: 3
+  web:
+    env_file:
+      - docker/modules/rabbitmq/.env
+  celery:
+    networks:
+      - queue_network
+    env_file:
+      - docker/modules/rabbitmq/.env
+    depends_on:
+      rabbitmq:
+        condition: service_started
+
+volumes:
+  rabbitmq:
+
+networks:
+  queue_network:
+    driver: bridge
