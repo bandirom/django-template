@@ -53,3 +53,6 @@ django_opentracing==1.1.0
 
 # Monitoring System
 sentry-sdk==1.0.0
+
+# MicroService Requests
+django-microservice-request>=0.1
