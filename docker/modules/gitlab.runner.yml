@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  runner:
+    container_name: gitlab-runner
+    build:
+      context: .
+      dockerfile: docker/runner/Dockerfile
+    volumes:
+      - gitlab_runner_config:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
+
+volumes:
+  gitlab_runner_config:
