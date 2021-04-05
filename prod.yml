@@ -33,6 +33,11 @@ services:
     restart: always
     networks:
       - separated_network
+    healthcheck:
+      test: curl --fail -s http://localhost:8000$$HEALTH_CHECK_URL || exit 1
+      interval: 1m30s
+      timeout: 3s
+      retries: 3
   celery:
     build:
       context: .
@@ -56,6 +61,11 @@ services:
     restart: always
     networks:
       - separated_network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   redis:
     image: redis:6.0.1-alpine
     restart: always
@@ -63,7 +73,11 @@ services:
       - redis_data:/data
     networks:
       - separated_network
-
+    healthcheck:
+      test: [ "CMD", "redis-cli","ping" ]
+      interval: 1m20s
+      timeout: 5s
+      retries: 3
 volumes:
   postgres_data:
   redis_data:
