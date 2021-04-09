@@ -34,7 +34,7 @@ services:
   db:
     image: postgres:13.2-alpine
     hostname: postgres
-    restart: unless-stopped
+    restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
