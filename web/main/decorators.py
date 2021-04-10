@@ -1,10 +1,22 @@
 import logging
-
+from django.core.cache import cache
 from requests.exceptions import RequestException
 from kombu.exceptions import OperationalError
 from timeit import default_timer
 
 logger = logging.getLogger(__name__)
+
+
+def cached_function_result(timeout=300):
+    def decorator(function):
+        def wrapper(*args, **kwargs):
+            if function.__name__ in cache:
+                return cache.get(function.__name__)
+            result = function(*args, **kwargs)
+            cache.set(function.__name__, result, timeout=timeout)
+            return result
+        return wrapper
+    return decorator
 
 
 def execution_time(func) -> object:
