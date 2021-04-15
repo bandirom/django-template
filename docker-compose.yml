@@ -21,6 +21,7 @@ services:
         condition: service_started
     restart: always
     networks:
+      - microservice_network
       - separated_network
     extra_hosts:
       DOCKER_GATEWAY_HOST: 172.17.0.1  # Linux OS get access from docker container to localhost
@@ -82,5 +83,7 @@ volumes:
   redis_data:
 
 networks:
+  microservice_network:
+    driver: bridge
   separated_network:
     driver: bridge

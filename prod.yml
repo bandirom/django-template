@@ -10,7 +10,7 @@ services:
       - web
     restart: always
     networks:
-      - separated_network
+      - microservice_network
   web:
     build:
       context: .
@@ -32,6 +32,7 @@ services:
       - redis
     restart: always
     networks:
+      - microservice_network
       - separated_network
     healthcheck:
       test: curl --fail -s http://localhost:8000$$HEALTH_CHECK_URL || exit 1
@@ -78,6 +79,7 @@ services:
       interval: 1m20s
       timeout: 5s
       retries: 3
+
 volumes:
   postgres_data:
   redis_data:
@@ -85,5 +87,7 @@ volumes:
   media_volume:
 
 networks:
+  microservice_network:
+    driver: bridge
   separated_network:
     driver: bridge
