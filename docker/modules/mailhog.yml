@@ -4,10 +4,11 @@ version: '3.7'
 
 services:
   celery:
-    environment:
-      - EMAIL_HOST=mailhog
-      - EMAIL_PORT=1025
-      - EMAIL_USE_TLS=0
+    env_file:
+      - docker/dev/env/.mailhog.env
+  web:
+    env_file:
+      - docker/dev/env/.mailhog.env
   mailhog:
     image: mailhog/mailhog
     ports:
