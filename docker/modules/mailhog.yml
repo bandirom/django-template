@@ -17,6 +17,8 @@ services:
     restart: unless-stopped
     volumes:
       - mailbox_data:/maildir
+    networks:
+      - separated_network
 
 
 volumes:
