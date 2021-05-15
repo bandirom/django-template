@@ -1,12 +1,6 @@
-###########
-# BUILDER #
-###########
-
 # pull official base image
 FROM python:3.9.1-alpine as builder
-
-# set work directory
-WORKDIR /usr/src/web
+MAINTAINER bandirom@ukr.net
 
 RUN apk update \
 	  # install psycopg2 dependencies
