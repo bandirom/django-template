@@ -2,7 +2,7 @@ django==3.1.7
 django-filter==2.4.0
 
 # for PostgreSql database
-psycopg2==2.8.5
+psycopg2==2.8.6
 
 # Ddos defender: required redis
 django-defender==0.8.0
