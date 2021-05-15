@@ -10,11 +10,11 @@ RUN apk update \
 
 ARG TEMP_PATH=/usr/src/web
 
-ENV PYTHONPATH="${PYTHONPATH}:${TEMP_PATH}"
-
 # install dependencies
 COPY ./web/src/requirements  $TEMP_PATH/requirements
-RUN pip install --upgrade pip && pip install --prefix=/install -r $TEMP_PATH/requirements/production.txt
+
+RUN pip install --upgrade pip \
+  && pip install --no-warn-script-location --prefix=/install -r $TEMP_PATH/requirements/production.txt
 
 
 # pull official base image
