@@ -5,7 +5,7 @@ django-filter==2.4.0
 psycopg2==2.8.6
 
 # Ddos defender: required redis
-django-defender==0.8.0
+django-defender==0.9.0
 
 # redis
 redis==3.5.3
