@@ -6,6 +6,7 @@ __pycache__/
 celerybeat*
 .local/
 *.log
+*.log.*
 .ash_history
 .coverage
 web/.cache
