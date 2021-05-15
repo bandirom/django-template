@@ -8,9 +8,13 @@ RUN apk update \
     # install Pillow dependencies
     jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev
 
+ARG TEMP_PATH=/usr/src/web
+
+ENV PYTHONPATH="${PYTHONPATH}:${TEMP_PATH}"
+
 # install dependencies
-COPY ./web/src/requirements  /usr/src/web/requirements
-RUN pip install --upgrade pip && pip install --prefix=/install -r /usr/src/web/requirements/production.txt
+COPY ./web/src/requirements  $TEMP_PATH/requirements
+RUN pip install --upgrade pip && pip install --prefix=/install -r $TEMP_PATH/requirements/production.txt
 
 
 # pull official base image
