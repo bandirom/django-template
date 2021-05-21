@@ -21,7 +21,9 @@ RUN apk update \
     jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev \
 	  && pip install --upgrade pip \
     && addgroup -g $GID -S $USER \
-	  && adduser -S $USER -G $USER --disabled-password --uid "$UID"
+	  && adduser -S $USER -G $USER --disabled-password --uid "$UID" \
+	  && mkdir -p /socket \
+    && chmod -R 777 /socket
 
 COPY ./web/src/requirements  ./requirements
 RUN pip install -r ./requirements/local.txt

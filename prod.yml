@@ -19,6 +19,7 @@ services:
     volumes:
       - static_volume:/home/ubuntu/web/static
       - media_volume:/home/ubuntu/web/media
+      - redis_socket:/socket
     expose:
       - 8000
     environment:
@@ -51,6 +52,8 @@ services:
     depends_on:
       - redis
     restart: always
+    volumes:
+      - redis_socket:/socket
     networks:
       - separated_network
   db:
@@ -68,10 +71,13 @@ services:
       timeout: 5s
       retries: 5
   redis:
-    image: redis:6.0.1-alpine
+    build:
+      context: .
+      dockerfile: docker/prod/redis/Dockerfile
     restart: always
     volumes:
       - redis_data:/data
+      - redis_socket:/socket
     networks:
       - separated_network
     healthcheck:
@@ -83,6 +89,7 @@ services:
 volumes:
   postgres_data:
   redis_data:
+  redis_socket:
   static_volume:
   media_volume:
 

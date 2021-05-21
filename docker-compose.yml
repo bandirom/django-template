@@ -8,6 +8,7 @@ services:
     entrypoint: /entrypoint.sh
     volumes:
       - ./web/:/usr/src/web/
+      - redis_socket:/socket
     ports:
       - 8000:8000
     env_file:
@@ -15,10 +16,8 @@ services:
       - docker/dev/env/.db.env
       - docker/prod/env/.data.env
     depends_on:
-      db:
-        condition: service_started
-      redis:
-        condition: service_started
+      - db
+      - redis
     restart: always
     networks:
       - microservice_network
@@ -33,7 +32,7 @@ services:
       timeout: 3s
       retries: 3
   db:
-    image: postgres:13.2-alpine
+    image: postgres:12.6-alpine
     hostname: postgres
     restart: always
     volumes:
@@ -43,15 +42,18 @@ services:
     networks:
       - separated_network
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER" ]
+      test: [ "CMD", "pg_isready -U $$POSTGRES_USER" ]
       interval: 50s
       timeout: 5s
       retries: 5
   redis:
-    image: redis:6.0.1-alpine
+    build:
+      context: .
+      dockerfile: ./docker/dev/redis/Dockerfile
     restart: always
     volumes:
       - redis_data:/data
+      - redis_socket:/socket
     networks:
       - separated_network
     healthcheck:
@@ -65,14 +67,13 @@ services:
       dockerfile: docker/dev/web/Dockerfile
     command: celery -A src worker -l info -Q celery
     volumes:
-      - ./web/:/usr/src/web/
+      - redis_socket:/socket
     env_file:
       - docker/dev/env/.env
       - docker/dev/env/.db.env
       - docker/prod/env/.data.env
     depends_on:
-      redis:
-        condition: service_started
+      - redis
     restart: always
     networks:
       - separated_network
@@ -81,6 +82,7 @@ services:
 volumes:
   postgres_data:
   redis_data:
+  redis_socket:
 
 networks:
   microservice_network:
