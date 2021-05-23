@@ -6,6 +6,7 @@ services:
       - static_volume:/home/ubuntu/web/static
       - media_volume:/home/ubuntu/web/media
       - ./logs/nginx:/var/log/nginx
+      - gunicorn_socket:/gunicorn_socket
     depends_on:
       - web
     restart: always
@@ -20,6 +21,7 @@ services:
       - static_volume:/home/ubuntu/web/static
       - media_volume:/home/ubuntu/web/media
       - redis_socket:/socket
+      - gunicorn_socket:/gunicorn_socket
     expose:
       - 8000
     environment:
@@ -90,6 +92,7 @@ volumes:
   postgres_data:
   redis_data:
   redis_socket:
+  gunicorn_socket:
   static_volume:
   media_volume:
 
