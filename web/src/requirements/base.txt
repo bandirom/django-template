@@ -53,3 +53,6 @@ sentry-sdk==1.1.0
 
 # MicroService Requests
 django-microservice-request>=0.1.4.1
+
+# RangeFilter for admin
+django-admin-rangefilter==0.8.1
