@@ -10,6 +10,11 @@ services:
     depends_on:
       - web
     restart: always
+    healthcheck:
+      test: service nginx status || exit 1
+      interval: 20s
+      timeout: 3s
+      retries: 3
     networks:
       - microservice_network
   web:
