@@ -25,7 +25,7 @@ services:
     volumes:
       - static_volume:/home/ubuntu/web/static
       - media_volume:/home/ubuntu/web/media
-      - redis_socket:/socket
+      - redis_socket:/redis_socket
       - gunicorn_socket:/gunicorn_socket
     expose:
       - 8000
@@ -60,11 +60,11 @@ services:
       - redis
     restart: always
     volumes:
-      - redis_socket:/socket
+      - redis_socket:/redis_socket
     networks:
       - separated_network
   db:
-    image: postgres:13.2-alpine
+    image: postgres:12.6-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
@@ -84,7 +84,7 @@ services:
     restart: always
     volumes:
       - redis_data:/data
-      - redis_socket:/socket
+      - redis_socket:/redis_socket
     networks:
       - separated_network
     healthcheck:

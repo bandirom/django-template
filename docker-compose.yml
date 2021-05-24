@@ -8,7 +8,7 @@ services:
     entrypoint: /entrypoint.sh
     volumes:
       - ./web/:/usr/src/web/
-      - redis_socket:/socket
+      - redis_socket:/redis_socket
     ports:
       - 8000:8000
     env_file:
@@ -53,7 +53,7 @@ services:
     restart: always
     volumes:
       - redis_data:/data
-      - redis_socket:/socket
+      - redis_socket:/redis_socket
     networks:
       - separated_network
     healthcheck:
@@ -67,7 +67,7 @@ services:
       dockerfile: docker/dev/web/Dockerfile
     command: celery -A src worker -l info -Q celery
     volumes:
-      - redis_socket:/socket
+      - redis_socket:/redis_socket
     env_file:
       - docker/dev/env/.env
       - docker/dev/env/.db.env

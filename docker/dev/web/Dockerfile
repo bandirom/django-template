@@ -21,9 +21,7 @@ RUN apk update \
     jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev \
 	  && pip install --upgrade pip \
     && addgroup -g $GID -S $USER \
-	  && adduser -S $USER -G $USER --disabled-password --uid "$UID" \
-	  && mkdir -p /socket \
-    && chmod -R 777 /socket
+	  && adduser -S $USER -G $USER --disabled-password --uid "$UID"
 
 COPY ./web/src/requirements  ./requirements
 RUN pip install -r ./requirements/local.txt
@@ -31,7 +29,10 @@ RUN pip install -r ./requirements/local.txt
 COPY --chown=$USER:$USER ./docker/dev/web/entrypoint.sh /entrypoint.sh
 COPY --chown=$USER:$USER ./web $HOME
 
-RUN chmod +x /entrypoint.sh && mkdir -p $HOME/static && chown -R $USER:$USER $HOME/static
+RUN chmod +x /entrypoint.sh \
+    && mkdir -p $HOME/static /redis_socket \
+    && chown -R $USER:$USER $HOME/static \
+    && chmod -R 777 /redis_socket
 
 RUN flake8 .
 

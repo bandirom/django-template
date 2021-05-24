@@ -35,8 +35,8 @@ ARG USER=ubuntu
 RUN apk update && apk add --no-cache postgresql-dev curl \
     && addgroup -g $GID -S $USER \
     && adduser -S $USER -G $USER --disabled-password --uid "$UID" \
-    && mkdir -p /gunicorn_socket \
-    && chmod -R 777 /gunicorn_socket \
+    && mkdir -p /gunicorn_socket /redis_socket \
+    && chmod -R 777 /gunicorn_socket /redis_socket \
     && chown -R $USER:$USER /gunicorn_socket
 
 WORKDIR $APP_HOME
