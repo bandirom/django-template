@@ -1,14 +1,14 @@
 from os import environ
 
 REDIS_URL = environ.get('REDIS_URL')
-REDIS_SOCKET = environ.get('REDIS_SOCKET')
+REDIS_UNIX_SOCKET_PATH = environ.get('REDIS_UNIX_SOCKET_PATH')
 
 CACHEOPS_REDIS = {
     'host': 'redis',
     'port': 6379,
     'db': 1,
     'socket_timeout': 3,
-    'unix_socket_path': REDIS_SOCKET
+    'unix_socket_path': REDIS_UNIX_SOCKET_PATH
 }
 
 CACHEOPS_DEFAULTS = {
