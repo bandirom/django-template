@@ -156,6 +156,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+TIMEZONE_COOKIE_NAME = 'timezone'
+TIMEZONE_COOKIE_AGE = 15552000  # 60*60*24*180
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
