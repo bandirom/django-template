@@ -45,8 +45,6 @@ COPY --from=builder /install /usr/local
 COPY --chown=$USER:$USER ./docker/prod/web/entrypoint.sh /entrypoint.sh
 COPY --chown=$USER:$USER ./web $APP_HOME
 
-RUN chmod +x /entrypoint.sh && mkdir -p static && chown -R $USER:$USER static
-
-RUN flake8 .
+RUN chmod +x /entrypoint.sh && mkdir -p static && chown -R $USER:$USER static && flake8 .
 
 USER $USER
