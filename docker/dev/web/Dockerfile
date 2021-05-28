@@ -32,8 +32,7 @@ COPY --chown=$USER:$USER ./web $HOME
 RUN chmod +x /entrypoint.sh \
     && mkdir -p $HOME/static /redis_socket \
     && chown -R $USER:$USER $HOME/static \
-    && chmod -R 777 /redis_socket
-
-RUN flake8 .
+    && chmod -R 777 /redis_socket \
+    && flake8 .
 
 USER $USER
