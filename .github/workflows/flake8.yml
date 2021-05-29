@@ -20,5 +20,5 @@ jobs:
           python -m pip install flake8
       - name: Run flake8
         run: |
-          pwd
+          cd web
           flake8 .
