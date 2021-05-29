@@ -35,5 +35,5 @@ jobs:
         run: |
           docker --version
           docker-compose --version
-          docker-compose -f prod.yml -f prod.dev.yml build
+          docker-compose -f prod.yml -f prod.dev.yml up -d --build
           docker-compose -f prod.yml -f prod.dev.yml run python manage.py test
