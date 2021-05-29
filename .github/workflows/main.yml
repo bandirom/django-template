@@ -25,5 +25,12 @@ jobs:
         run: |
           cd web
           flake8 .
+
+  build:
+    runs-on: ubuntu-latest
+    needs: ['testing']
+    steps:
+      - name: Check docker
+        run: |
           docker --version
           docker-compose --version
