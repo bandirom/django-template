@@ -48,7 +48,9 @@ jobs:
       - name: run remote build
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: ls -a
+          command: |
+            cd template
+            docker-compose -f prod.yml -f prod.dev.yml up -d --build
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USER }}
           privateKey: ${{ secrets.AWS_PEM}}
