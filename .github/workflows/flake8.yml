@@ -1,0 +1,24 @@
+name: Flake8
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install flake8
+        run: 
+          pip install --upgrade pip
+          pip install flake8
+          echo `pwd`
+          cd web
+          flake8 .
+
