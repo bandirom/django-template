@@ -35,16 +35,12 @@ jobs:
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.AWS_PEM }}
-          known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
-      - name: Adding Known Hosts
-        run: ssh-keyscan -H ${{ secrets.AWS_HOST }} >> ~/.ssh/known_hosts
-      - name: Check directory
-        run: |
-          ls -la
-          pwd
-          echo $USER
+#          known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
+#      - name: Adding Known Hosts
+#        run: ssh-keyscan -H ${{ secrets.AWS_HOST }} >> ~/.ssh/known_hosts
+
       - name: Deploy with rsync
-        run: rsync -avz . ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:/home/ubuntu/template/
+        run: rsync -az . ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:/home/ubuntu/template/
       - name: run remote build
         uses: garygrossgarten/github-action-ssh@release
         with:
@@ -54,8 +50,3 @@ jobs:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USER }}
           privateKey: ${{ secrets.AWS_PEM}}
-#      - name: Check docker
-#        run: |
-#          docker --version
-#          docker-compose --version
-#          docker-compose -f prod.yml -f prod.dev.yml up -d --build
