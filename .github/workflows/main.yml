@@ -45,9 +45,15 @@ jobs:
           echo $USER
       - name: Deploy with rsync
         run: rsync -avz . ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:/home/ubuntu/template/
-
-      - name: Check docker
-        run: |
-          docker --version
-          docker-compose --version
-          docker-compose -f prod.yml -f prod.dev.yml up -d --build
+      - name: run remote build
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: ls -a
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          privateKey: ${{ secrets.AWS_PEM}}
+#      - name: Check docker
+#        run: |
+#          docker --version
+#          docker-compose --version
+#          docker-compose -f prod.yml -f prod.dev.yml up -d --build
