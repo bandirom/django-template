@@ -1,4 +1,4 @@
-name: Flake8
+name: Main
 
 env:
   APP_NAME: "Template"
@@ -30,6 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: ['testing']
     steps:
+      - uses: actions/checkout@v2
       - name: Check docker
         run: |
           docker --version
