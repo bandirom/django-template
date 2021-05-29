@@ -1,5 +1,8 @@
 name: Flake8
 
+env:
+  APP_NAME: "Template"
+
 on:
   push:
     branches: [ master ]
