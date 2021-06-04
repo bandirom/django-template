@@ -15,3 +15,5 @@ services:
       - BACKUP_KEEP_WEEKS=4
       - BACKUP_KEEP_MONTHS=6
       - HEALTHCHECK_PORT=81
+    networks:
+      - separated_network
