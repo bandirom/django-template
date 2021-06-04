@@ -12,6 +12,7 @@ User = get_user_model()
 class CustomUserAdmin(UserAdmin):
     ordering = ('-id',)
     list_display = ('email', 'full_name', 'is_active')
+    search_fields = ('first_name', 'last_name', 'email')
 
     fieldsets = (
         (_('Personal info'), {'fields': ('id', 'first_name', 'last_name', 'email')}),
