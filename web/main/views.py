@@ -1,13 +1,28 @@
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.utils.decorators import method_decorator
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import GenericAPIView, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 
 from .serializers import UserSerializer, SetTimeZoneSerializer
 
-
 User = get_user_model()
+
+
+class TemplateAPIView(APIView):
+    """ Help to build CMS System using DRF, JWT and Cookies
+        path('some-path/', TemplateAPIView.as_view(template_name='template.html'))
+    """
+    permission_classes = (AllowAny,)
+    template_name = ''
+
+    @method_decorator(name='create', decorator=swagger_auto_schema(auto_schema=None))
+    def get(self, request, *args, **kwargs):
+        return Response()
 
 
 class UserView(GenericAPIView):

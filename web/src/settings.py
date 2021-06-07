@@ -30,6 +30,8 @@ USE_HTTPS = int(os.environ.get('USE_HTTPS', 0))
 ENABLE_SENTRY = int(os.environ.get('ENABLE_SENTRY', 0))
 ENABLE_SILK = int(os.environ.get('ENABLE_SILK', 0))
 ENABLE_DEBUG_TOOLBAR = int(os.environ.get('ENABLE_DEBUG_TOOLBAR', 0))
+ENABLE_RENDERING = int(os.environ.get('ENABLE_RENDERING', 0))
+
 INTERNAL_IPS = []
 
 ADMIN_URL = os.environ.get('ADMIN_URL', 'admin')
@@ -93,6 +95,14 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }
+
+if ENABLE_RENDERING:
+    """ For build CMS using DRF """
+    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.TemplateHTMLRenderer',
+    )
+
 
 ROOT_URLCONF = 'src.urls'
 
