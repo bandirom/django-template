@@ -12,3 +12,4 @@ celerybeat*
 web/.cache
 .cache
 web/media/*
+htmlcov
