@@ -2,4 +2,8 @@
 .cache
 .ash_history
 .coverage
+.vscode
+.idea
 htmlcov
+venv
+__pycache__
