@@ -7,7 +7,7 @@ services:
     volumes:
       - ./backup:/backups
     env_file:
-      - docker/dev/env/.db.env
+      - docker/prod/env/.db.env
     environment:
       - POSTGRES_EXTRA_OPTS=-Z9 --schema=public --blobs
       - SCHEDULE=@daily  # @every 0h30m00s  # @daily
