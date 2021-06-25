@@ -5,7 +5,7 @@
 django-silk>=4.1.0
 
 # Test coverage
-coverage==5.4
+coverage==5.5
 
 # command line utility for displaying the installed python packages in form of a dependency tree
 pipdeptree==2.0.0
@@ -17,5 +17,5 @@ importanize==0.7.0
 vulture==2.3
 
 # Debug Toolbar
-django-debug-toolbar==3.2
+django-debug-toolbar==3.2.1
 django-debug-toolbar-request-history==0.1.3

@@ -2,7 +2,7 @@ django==3.1.7
 django-filter==2.4.0
 
 # for PostgreSql database
-psycopg2==2.8.6
+psycopg2==2.9.1
 
 # Ddos defender: required redis
 django-defender==0.9.0
@@ -16,8 +16,8 @@ drf-yasg==1.20.0 # Swagger
 
 # for auth system
 django-allauth==0.42.0
-dj-rest-auth==2.1.3
-djangorestframework-simplejwt==4.6.0
+dj-rest-auth==2.1.7
+djangorestframework-simplejwt==4.7.1
 
 # For backend working
 celery==4.4.6
@@ -29,7 +29,7 @@ django-cors-headers==3.7.0
 flake8==3.9.2
 
 # Async Support
-uvicorn==0.13.3
+uvicorn==0.14.0
 httpx==0.16.1
 
 # Cashe Support
@@ -52,7 +52,7 @@ django_opentracing==1.1.0
 sentry-sdk==1.1.0
 
 # MicroService Requests
-django-microservice-request>=0.1.4.1
+django-microservice-request>=0.1.4.5
 
 # RangeFilter for admin
 django-admin-rangefilter==0.8.1
