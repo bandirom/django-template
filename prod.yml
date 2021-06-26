@@ -27,6 +27,7 @@ services:
       - media_volume:/home/ubuntu/web/media
       - redis_socket:/redis_socket
       - gunicorn_socket:/gunicorn_socket
+      - ./logs/django:/home/ubuntu/web/logs
     expose:
       - 8000
     environment:
