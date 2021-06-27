@@ -27,6 +27,7 @@ services:
       - media_volume:/home/ubuntu/web/media
       - redis_socket:/redis_socket
       - gunicorn_socket:/gunicorn_socket
+      - postgres_socket:/postgres_socket
       - ./logs/django:/home/ubuntu/web/logs
     expose:
       - 8000
@@ -65,9 +66,12 @@ services:
     networks:
       - separated_network
   db:
-    image: postgres:12.6-alpine
+    build:
+      context: .
+      dockerfile: docker/prod/db/Dockerfile
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+      - postgres_socket:/postgres_socket
     env_file:
       - docker/prod/env/.db.env
     restart: always
@@ -99,6 +103,7 @@ volumes:
   redis_data:
   redis_socket:
   gunicorn_socket:
+  postgres_socket:
   static_volume:
   media_volume:
 
