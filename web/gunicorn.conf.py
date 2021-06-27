@@ -8,7 +8,7 @@ workers = 3  # cpu_count() * 2 + 1
 
 threads = 1
 
-worker_class = 'uvicorn.workers.UvicornH11Worker'
+worker_class = 'uvicorn.workers.UvicornWorker'
 
 loglevel = 'info'
 accesslog = None  # environ.get('APP_HOME', '') + '/logs/gunicorn_access.log'
