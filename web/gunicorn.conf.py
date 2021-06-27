@@ -17,6 +17,7 @@ errorlog = '-'  # environ.get('APP_HOME', '') + '/logs/gunicorn_errors.log'
 
 reload = False
 
+# Reload gunicorn worker if request count > max_requests
 max_requests = 1000
 max_requests_jitter = 200
 
