@@ -26,7 +26,7 @@ RUN apk update \
 COPY ./web/src/requirements  ./requirements
 RUN pip install -r ./requirements/local.txt
 
-COPY --chown=$USER:$USER ./docker/dev/web/entrypoint.sh /entrypoint.sh
+COPY --chown=$USER:$USER ./docker/dev/web/entrypoint.sh /
 COPY --chown=$USER:$USER ./web $HOME
 
 RUN chmod +x /entrypoint.sh \
