@@ -16,7 +16,7 @@ class TimezoneMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if tzname := request.COOKIES.get(settings.TIMEZONE_COOKIE_NAME):
+        if tzname := request.COOKIES.get(getattr(settings, 'TIMEZONE_COOKIE_NAME', 'timezone')):
             timezone.activate(pytz.timezone(tzname))
         else:
             timezone.deactivate()
