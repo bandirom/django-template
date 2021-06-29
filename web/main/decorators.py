@@ -20,16 +20,24 @@ def cached_function_result(timeout=300):
     return decorator
 
 
-def execution_time(func) -> object:
-    def delta_time(*args, **kwargs):
-        t1 = default_timer()
-        data = func(*args, **kwargs)
-        delta = default_timer() - t1
-        logger.info(f'Function: {func.__name__}, Run time: {delta}')
-        logger.info(f'Returned data: {data}, Type: {type(data)}')
-        logger.info('############ SEPARATING ############')
-        return data
-    return delta_time
+def execution_time(stdout: str = 'console'):
+    """
+    :param stdout: 'console' or 'tuple'
+    """
+    def decorator(func) -> object:
+        def delta_time(*args, **kwargs):
+            t1 = default_timer()
+            data = func(*args, **kwargs)
+            delta = default_timer() - t1
+            if stdout == 'console':
+                logger.info(f'Function: {func.__name__}, Run time: {delta}')
+                logger.info(f'Returned data: {data}, Type: {type(data)}')
+                logger.info('############ SEPARATING ############')
+            elif stdout == 'tuple':
+                return data, delta
+            return data
+        return delta_time
+    return decorator
 
 
 def except_shell(errors=(Exception,), default_value=''):
