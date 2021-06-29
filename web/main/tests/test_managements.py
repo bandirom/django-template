@@ -8,4 +8,3 @@ class ManagementTest(TestCase):
         out = StringIO()
         call_command('wait_for_db', stdout=out)
         self.assertIn('Database available!', out.getvalue())
-
