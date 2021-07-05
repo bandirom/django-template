@@ -10,6 +10,7 @@ celerybeat*
 *.log.*
 .ash_history
 .bash_history
+.python_history
 .coverage
 .cache
 web/media/*
