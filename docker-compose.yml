@@ -19,7 +19,7 @@ services:
     depends_on:
       - db
       - redis
-    restart: always
+    restart: unless-stopped
     networks:
       - microservice_network
       - separated_network
@@ -37,7 +37,7 @@ services:
       context: .
       dockerfile: docker/dev/db/Dockerfile
     hostname: postgres
-    restart: always
+    restart: unless-stopped
     volumes:
       - postgres_data:/var/lib/postgresql/data/
       - postgres_socket:/postgres_socket
@@ -54,7 +54,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/dev/redis/Dockerfile
-    restart: always
+    restart: unless-stopped
     volumes:
       - redis_data:/data
       - redis_socket:/redis_socket
@@ -79,7 +79,7 @@ services:
       - docker/prod/env/.data.env
     depends_on:
       - redis
-    restart: always
+    restart: unless-stopped
     networks:
       - separated_network
 
