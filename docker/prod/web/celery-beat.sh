@@ -7,4 +7,4 @@ if [ -f "$FILE" ]; then
     rm "$FILE"
 fi
 
-celery -A application beat -l info
+celery -A src beat -l info
