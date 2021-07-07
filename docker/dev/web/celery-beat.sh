@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-FILE=/usr/src/web/celerybeat.pid
+FILE="$HOME/celerybeat.pid"
 
 if [ -f "$FILE" ]; then
     echo "Clean PID file"
