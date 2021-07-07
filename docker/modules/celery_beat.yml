@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: docker/dev/web/Dockerfile
-    entrypoint: /celery_beat.sh
+    entrypoint: /celery-beat.sh
     env_file:
       - docker/dev/env/.env
       - docker/dev/env/.db.env
