@@ -2,6 +2,7 @@ import logging
 from django.core.cache import cache
 from requests.exceptions import RequestException
 from kombu.exceptions import OperationalError
+from celery.exceptions import TimeoutError
 from timeit import default_timer
 from smtplib import SMTPRecipientsRefused
 
@@ -53,5 +54,5 @@ def except_shell(errors=(Exception,), default_value=''):
 
 
 request_shell = except_shell((RequestException,))
-celery_shell = except_shell((OperationalError,))
+celery_shell = except_shell((OperationalError, TimeoutError))
 smtp_shell = except_shell((SMTPRecipientsRefused,))
