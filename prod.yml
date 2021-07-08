@@ -36,6 +36,7 @@ services:
     env_file:
       - docker/prod/env/.env
       - docker/prod/env/.db.env
+      - docker/prod/env/.gunicorn.env
       - docker/prod/env/.data.env
     depends_on:
       - db
