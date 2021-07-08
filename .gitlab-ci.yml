@@ -1,0 +1,9 @@
+
+pep8-check:
+  image: python:3.9.1-alpine
+  only:
+    - branches
+  script:
+    - cd web
+    - python -mpip install flake8==3.9.1
+    - python -mflake8 .
