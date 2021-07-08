@@ -100,5 +100,6 @@ volumes:
 networks:
   microservice_network:
     driver: bridge
+    name: local_microservice_network
   separated_network:
     driver: bridge

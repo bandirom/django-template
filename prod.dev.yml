@@ -16,9 +16,11 @@ services:
     environment:
       <<: *variables
       SWAGGER_URL: http://localhost:9000
-    volumes:
-      - ./web:/home/ubuntu/web
   celery:
     command: celery -A src worker -l info -Q dev_celery
     environment:
       <<: *variables
+
+networks:
+  microservice_network:
+    name: dev_microservice_network
