@@ -1,5 +1,8 @@
 version: '3.7'
 
+x-variables: &variables
+  ENV_STAGE: local
+
 services:
   web:
     build:
@@ -12,6 +15,8 @@ services:
       - postgres_socket:/postgres_socket
     ports:
       - 8000:8000
+    environment:
+      <<: *variables
     env_file:
       - docker/dev/env/.env
       - docker/dev/env/.db.env
@@ -73,6 +78,8 @@ services:
     volumes:
       - redis_socket:/redis_socket
       - postgres_socket:/postgres_socket
+    environment:
+      <<: *variables
     env_file:
       - docker/dev/env/.env
       - docker/dev/env/.db.env

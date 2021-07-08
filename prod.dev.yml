@@ -1,5 +1,10 @@
 version: '3.7'
 
+x-variables: &variables
+  ENV_STAGE: dev
+  DEBUG: 1
+  USE_HTTPS: 0
+
 services:
   nginx:
     build:
@@ -9,8 +14,11 @@ services:
       - 9000:9000
   web:
     environment:
-      - DEBUG=1
-      - USE_HTTPS=0
-      - SWAGGER_URL=http://localhost:9000
+      <<: *variables
+      SWAGGER_URL: http://localhost:9000
     volumes:
       - ./web:/home/ubuntu/web
+  celery:
+    command: celery -A src worker -l info -Q dev_celery
+    environment:
+      <<: *variables
