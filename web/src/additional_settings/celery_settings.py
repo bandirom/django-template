@@ -3,7 +3,7 @@ from os import environ
 CELERY_BROKER_URL = environ.get('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = environ.get('CELERY_RESULT_BACKEND')
 
-CELERY_TIMEZONE = os.environ.get('TZ', 'UTC')
+CELERY_TIMEZONE = environ.get('TZ', 'UTC')
 
 CELERY_RESULT_PERSISTENT = True
 CELERY_TASK_TRACK_STARTED = True
