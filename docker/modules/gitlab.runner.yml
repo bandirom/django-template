@@ -5,7 +5,7 @@ services:
     container_name: gitlab-runner
     build:
       context: .
-      dockerfile: docker/modules/runner/Dockerfile
+      dockerfile: ./runner/Dockerfile
     volumes:
       - gitlab_runner_config:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
