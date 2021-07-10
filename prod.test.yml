@@ -1,0 +1,43 @@
+version: '3.7'
+
+x-variables: &variables
+  ENV_STAGE: test
+  DEBUG: 0
+  USE_HTTPS: 1
+  ENABLE_SILK: 0
+  ENABLE_SENTRY: 0
+  JAEGER_AGENT_HOST: ''
+
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/prod/nginx/Dockerfile
+  web:
+    volumes:
+      - postgres_socket:/postgres_socket
+    entrypoint: /tests.sh
+    environment:
+      <<: *variables
+    env_file:
+      - docker/dev/env/.db.env
+    depends_on:
+      - db
+  db:
+    build:
+      context: .
+      dockerfile: docker/prod/db/Dockerfile
+    volumes:
+      - postgres_socket:/postgres_socket
+    env_file:
+      - docker/dev/env/.db.env
+    networks:
+      - separated_network
+
+networks:
+  microservice_network:
+    name: dev_microservice_network
+
+volumes:
+  postgres_socket:
