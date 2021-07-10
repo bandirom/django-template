@@ -50,6 +50,4 @@ RUN chmod +x /entrypoint.sh /tests.sh \
     && chown -R $USER:$USER static \
     && flake8 .
 
-VOLUME $APP_HOME
-
 USER $USER
