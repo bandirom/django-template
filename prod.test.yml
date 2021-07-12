@@ -15,29 +15,23 @@ services:
       context: .
       dockerfile: docker/prod/nginx/Dockerfile
   web:
-    volumes:
-      - postgres_socket:/postgres_socket
     entrypoint: /tests.sh
+    restart: 'no'
     environment:
       <<: *variables
     env_file:
-      - docker/dev/env/.db.env
+      - docker/prod/env/.test.env
     depends_on:
       - db
   db:
     build:
       context: .
       dockerfile: docker/prod/db/Dockerfile
-    volumes:
-      - postgres_socket:/postgres_socket
     env_file:
-      - docker/dev/env/.db.env
+      - docker/prod/env/.test.env
     networks:
       - separated_network
 
 networks:
   microservice_network:
     name: dev_microservice_network
-
-volumes:
-  postgres_socket:
