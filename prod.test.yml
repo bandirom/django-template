@@ -3,7 +3,7 @@ version: '3.7'
 x-variables: &variables
   ENV_STAGE: test
   DEBUG: 0
-  USE_HTTPS: 1
+  USE_HTTPS: 0
   ENABLE_SILK: 0
   ENABLE_SENTRY: 0
   JAEGER_AGENT_HOST: ''
