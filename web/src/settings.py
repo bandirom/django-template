@@ -23,6 +23,7 @@ SUPERUSER_EMAIL = os.environ.get('SUPERUSER_EMAIL', 'test@test.com')
 SUPERUSER_PASSWORD = os.environ.get('SUPERUSER_PASSWORD', 'tester26')
 
 MICROSERVICE_TITLE = os.environ.get('MICROSERVICE_TITLE', 'Template')
+MICROSERVICE_PREFIX = os.environ.get('MICROSERVICE_PREFIX', '')
 
 REDIS_URL = os.environ.get('REDIS_URL')
 
@@ -170,10 +171,10 @@ USE_TZ = True
 TIMEZONE_COOKIE_NAME = 'timezone'
 TIMEZONE_COOKIE_AGE = 15552000  # 60*60*24*180
 
-STATIC_URL = '/static/'
+STATIC_URL = f'{MICROSERVICE_PREFIX}/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_URL = '/media/'
+MEDIA_URL = f'{MICROSERVICE_PREFIX}/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOCALE_PATHS = (
