@@ -76,6 +76,7 @@ services:
       dockerfile: docker/dev/web/Dockerfile
     command: celery -A src worker -l info -Q celery
     volumes:
+      - ./web/:/usr/src/web/
       - redis_socket:/redis_socket
       - postgres_socket:/postgres_socket
     environment:
