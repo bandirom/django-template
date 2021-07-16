@@ -9,6 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Project build
+        run: |
+          docker-compose build
+          docker-compose run --rm web coverage manage.py test --no-input
+
       - name: "Upload coverage to Codecov"
         uses: codecov/codecov-action@v1
         with:
