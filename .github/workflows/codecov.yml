@@ -13,7 +13,7 @@ jobs:
         run: |
           docker-compose build
           docker-compose -f docker-compose.yml -f debug.yml run -u root web coverage run manage.py test --keepdb
-#          docker-compose exec -T web coverage xml
+          docker-compose-f docker-compose.yml -f debug.yml run -u root web coverage xml
       - name: "Upload coverage to Codecov"
         uses: codecov/codecov-action@v1
         with:
