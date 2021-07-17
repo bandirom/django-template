@@ -13,9 +13,8 @@ jobs:
         run: |
           docker-compose build
           chmod +x docker/debug/web/entrypoint.sh
-          docker-compose -f docker-compose.yml up -d
-          docker-compose exec -T web coverage run manage.py test --no-input
-          docker-compose exec -T web coverage xml
+          docker-compose -f docker-compose.yml -f debug.yml run web coverage run manage.py test --no-input
+#          docker-compose exec -T web coverage xml
       - name: "Upload coverage to Codecov"
         uses: codecov/codecov-action@v1
         with:
