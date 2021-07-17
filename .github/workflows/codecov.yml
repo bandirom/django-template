@@ -12,7 +12,6 @@ jobs:
       - name: "Run coverage.py"
         run: |
           docker-compose build
-          chmod +x docker/debug/web/entrypoint.sh
           docker-compose -f docker-compose.yml -f debug.yml run web coverage run manage.py test --no-input
 #          docker-compose exec -T web coverage xml
       - name: "Upload coverage to Codecov"
