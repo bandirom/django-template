@@ -30,7 +30,6 @@ flake8==3.9.2
 
 # Async Support
 uvicorn==0.14.0
-httpx==0.16.1
 
 # Cashe Support
 django-cacheops==6.0
