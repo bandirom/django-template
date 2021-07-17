@@ -9,12 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Project build
+      - name: "Run coverage.py"
         run: |
           docker-compose build
-          docker-compose run --rm web coverage manage.py test --no-input
-
+          docker-compose -f docker-compose.yml -f debug.yml run web coverage run manage.py test --no-input
+          docker-compose -f docker-compose.yml -f debug.yml run --rm web coverage xml
       - name: "Upload coverage to Codecov"
         uses: codecov/codecov-action@v1
         with:
           fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+
