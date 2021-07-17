@@ -5,7 +5,7 @@ services:
     volumes:
       - static_volume:/home/ubuntu/web/static
       - media_volume:/home/ubuntu/web/media
-      - ./logs/nginx:/var/log/nginx
+      - ./logs/nginx:/var/log/nginx:delegated
       - gunicorn_socket:/gunicorn_socket
     depends_on:
       - web
@@ -28,7 +28,7 @@ services:
       - redis_socket:/redis_socket
       - gunicorn_socket:/gunicorn_socket
       - postgres_socket:/postgres_socket
-      - ./logs/django:/home/ubuntu/web/logs
+      - ./logs/django:/home/ubuntu/web/logs:delegated
     expose:
       - 8000
     environment:
