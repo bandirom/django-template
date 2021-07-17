@@ -1,3 +1,5 @@
+![GitHub](https://img.shields.io/github/license/bandirom/DjangoTemplateWithDocker)
+
 # Django template in docker with docker-compose
 
 ### Features of the template:
