@@ -60,6 +60,24 @@
 
 <b>Don't forget to set SMTP mail backend in settings</b>
 
+#### For set https connection you should have a domain name
+<b> In prod.certbot.yml: </b>
+
+Change the envs:
+    CERTBOT_EMAIL: your real email
+    ENVSUBST_VARS: list of variables which set in nginx.conf files
+    APP: value of the variable from list ENVSUBST_VARS
+    
+To set https for 2 and more nginx servers:
+    
+    ENVSUBST_VARS: API UI
+    API: api.domain.com
+    UI: domain.com
+    
+Run command:
+
+    docker-compose -f prod.yml -f prod.certbot.yml up -d --build
+    
 ### Will be added 
 
 * PgBouncer
