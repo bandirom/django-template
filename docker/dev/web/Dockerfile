@@ -29,7 +29,7 @@ RUN pip install -r ./requirements/local.txt
 COPY --chown=$USER:$USER ./docker/dev/web/entrypoints /
 COPY --chown=$USER:$USER ./web $HOME
 
-RUN chmod +x /entrypoint.sh /debug.sh /celery-beat.sh \
+RUN chmod +x /*.sh \
     && mkdir -p $HOME/static /redis_socket \
     && chown -R $USER:$USER $HOME/static \
     && chmod -R 777 /redis_socket \
