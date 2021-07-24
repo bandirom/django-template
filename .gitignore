@@ -17,3 +17,5 @@ web/media/*
 htmlcov
 venv
 backup
+.crt
+.key
