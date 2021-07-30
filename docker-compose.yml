@@ -29,7 +29,7 @@ services:
       - microservice_network
       - separated_network
     extra_hosts:
-      DOCKER-GATEWAY-HOST: 172.17.0.1  # Linux OS get access from docker container to localhost
+      docker-gateway-host: 172.17.0.1  # Linux OS get access from docker container to localhost
       # host.docker.internal - For docker in Windows. No other action is required.
       # If You need to connect to PostgreSql in localhost, just use host.docker.internal instead of localhost
     healthcheck:
@@ -90,7 +90,8 @@ services:
     restart: unless-stopped
     networks:
       - separated_network
-
+    extra_hosts:
+      docker-gateway-host: 172.17.0.1
 
 volumes:
   postgres_data:

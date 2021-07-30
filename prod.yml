@@ -51,7 +51,7 @@ services:
       timeout: 3s
       retries: 3
     extra_hosts:
-      DOCKER-GATEWAY-HOST: 172.17.0.1
+      docker-gateway-host: 172.17.0.1
   celery:
     build:
       context: .
@@ -68,6 +68,8 @@ services:
       - redis_socket:/redis_socket
     networks:
       - separated_network
+    extra_hosts:
+      docker-gateway-host: 172.17.0.1
   db:
     build:
       context: .
