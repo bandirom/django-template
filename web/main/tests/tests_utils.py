@@ -26,11 +26,11 @@ class UtilsTestCase(TestCase):
         self.assertEqual(utils.find_by_key(data, 'clouds'), data['list_dict'][0]['clouds'])
 
     def test_parse_str_with_space(self):
-        str1 = "We are the champions"
+        str1 = 'We are the champions'
         self.assertEqual(utils.parse_str_with_space(str1), str1)
-        str2 = " You are looking great   "
+        str2 = ' You are looking great   '
         self.assertEqual(utils.parse_str_with_space(str2), 'You are looking great')
-        str3 = " This    double  life you    lead is   eating you   up from  within    "
+        str3 = ' This    double  life you    lead is   eating you   up from  within    '
         self.assertEqual(utils.parse_str_with_space(str3), 'This double life you lead is eating you up from within')
 
     def test_find_dict_in_list(self):

@@ -10,7 +10,7 @@ services:
       dockerfile: docker/dev/web/Dockerfile
     entrypoint: /entrypoint.sh
     volumes:
-      - ./web/:/usr/src/web/
+      - ./web/:/usr/src/web/:cached
       - redis_socket:/redis_socket
       - postgres_socket:/postgres_socket
     ports:
@@ -29,7 +29,7 @@ services:
       - microservice_network
       - separated_network
     extra_hosts:
-      docker-gateway-host: 172.17.0.1  # Linux OS get access from docker container to localhost
+      - "docker-gateway-host:172.17.0.1"  # Linux OS get access from docker container to localhost
       # host.docker.internal - For docker in Windows. No other action is required.
       # If You need to connect to PostgreSql in localhost, just use host.docker.internal instead of localhost
     healthcheck:
@@ -76,7 +76,7 @@ services:
       dockerfile: docker/dev/web/Dockerfile
     command: celery -A src worker -l info -Q celery
     volumes:
-      - ./web/:/usr/src/web/
+      - ./web/:/usr/src/web/:cached
       - redis_socket:/redis_socket
       - postgres_socket:/postgres_socket
     environment:
@@ -91,7 +91,7 @@ services:
     networks:
       - separated_network
     extra_hosts:
-      docker-gateway-host: 172.17.0.1
+      - "docker-gateway-host:172.17.0.1"
 
 volumes:
   postgres_data:

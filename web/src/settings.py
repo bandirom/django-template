@@ -8,14 +8,13 @@ from .additional_settings.cacheops_settings import *
 from .additional_settings.logging_settings import *
 from .additional_settings.celery_settings import *
 
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
-DEBUG = int(os.environ.get("DEBUG", default=1))
+DEBUG = int(os.environ.get('DEBUG', default=1))
 
-ALLOWED_HOSTS: list = os.environ.get("DJANGO_ALLOWED_HOSTS").split(",")
+ALLOWED_HOSTS: list = os.environ.get('DJANGO_ALLOWED_HOSTS').split(',')
 
 AUTH_USER_MODEL = 'main.User'
 
@@ -36,6 +35,10 @@ ENABLE_RENDERING = int(os.environ.get('ENABLE_RENDERING', 0))
 INTERNAL_IPS = []
 
 ADMIN_URL = os.environ.get('ADMIN_URL', 'admin')
+
+ADMINS = [
+    ('Nazarii', 'bandirom@ukr.net'),
+]
 
 SWAGGER_URL = os.environ.get('SWAGGER_URL')
 
@@ -71,7 +74,6 @@ LOCAL_APPS = [
 
 INSTALLED_APPS += THIRD_PARTY_APPS + LOCAL_APPS
 
-
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'main.middleware.HealthCheckMiddleware',
@@ -106,7 +108,6 @@ if ENABLE_RENDERING:
         'rest_framework.renderers.TemplateHTMLRenderer',
     )
 
-
 ROOT_URLCONF = 'src.urls'
 
 LOGIN_URL = 'rest_framework:login'
@@ -132,14 +133,14 @@ WSGI_APPLICATION = 'src.wsgi.application'
 ASGI_APPLICATION = 'src.asgi.application'
 
 DATABASES = {
-    "default": {
-        "ENGINE": os.environ.get("SQL_ENGINE"),
-        "NAME": os.environ.get("POSTGRES_DB"),
-        "USER": os.environ.get("POSTGRES_USER"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
-        "HOST": os.environ.get("POSTGRES_SOCKET") or os.environ.get('POSTGRES_HOST'),
-        "PORT": os.environ.get("POSTGRES_PORT"),
-        "CONN_MAX_AGE": 0,
+    'default': {
+        'ENGINE': os.environ.get('SQL_ENGINE'),
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('POSTGRES_SOCKET') or os.environ.get('POSTGRES_HOST'),
+        'PORT': os.environ.get('POSTGRES_PORT'),
+        'CONN_MAX_AGE': 0,
     },
 }
 
@@ -157,6 +158,16 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': os.environ.get('REDIS_SOCKET'),
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
 
 LANGUAGE_CODE = 'en-us'
 
@@ -185,16 +196,19 @@ LANGUAGES = (
     ('en', _('English')),
 )
 
+SESSION_COOKIE_NAME = 'sessionid'
+CSRF_COOKIE_NAME = 'csrftoken'
+
 ROSETTA_MESSAGES_SOURCE_LANGUAGE_CODE = LANGUAGE_CODE
 ROSETTA_MESSAGES_SOURCE_LANGUAGE_NAME = 'English'
 ROSETTA_SHOW_AT_ADMIN_PANEL = True
 ROSETTA_ENABLE_TRANSLATION_SUGGESTIONS = False
 
-
 if JAEGER_AGENT_HOST := os.environ.get('JAEGER_AGENT_HOST'):
     from jaeger_client import Config
     from jaeger_client.config import DEFAULT_REPORTING_PORT
     from django_opentracing import DjangoTracing
+
     """If you don't need to trace all requests, comment middleware and set OPENTRACING_TRACE_ALL = False
         More information https://github.com/opentracing-contrib/python-django/#tracing-individual-requests
     """
@@ -202,12 +216,12 @@ if JAEGER_AGENT_HOST := os.environ.get('JAEGER_AGENT_HOST'):
     OPENTRACING_TRACE_ALL = True
     tracer = Config(
         config={
-            "sampler": {"type": "const", "param": 1},
-            "local_agent": {
-                "reporting_port": os.environ.get("JAEGER_AGENT_PORT", DEFAULT_REPORTING_PORT),
-                "reporting_host": JAEGER_AGENT_HOST,
+            'sampler': {'type': 'const', 'param': 1},
+            'local_agent': {
+                'reporting_port': os.environ.get('JAEGER_AGENT_PORT', DEFAULT_REPORTING_PORT),
+                'reporting_host': JAEGER_AGENT_HOST,
             },
-            "logging": int(os.environ.get('JAEGER_LOGGING', False)),
+            'logging': int(os.environ.get('JAEGER_LOGGING', False)),
         },
         service_name=MICROSERVICE_TITLE,
         validate=True,
@@ -218,6 +232,7 @@ if (SENTRY_DSN := os.environ.get('SENTRY_DSN')) and ENABLE_SENTRY:
     # More information on site https://sentry.io/
     from sentry_sdk import init
     from sentry_sdk.integrations.django import DjangoIntegration
+
     init(
         dsn=SENTRY_DSN,
         integrations=[DjangoIntegration()],

@@ -1,6 +1,3 @@
-from typing import Hashable
-
-
 def parse_str_with_space(var: str) -> str:
     """ return string without multiply whitespaces
     Example: var = "My name  is   John    "
@@ -23,7 +20,10 @@ def find_by_key(data: dict, target):
                     return find_by_key(i, target)
 
 
-def find_dict_in_list(target: list[dict], dict_key: Hashable, lookup_value) -> dict:
+def find_dict_in_list(target: list[dict], dict_key, lookup_value) -> dict:
     """Find a dict in a list of dict by dict key"""
-    data = list(filter(lambda x: x[dict_key] == lookup_value, target))
-    return data[0] if data else {}
+    return next(iter(x for x in target if x.get(dict_key) == lookup_value), {})
+
+
+def get_user_language(request) -> str:
+    return request.headers.get('Accept-Language', 'en').split(',')[0]

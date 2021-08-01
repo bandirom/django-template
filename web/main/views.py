@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
@@ -17,7 +16,7 @@ class TemplateAPIView(APIView):
     permission_classes = (AllowAny,)
     template_name = ''
 
-    @method_decorator(name='create', decorator=swagger_auto_schema(auto_schema=None))
+    @swagger_auto_schema(auto_schema=None)
     def get(self, request, *args, **kwargs):
         return Response()
 

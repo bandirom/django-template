@@ -16,7 +16,7 @@ schema_view_param = {
 
 schema_view = get_schema_view(
     openapi.Info(
-        title=settings.MICROSERVICE_TITLE + " API",
+        title=settings.MICROSERVICE_TITLE + ' API',
         default_version='v1',
         description='Microservice description'
     ),

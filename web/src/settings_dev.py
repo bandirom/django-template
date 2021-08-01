@@ -1,8 +1,6 @@
 from .settings import INSTALLED_APPS, MIDDLEWARE, ENABLE_SILK, INTERNAL_IPS
 from .settings import *
 
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 CORS_ORIGIN_ALLOW_ALL = True
 
 if ENABLE_SILK:
@@ -11,6 +9,7 @@ if ENABLE_SILK:
 
 if ENABLE_DEBUG_TOOLBAR:
     from socket import gethostbyname_ex, gethostname
+
     INSTALLED_APPS += ['debug_toolbar']
     MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
     hostname, d, ips = gethostbyname_ex(gethostname())

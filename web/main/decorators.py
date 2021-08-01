@@ -9,13 +9,14 @@ from smtplib import SMTPRecipientsRefused
 logger = logging.getLogger(__name__)
 
 
-def cached_function_result(timeout=300):
+def cached_function_result(timeout: int = 300, version: int = 1, prefix: str = ''):
     def decorator(function):
         def wrapper(*args, **kwargs):
-            if function.__name__ in cache:
-                return cache.get(function.__name__)
+            key = prefix + '_' + function.__name__ if prefix else function.__name__
+            if key in cache:
+                return cache.get(key)
             result = function(*args, **kwargs)
-            cache.set(function.__name__, result, timeout=timeout)
+            cache.set(key, result, timeout=timeout, version=version)
             return result
         return wrapper
     return decorator
@@ -41,18 +42,18 @@ def execution_time(stdout: str = 'console'):
     return decorator
 
 
-def except_shell(errors=(Exception,), default_value=''):
+def except_shell(errors=(Exception,), default_value=None):
     def decorator(func):
         def new_func(*args, **kwargs):
             try:
                 return func(*args, **kwargs)
             except errors as e:
                 logging.error(e)
-                return default_value or None
+                return default_value
         return new_func
     return decorator
 
 
 request_shell = except_shell((RequestException,))
 celery_shell = except_shell((OperationalError, TimeoutError))
-smtp_shell = except_shell((SMTPRecipientsRefused,))
+smtp_shell = except_shell((SMTPRecipientsRefused,), default_value=False)
