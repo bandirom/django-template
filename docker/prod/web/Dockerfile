@@ -46,8 +46,8 @@ COPY --chown=$USER:$USER ./docker/prod/web/entrypoints /
 COPY --chown=$USER:$USER ./web $APP_HOME
 
 RUN chmod +x /*.sh \
-    && mkdir -p static \
-    && chown -R $USER:$USER static \
+    && mkdir -p static logs \
+    && chown -R $USER:$USER static logs \
     && flake8 .
 
 USER $USER
