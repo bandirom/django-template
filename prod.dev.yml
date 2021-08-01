@@ -17,7 +17,7 @@ services:
       <<: *variables
       SWAGGER_URL: http://localhost:9000
   celery:
-    command: celery -A src worker -l info -Q dev_celery
+    command: celery -A src worker -l info -Q celery
     environment:
       <<: *variables
 
