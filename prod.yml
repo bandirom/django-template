@@ -61,7 +61,7 @@ services:
       context: .
       dockerfile: docker/prod/web/Dockerfile
     image: bandirom/django-template:0.1
-    command: celery -A src worker -l info -Q celery
+    command: celery -A src worker -l info
     env_file:
       - docker/prod/env/.env
       - docker/prod/env/.db.env
