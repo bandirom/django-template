@@ -1,4 +1,5 @@
 from os import environ
+from kombu import Queue, Exchange
 
 CELERY_BROKER_URL = environ.get('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = environ.get('CELERY_RESULT_BACKEND')
@@ -23,6 +24,12 @@ CELERY_BROKER_TRANSPORT_OPTIONS = {
     'interval_max': 3,
 }
 
+celery_exchange = Exchange('celery', type='direct')  # topic, fanout
+
 CELERY_TASK_ROUTES = {
     '*': {'queue': 'celery'},
 }
+
+CELERY_TASK_QUEUES = (
+    Queue('celery', exchange=celery_exchange, max_priority=10),
+)
