@@ -31,5 +31,5 @@ CELERY_TASK_ROUTES = {
 }
 
 CELERY_TASK_QUEUES = (
-    Queue('celery', exchange=celery_exchange, max_priority=10),
+    Queue('celery', exchange=celery_exchange),
 )
