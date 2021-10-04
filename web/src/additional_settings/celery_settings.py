@@ -31,5 +31,5 @@ CELERY_TASK_ROUTES = {
 }
 
 CELERY_TASK_QUEUES = (
-    Queue('celery', exchange=celery_exchange),
+    Queue('celery', exchange=celery_exchange, queue_arguments={'x-queue-mode': 'lazy'}),
 )
