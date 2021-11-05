@@ -232,15 +232,23 @@ if (SENTRY_DSN := os.environ.get('SENTRY_DSN')) and ENABLE_SENTRY:
     # More information on site https://sentry.io/
     from sentry_sdk import init
     from sentry_sdk.integrations.django import DjangoIntegration
+    from sentry_sdk.integrations.redis import RedisIntegration
+    from sentry_sdk.integrations.celery import CeleryIntegration
 
     init(
         dsn=SENTRY_DSN,
-        integrations=[DjangoIntegration()],
+        integrations=[
+            DjangoIntegration(),
+            RedisIntegration(),
+            CeleryIntegration(),
+        ],
 
         # Set traces_sample_rate to 1.0 to capture 100%
         # of transactions for performance monitoring.
         # We recommend adjusting this value in production.
-        traces_sample_rate=1.0,
+        traces_sample_rate=float(os.environ.get('SENTRY_TRACES_SAMPLE_RATE', '1.0')),
+        environment=os.environ.get('SENTRY_ENV', 'development'),
+        sample_rate=float(os.environ.get('SENTRY_SAMPLE_RATE', '1.0')),
 
         # If you wish to associate users to errors (assuming you are using
         # django.contrib.auth) you may enable sending PII data.
