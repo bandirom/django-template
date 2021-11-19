@@ -8,3 +8,4 @@ htmlcov
 venv
 __pycache__
 backup
+node_modules
