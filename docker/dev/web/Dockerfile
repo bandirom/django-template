@@ -1,5 +1,5 @@
 # pull official base image
-FROM python:3.9.1-alpine
+FROM python:3.10.0-alpine
 MAINTAINER bandirom@ukr.net
 
 ENV PYTHONDONTWRITEBYTECODE=1 \

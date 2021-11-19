@@ -1,5 +1,5 @@
 # pull official base image
-FROM python:3.9.1-alpine as builder
+FROM python:3.10.0-alpine as builder
 MAINTAINER bandirom@ukr.net
 
 RUN apk update \

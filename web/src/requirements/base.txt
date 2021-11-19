@@ -1,4 +1,4 @@
-django==3.2.7
+django==3.2.9
 django-filter==2.4.0
 
 # for PostgreSql database
@@ -53,7 +53,7 @@ django_opentracing==1.1.0
 sentry-sdk==1.4.3
 
 # MicroService Requests
-django-microservice-request==0.1.4.6
+django-microservice-request==0.1.4.8
 
 # RangeFilter for admin
 django-admin-rangefilter==0.8.1
