@@ -43,14 +43,6 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'django.server',
         },
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'main.logging.AdminEmailHandler',
-            'include_html': True,
-            'filters': ['require_debug_false'],
-            'email_backend': 'django.core.mail.backends.{0}.EmailBackend'.format(
-                environ.get('EMAIL_BACKEND', 'console')),
-        }
     },
     'loggers': {
         'django': {
@@ -58,7 +50,7 @@ LOGGING = {
             'propagate': True
         },
         'django.request': {
-            'handlers': ['django.server', 'mail_admins'],
+            'handlers': ['django.server'],
             'level': 'ERROR',
             'propagate': False,
         },

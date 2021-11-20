@@ -1,11 +1,15 @@
 from time import sleep
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import TestCase, override_settings
 
 from main import decorators
 
 User = get_user_model()
+
+CACHES = {'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'}}
+
+locmem_cache = override_settings(CACHES=CACHES)
 
 
 class DecoratorTest(TestCase):
@@ -48,6 +52,7 @@ class DecoratorTest(TestCase):
         self.assertEqual(data, 'Hello World')
         self.assertGreater(delta, 1, f'Delta: {delta}')
 
+    @locmem_cache
     def test_cached_function_result(self):
         sleep_time = 2
         data, delta = self.cached_result_function(sleep_time)

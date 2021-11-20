@@ -2,14 +2,15 @@ version: '3.7'
 
 services:
   nginx:
-    image: bandirom/django-template-nginx:0.1
+    build:
+      context: .
+      dockerfile: docker/prod/nginx/Dockerfile
+    image: bandirom/django-template-nginx:${DOCKER_TAG:-latest}
     volumes:
       - static_volume:/home/ubuntu/web/static
       - media_volume:/home/ubuntu/web/media
-      - ./logs/nginx:/var/log/nginx:delegated
       - gunicorn_socket:/gunicorn_socket
-    depends_on:
-      - web
+    depends_on: [web]
     restart: always
     healthcheck:
       test: service nginx status || exit 1
@@ -24,7 +25,7 @@ services:
     build:
       context: .
       dockerfile: docker/prod/web/Dockerfile
-    image: bandirom/django-template:0.1
+    image: bandirom/django-template:${DOCKER_TAG:-latest}
     entrypoint: /entrypoint.sh
     volumes:
       - static_volume:/home/ubuntu/web/static
@@ -42,9 +43,7 @@ services:
       - docker/prod/env/.db.env
       - docker/prod/env/.gunicorn.env
       - docker/prod/env/.data.env
-    depends_on:
-      - db
-      - redis
+    depends_on: [db, redis]
     restart: always
     networks:
       - microservice_network
@@ -60,14 +59,13 @@ services:
     build:
       context: .
       dockerfile: docker/prod/web/Dockerfile
-    image: bandirom/django-template:0.1
+    image: bandirom/django-template:${DOCKER_TAG:-latest}
     command: celery -A src worker -l info
     env_file:
       - docker/prod/env/.env
       - docker/prod/env/.db.env
       - docker/prod/env/.data.env
-    depends_on:
-      - redis
+    depends_on: [redis]
     restart: always
     volumes:
       - redis_socket:/redis_socket
@@ -79,7 +77,7 @@ services:
     build:
       context: .
       dockerfile: docker/prod/db/Dockerfile
-    image: bandirom/django-template-db:latest
+    image: bandirom/django-template-db:${DOCKER_TAG:-latest}
     volumes:
       - postgres_data:/var/lib/postgresql/data/
       - postgres_socket:/postgres_socket
@@ -97,7 +95,7 @@ services:
     build:
       context: .
       dockerfile: docker/prod/redis/Dockerfile
-    image: bandirom/django-template-redis:latest
+    image: bandirom/django-template-redis:${DOCKER_TAG:-latest}
     restart: always
     volumes:
       - redis_data:/data

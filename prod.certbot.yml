@@ -9,8 +9,8 @@ services:
       - ./docker/prod/nginx/certbot.conf:/etc/nginx/user.conf.d/nginx_template.conf:ro
       - ./docker/prod/nginx/conf.d/proxy.conf:/etc/nginx/user.conf.d/proxy.conf:ro
     ports:
-      - 443:443/tcp
-      - 80:80/tcp
+      - "443:443"
+      - "80:80"
     environment:
       CERTBOT_EMAIL: your@email.com
       # variable names are space-separated
@@ -18,7 +18,7 @@ services:
       APP: your.domain.com
   web:
     environment:
-      - USE_HTTPS=1
+      USE_HTTPS: 1
 
 volumes:
   letsencrypt:

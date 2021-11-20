@@ -39,9 +39,6 @@ django-redis==5.0.0
 # ImageField
 pillow==8.1.1
 
-# JsonLogger
-python-json-logger==2.0.1
-
 # Translation
 django-rosetta==0.9.7
 
@@ -57,3 +54,6 @@ django-microservice-request==0.1.4.8
 
 # RangeFilter for admin
 django-admin-rangefilter==0.8.1
+
+# JsonValidator
+jsonschema==4.2.1

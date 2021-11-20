@@ -12,9 +12,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-DEBUG = int(os.environ.get('DEBUG', default=1))
+DEBUG = int(os.environ.get('DEBUG', 1))
 
-ALLOWED_HOSTS: list = os.environ.get('DJANGO_ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS: list = os.environ.get('DJANGO_ALLOWED_HOSTS', '*').split(',')
 
 AUTH_USER_MODEL = 'main.User'
 
@@ -24,7 +24,7 @@ SUPERUSER_PASSWORD = os.environ.get('SUPERUSER_PASSWORD', 'tester26')
 MICROSERVICE_TITLE = os.environ.get('MICROSERVICE_TITLE', 'Template')
 MICROSERVICE_PREFIX = os.environ.get('MICROSERVICE_PREFIX', '')
 
-REDIS_URL = os.environ.get('REDIS_URL')
+REDIS_URL = os.environ.get('REDIS_URL', 'redis://redis:6379')
 
 USE_HTTPS = int(os.environ.get('USE_HTTPS', 0))
 ENABLE_SENTRY = int(os.environ.get('ENABLE_SENTRY', 0))
@@ -36,16 +36,12 @@ INTERNAL_IPS = []
 
 ADMIN_URL = os.environ.get('ADMIN_URL', 'admin')
 
-ADMINS = [
-    ('Nazarii', 'bandirom@ukr.net'),
-]
-
 SWAGGER_URL = os.environ.get('SWAGGER_URL')
 
 API_KEY_HEADER = os.environ.get('API_KEY_HEADER')
 API_KEY = os.environ.get('API_KEY')
 
-HEALTH_CHECK_URL = os.environ.get('HEALTH_CHECK_URL')
+HEALTH_CHECK_URL = os.environ.get('HEALTH_CHECK_URL', '/application/health/')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
@@ -56,7 +52,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
 ]
 
 THIRD_PARTY_APPS = [
@@ -134,7 +129,7 @@ ASGI_APPLICATION = 'src.asgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('SQL_ENGINE'),
+        'ENGINE': os.environ.get('SQL_ENGINE', 'django.db.backends.postgresql'),
         'NAME': os.environ.get('POSTGRES_DB'),
         'USER': os.environ.get('POSTGRES_USER'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
@@ -162,7 +157,7 @@ AUTH_PASSWORD_VALIDATORS = [
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': os.environ.get('REDIS_SOCKET'),
+        'LOCATION': os.environ.get('REDIS_SOCKET', 'unix:///redis_socket/redis-server.sock?db=1'),
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
