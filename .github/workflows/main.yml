@@ -42,6 +42,7 @@ jobs:
         run: |
           cd $APP_HOME
           flake8 .
+          python manage.py makemigrations --check
           python manage.py test
     services:
       postgres:
