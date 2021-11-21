@@ -6,9 +6,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 	PYTHONUNBUFFERED=1 \
 	TZ=Europe/Kiev \
 	LANG=C.UTF-8 \
-	HOME=/usr/src/web
+	APP_HOME=/usr/src/web
 
-WORKDIR $HOME
+WORKDIR $APP_HOME
 
 ARG GID=1000
 ARG UID=1000
@@ -27,11 +27,11 @@ COPY ./web/src/requirements  ./requirements
 RUN pip install -r ./requirements/local.txt
 
 COPY --chown=$USER:$USER ./docker/dev/web/entrypoints /
-COPY --chown=$USER:$USER ./web $HOME
+COPY --chown=$USER:$USER ./web $APP_HOME
 
 RUN chmod +x /*.sh \
-    && mkdir -p $HOME/static /redis_socket \
-    && chown -R $USER:$USER $HOME/static \
+    && mkdir -p $APP_HOME/static /redis_socket \
+    && chown -R $USER:$USER $APP_HOME/static \
     && chmod -R 777 /redis_socket \
     && flake8 .
 
