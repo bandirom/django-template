@@ -8,5 +8,3 @@ python manage.py migrate
 python manage.py collectstatic --no-input
 
 gunicorn src.asgi:application
-
-exec "$@"
