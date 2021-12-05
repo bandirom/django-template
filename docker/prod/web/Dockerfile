@@ -1,4 +1,4 @@
-FROM python:3.10.0-alpine as builder
+FROM python:3.9.6-alpine as builder
 
 RUN apk update && \
     apk add --no-cache build-base postgresql-dev gcc python3-dev musl-dev openssl libffi-dev openssl-dev \
@@ -14,7 +14,7 @@ RUN pip install --upgrade pip setuptools && \
     pip install --no-warn-script-location --prefix=/install -r $TEMP_PATH/requirements/production.txt
 
 
-FROM python:3.10.0-alpine
+FROM python:3.9.6-alpine
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
