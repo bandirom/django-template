@@ -1,9 +1,21 @@
+image:
+  name: docker/compose:latest
+
+services:
+  - docker:19-dind
+
+variables:
+  # use overlays driver for improved performance
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
+  DOCKER_REGISTRY: ""
+  DOCKER_TAG: $CI_COMMIT_REF_SLUG
 
 pep8-check:
-  image: python:3.9.1-alpine
-  only:
-    - branches
+  image: python:3.9.6-alpine
+  only: [branches]
   script:
     - cd web
-    - python -mpip install flake8==3.9.1
-    - python -mflake8 .
+    - pip install flake8
+    - flake8 .
