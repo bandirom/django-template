@@ -30,7 +30,7 @@ django-cors-headers==3.10.0
 flake8==4.0.1
 
 # Async Support
-uvicorn==0.15.0
+uvicorn[standard]==0.15.0
 
 # Cashe Support
 django-cacheops==6.0
