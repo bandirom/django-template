@@ -1,4 +1,4 @@
-django==3.2.9
+django==3.2.10
 django-filter==2.4.0
 
 # for PostgreSql database
@@ -8,7 +8,7 @@ psycopg2==2.9.1
 django-defender==0.9.1
 
 # redis
-redis==3.5.3
+redis==4.0.2
 
 # for RestAPI
 djangorestframework==3.12.4
@@ -24,36 +24,32 @@ celery==5.1.2
 pyamqp==0.1.0.7
 
 # for react
-django-cors-headers==3.10.0
+django-cors-headers==3.10.1
 
 # For testing
 flake8==4.0.1
 
 # Async Support
-uvicorn[standard]==0.15.0
+uvicorn[standard]==0.16.0
 
 # Cashe Support
 django-cacheops==6.0
-django-redis==5.0.0
+django-redis==5.1.0
 
 # ImageField
 pillow==8.1.1
 
 # Translation
-django-rosetta==0.9.7
-
-# Jaeger OpenTracing
-jaeger-client==4.4.0
-django_opentracing==1.1.0
+django-rosetta==0.9.8
 
 # Monitoring System
-sentry-sdk==1.4.3
+sentry-sdk==1.5.0
 
 # MicroService Requests
 django-microservice-request==0.1.4.8
 
 # RangeFilter for admin
-django-admin-rangefilter==0.8.1
+django-admin-rangefilter==0.8.2
 
 # JsonValidator
 jsonschema==4.2.1
