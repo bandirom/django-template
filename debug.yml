@@ -3,7 +3,7 @@ version: '3.7'
 services:
   web:
     ports:
-      - 9009:8000  # in debugger settings set 0.0.0.0:8000 and use local 9009 port
+      - "9009:8000"  # in debugger settings set 0.0.0.0:8000 and use local 9009 port
     entrypoint: /debug.sh
     environment:
       - ENABLE_SILK=0
