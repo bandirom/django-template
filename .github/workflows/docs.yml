@@ -1,0 +1,33 @@
+name: Documentation
+on:
+  push:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Acquire sources
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+          architecture: x64
+
+      - name: Apply caching of dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ hashFiles('**/requirements-*.txt') }}
+
+      - name: Install dependencies
+        run: pip install -r docs/requirements.txt
+
+      - name: doc8 style checks
+        run: doc8 docs/source/ --config web/pyproject.toml
+
+      - name: Generate documentation
+        run: make -C docs html
+
+      - name: Spelling
+        run: make -C docs spelling

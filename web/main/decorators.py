@@ -28,7 +28,7 @@ def cached_result(cache_key: str, timeout: int = 300, version: Union[int, str] =
     return decorator
 
 
-def execution_time(stdout: str = "console"):
+def execution_time(stdout: str = 'console'):
     """
     :param stdout: 'console' or 'tuple'
     """
