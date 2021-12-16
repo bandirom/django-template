@@ -10,9 +10,10 @@ from .serializers import SetTimeZoneSerializer
 
 
 class TemplateAPIView(APIView):
-    """ Help to build CMS System using DRF, JWT and Cookies
-        path('some-path/', TemplateAPIView.as_view(template_name='template.html'))
+    """Help to build CMS System using DRF, JWT and Cookies
+    path('some-path/', TemplateAPIView.as_view(template_name='template.html'))
     """
+
     permission_classes = (AllowAny,)
     template_name = ''
 

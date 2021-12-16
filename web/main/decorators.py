@@ -1,4 +1,7 @@
 import logging
+from functools import wraps
+from typing import Union
+
 from django.core.cache import cache
 from requests.exceptions import RequestException
 from kombu.exceptions import OperationalError
@@ -9,48 +12,58 @@ from smtplib import SMTPRecipientsRefused
 logger = logging.getLogger(__name__)
 
 
-def cached_function_result(timeout: int = 300, version: int = 1, prefix: str = ''):
+def cached_result(cache_key: str, timeout: int = 300, version: Union[int, str] = 1):
     def decorator(function):
+        @wraps(function)
         def wrapper(*args, **kwargs):
-            key = prefix + '_' + function.__name__ if prefix else function.__name__
+            key = cache.make_key(cache_key, version)
             if key in cache:
                 return cache.get(key)
             result = function(*args, **kwargs)
-            cache.set(key, result, timeout=timeout, version=version)
+            cache.set(key, result, timeout=timeout)
             return result
+
         return wrapper
+
     return decorator
 
 
-def execution_time(stdout: str = 'console'):
+def execution_time(stdout: str = "console"):
     """
     :param stdout: 'console' or 'tuple'
     """
-    def decorator(func) -> object:
+
+    def decorator(func):
+        @wraps(func)
         def delta_time(*args, **kwargs):
             t1 = default_timer()
             data = func(*args, **kwargs)
             delta = default_timer() - t1
-            if stdout == 'console':
-                logger.info(f'Function: {func.__name__}, Run time: {delta}')
-                logger.info(f'Returned data: {data}, Type: {type(data)}')
-                logger.info('############ SEPARATING ############')
-            elif stdout == 'tuple':
+            if stdout == "console":
+                logger.debug(f"Function: {func.__name__}, Run time: {delta}")
+                logger.debug(f"Returned data: {data}, Type: {type(data)}")
+                logger.debug("############ SEPARATING ############")
+            elif stdout == "tuple":
                 return data, delta
             return data
+
         return delta_time
+
     return decorator
 
 
 def except_shell(errors=(Exception,), default_value=None):
     def decorator(func):
-        def new_func(*args, **kwargs):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
             try:
                 return func(*args, **kwargs)
             except errors as e:
                 logging.error(e)
                 return default_value
-        return new_func
+
+        return wrapper
+
     return decorator
 
 

@@ -4,14 +4,13 @@ from main import utils
 
 
 class UtilsTestCase(TestCase):
-
     def test_find_by_key(self):
         data = {
             'tes': 't',
             'dev': 'elop',
             'dict': {
                 'AWS': {'founder': 'Jeffrey Preston', 'date': 2006},
-                'Tesla': {'founder': 'Elon Musk', 'date': 2003}
+                'Tesla': {'founder': 'Elon Musk', 'date': 2003},
             },
         }
         self.assertEqual(utils.find_by_key(data, 'tes'), 't')

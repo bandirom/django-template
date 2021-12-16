@@ -10,8 +10,12 @@ from src.celery import app
 
 @app.task(name='email.send_information_email')
 def send_information_email(
-    subject: str, template_name: str, context: dict, to_email: Union[list[str], str],
-    letter_language: str = 'en', **kwargs
+    subject: str,
+    template_name: str,
+    context: dict,
+    to_email: Union[list[str], str],
+    letter_language: str = 'en',
+    **kwargs,
 ):
     """
     :param subject: email subject

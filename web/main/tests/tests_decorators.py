@@ -13,7 +13,6 @@ locmem_cache = override_settings(CACHES=CACHES)
 
 
 class DecoratorTest(TestCase):
-
     @classmethod
     def setUpTestData(cls):
         cls.user = User.objects.create_user(email='test111@test.com', password='test_test_test')
@@ -32,7 +31,7 @@ class DecoratorTest(TestCase):
         return 'Hello World'
 
     @decorators.execution_time(stdout='tuple')
-    @decorators.cached_function_result(timeout=5)
+    @decorators.cached_result(cache_key='cache_test', timeout=5)
     def cached_result_function(self, sleep_time: int = 2):
         sleep(sleep_time)
         return 'Result after hard func'

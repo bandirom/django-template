@@ -5,18 +5,13 @@ LOGGING = {
     'disable_existing_loggers': False,
     'root': {'level': 'INFO', 'handlers': ['default']},
     'formatters': {
-        'simple': {
-            'format': '%(levelname)s %(message)s'
-        },
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
-        },
+        'simple': {'format': '%(levelname)s %(message)s'},
+        'verbose': {'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'},
         'django.server': {
             '()': 'django.utils.log.ServerFormatter',
             'format': '[{server_time}] {message}',
             'style': '{',
         },
-
     },
     'filters': {
         'require_debug_false': {
@@ -24,7 +19,7 @@ LOGGING = {
         },
         'require_debug_true': {
             '()': 'django.utils.log.RequireDebugTrue',
-        }
+        },
     },
     'handlers': {
         'console': {
@@ -45,10 +40,7 @@ LOGGING = {
         },
     },
     'loggers': {
-        'django': {
-            'level': 'INFO',
-            'propagate': True
-        },
+        'django': {'level': 'INFO', 'propagate': True},
         'django.request': {
             'handlers': ['django.server'],
             'level': 'ERROR',
@@ -60,5 +52,4 @@ LOGGING = {
             'propagate': False,
         },
     },
-
 }

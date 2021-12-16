@@ -5,7 +5,6 @@ User = get_user_model()
 
 
 class UserManagerTest(TestCase):
-
     def test_create_user(self):
         user = User.objects.create_user(email='tester@test.com', password='password1234', first_name='Test')
         self.assertTrue(user.is_active)

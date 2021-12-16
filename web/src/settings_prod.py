@@ -2,12 +2,12 @@ from .settings import USE_HTTPS
 from .settings import *
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost",
-    "http://localhost:8000",
-    "http://localhost:3000",
+    'http://localhost',
+    'http://localhost:8000',
+    'http://localhost:3000',
 ]
 
-X_FRAME_OPTIONS = "DENY"
+X_FRAME_OPTIONS = 'DENY'
 
 # Only via HTTPS
 if USE_HTTPS:
@@ -17,6 +17,6 @@ if USE_HTTPS:
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-    SECURE_REFERRER_POLICY = "strict-origin"
+    SECURE_REFERRER_POLICY = 'strict-origin'
     SECURE_BROWSER_XSS_FILTER = True
-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

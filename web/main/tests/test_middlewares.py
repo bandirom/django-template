@@ -4,7 +4,6 @@ from rest_framework.status import HTTP_200_OK
 
 
 class MiddlewareTest(APITestCase):
-
     def test_health_check_middleware(self):
         url = settings.HEALTH_CHECK_URL
         response = self.client.get(url)

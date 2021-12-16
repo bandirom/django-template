@@ -5,7 +5,7 @@
 django-silk>=4.2.0
 
 # Test coverage
-coverage==6.2
+coverage[toml]==6.2
 
 # command line utility for displaying the installed python packages in form of a dependency tree
 pipdeptree==2.2.0

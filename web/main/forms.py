@@ -12,7 +12,7 @@ class IndentedJSONFormField(forms.JSONField):
 
 
 class IntegerMultipleChoiceField(forms.MultipleChoiceField):
-    """ Integer representation of MultipleChoiceField using JSONField"""
+    """Integer representation of MultipleChoiceField using JSONField"""
 
     def to_python(self, value):
         if not value:

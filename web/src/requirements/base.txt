@@ -11,16 +11,16 @@ django-defender==0.9.1
 redis==3.5.3
 
 # for RestAPI
-djangorestframework==3.12.4
+djangorestframework==3.13.1
 drf-yasg==1.20.0 # Swagger
 
 # for auth system
 django-allauth==0.42.0
-dj-rest-auth==2.1.11
+dj-rest-auth==2.1.12
 djangorestframework-simplejwt==5.0.0
 
 # For backend working
-celery==5.1.2
+celery==5.2.1
 pyamqp==0.1.0.7
 
 # for react
