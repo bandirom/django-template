@@ -2,7 +2,7 @@ django==3.2.10
 django-filter==2.4.0
 
 # for PostgreSql database
-psycopg2==2.9.1
+psycopg2-binary==2.9.2
 
 # Ddos defender: required redis
 django-defender==0.9.1
@@ -25,9 +25,6 @@ pyamqp==0.1.0.7
 
 # for react
 django-cors-headers==3.10.1
-
-# For testing
-flake8==4.0.1
 
 # Async Support
 uvicorn[standard]==0.16.0
