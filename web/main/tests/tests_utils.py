@@ -4,7 +4,6 @@ from main import utils
 
 
 class UtilsTestCase(TestCase):
-
     def test_parse_str_with_space(self):
         str1 = 'We are the champions'
         self.assertEqual(utils.parse_str_with_space(str1), str1)

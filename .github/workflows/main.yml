@@ -9,26 +9,8 @@ env:
   DOCKER_TAG: "latest"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Check Out Repo
-      uses: actions/checkout@v2
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-    - name: Build the Docker image
-      id: docker_build
-      run: |
-        docker-compose -f prod.yml build --pull
-        docker-compose -f prod.yml push
   test:
     runs-on: ubuntu-latest
-    needs: build
-    container:
-      image: bandirom/django-template:latest
     env:
       SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
       POSTGRES_USER: postgres
@@ -37,13 +19,18 @@ jobs:
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
     steps:
-      - name: Run the tests
-        id: tests
-        run: |
-          cd $APP_HOME
-          flake8 .
-          python manage.py makemigrations --check
-          python manage.py test
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Build project
+        run: docker-compose build
+      - name: flake8
+        run: docker-compose run --entrypoint="" web flake8 .
+      - name: black test
+        run: docker-compose run --entrypoint="" web black . --check
+      - name: Migration check
+        run: docker-compose run --entrypoint="" web python manage.py makemigrations --check
+      - name: Tests
+        run: docker-compose run --entrypoint="" web python manage.py test
     services:
       postgres:
         image: bandirom/django-template-db:latest
@@ -56,15 +43,19 @@ jobs:
           --health-retries 5
         env:
           POSTGRES_PASSWORD: postgres
-  test_black:
+  push:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [test]
     steps:
-      - name: CheckOut Repo
+      - name: Checkout Repo
         uses: actions/checkout@v2
-      - name: Run the black
-        id: tests
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Build the Docker image
+        id: docker_build
         run: |
-          pip install black
-          cd web
-          black . --check
+          docker-compose -f prod.yml build --pull
+          docker-compose -f prod.yml push

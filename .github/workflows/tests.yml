@@ -1,0 +1,56 @@
+name: Tests
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run the tests
+        id: tests
+        run: |
+          docker-compose build
+          docker-compose run --entrypoint="" web python manage.py makemigrations --check
+          docker-compose run --entrypoint="" web python manage.py test
+    services:
+      postgres:
+        image: bandirom/django-template-db:latest
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        env:
+          POSTGRES_PASSWORD: postgres
+  test_black:
+    runs-on: ubuntu-latest
+    steps:
+      - name: CheckOut Repo
+        uses: actions/checkout@v2
+      - name: Run the black
+        id: tests
+        run: |
+          pip install black
+          cd web
+          black . --check
+  test_flake8:
+    runs-on: ubuntu-latest
+    steps:
+      - name: CheckOut Repo
+        uses: actions/checkout@v2
+      - name: Run the black
+        run: |
+          pip install flake8
+          cd web
+          flake8 .
