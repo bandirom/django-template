@@ -28,7 +28,8 @@ ARG USER=ubuntu
 
 
 RUN apk update && \
-    apk add --no-cache postgresql-dev curl && \
+    apk add --no-cache postgresql-dev curl     \
+    jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev && \
     addgroup -g $GID -S $USER && \
     adduser -S $USER -G $USER --disabled-password --uid "$UID" && \
     mkdir -p /gunicorn_socket /redis_socket && \
@@ -43,7 +44,6 @@ COPY --chown=$USER:$USER ./web $APP_HOME
 
 RUN chmod +x /*.sh && \
     mkdir -p static logs  && \
-    chown -R $USER:$USER static logs  && \
-    flake8 .
+    chown -R $USER:$USER static logs
 
 USER $USER

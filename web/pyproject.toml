@@ -1,5 +1,5 @@
 [tool.black]
-line-length = 120
+line-length = 110
 exclude = "migrations"
 skip-string-normalization = true
 
@@ -38,6 +38,22 @@ exclude_lines = [
   "if __name__ == .__main__.:",
 ]
 
-
 [tool.coverage.xml]
 output = "coverage.xml"
+
+[tool.mypy]
+python_version = "3.9"
+cache_dir = ".cache/mypy"
+disallow_untyped_defs = true
+plugins = [
+  "mypy_django_plugin.main",
+  "mypy_drf_plugin.main"
+]
+
+[[tool.mypy.overrides]]
+module = ["*.migrations.*", "__init__"]
+ignore_errors = true
+
+[tool.django-stubs]
+django_settings_module = "src.settings_prod"
+ignore_missing_model_attributes = true
