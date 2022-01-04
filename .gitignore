@@ -21,3 +21,4 @@ backup
 .crt
 .key
 build
+*.mo

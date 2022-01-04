@@ -12,12 +12,12 @@ urlpatterns = [
     path(f'{admin_url}/', admin.site.urls),
     path(f'{admin_url}/defender/', include('defender.urls')),
     path('api/', include('rest_framework.urls')),
+    path('rosetta/', include('rosetta.urls')),
 ]
 
 urlpatterns += swagger_url
 
 if settings.DEBUG:
-    path('rosetta/', include('rosetta.urls')),
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     if settings.ENABLE_SILK:
