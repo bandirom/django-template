@@ -57,3 +57,6 @@ ignore_errors = true
 [tool.django-stubs]
 django_settings_module = "src.settings_prod"
 ignore_missing_model_attributes = true
+
+[tool.doc8]
+max_line_length = 110
