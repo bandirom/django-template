@@ -1,4 +1,4 @@
-django==3.2.10
+django~=3.2
 django-filter==2.4.0
 
 # for PostgreSql database
@@ -27,7 +27,7 @@ pyamqp==0.1.0.7
 django-cors-headers==3.10.1
 
 # Async Support
-# uvicorn[standard]==0.16.0
+uvicorn[standard]==0.16.0
 
 # Cashe Support
 django-cacheops==6.0
