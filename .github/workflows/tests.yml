@@ -1,5 +1,8 @@
 name: Tests
 
+env:
+  COVERAGE_THRESHOLD: 95
+
 on:
   push:
 
@@ -17,10 +20,13 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build project
         run: docker-compose build
-      - name: Migrate check
-        run: docker-compose run --entrypoint="" web python manage.py makemigrations --check
+      - name: Migration check
+        run: docker-compose run --entrypoint="" --no-deps web python manage.py makemigrations --check
       - name: Tests
-        run: docker-compose run --entrypoint="" web python manage.py test
+        run: docker-compose run --entrypoint="" -u root web coverage run manage.py test
+      - name: Coverage check
+        run: docker-compose run --entrypoint="" -u root web coverage report --fail-under=$COVERAGE_THRESHOLD
+
     services:
       postgres:
         image: bandirom/django-template-db:latest
@@ -44,6 +50,7 @@ jobs:
           pip install black
           cd web
           black . --check
+
   test_flake8:
     runs-on: ubuntu-latest
     steps:
