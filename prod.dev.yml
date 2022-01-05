@@ -2,7 +2,6 @@ version: '3.7'
 
 x-variables: &variables
   ENV_STAGE: dev
-  DEBUG: 0
   USE_HTTPS: 0
 
 services:
