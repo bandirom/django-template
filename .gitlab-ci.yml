@@ -12,6 +12,12 @@ variables:
   DOCKER_REGISTRY: ""
   DOCKER_TAG: $CI_COMMIT_REF_SLUG
 
+  # Use Docker BuildKit for better caching and faster builds
+  DOCKER_BUILDKIT: 1
+  BUILDKIT_INLINE_CACHE: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
+
 formatter-check:
   image: python:3.9.9-alpine
   only: [branches]
@@ -22,7 +28,6 @@ formatter-check:
     - black . --check
 
 tests:
-  image: python:3.9.9-alpine
   only: [branches]
   script:
     - docker-compose build
