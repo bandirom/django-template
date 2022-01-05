@@ -30,7 +30,7 @@ formatter-check:
 tests:
   only: [branches]
   script:
-    - docker-compose -f prod.yml build
+    - docker-compose build
 #    - docker-compose run --entrypoint="" web python manage.py makemigrations --check
 #    - docker-compose run --entrypoint="" -u root web coverage run manage.py test
 #    - docker-compose run --entrypoint="" -u root web coverage report --fail-under=$COVERAGE_THRESHOLD
