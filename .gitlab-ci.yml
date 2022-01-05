@@ -12,10 +12,11 @@ variables:
   DOCKER_REGISTRY: ""
   DOCKER_TAG: $CI_COMMIT_REF_SLUG
 
-pep8-check:
+formatter-check:
   image: python:3.9.6-alpine
   only: [branches]
   script:
+    - pip install --upgrade pip flake8 black
     - cd web
-    - pip install flake8
     - flake8 .
+    - black . --check
