@@ -28,7 +28,7 @@ COPY --chown=$USER:$USER ./web $APP_HOME
 
 RUN chmod +x /*.sh && \
     mkdir -p $APP_HOME/static /redis_socket && \
-    chown -R $USER:$USER $APP_HOME/static && \
+    chown -R $USER:$USER $APP_HOME && \
     chmod -R 777 /redis_socket
 
 USER $USER
