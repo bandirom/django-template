@@ -13,7 +13,7 @@ variables:
   DOCKER_TAG: $CI_COMMIT_REF_SLUG
 
 formatter-check:
-  image: python:3.9.6-alpine
+  image: python:3.9.9-alpine
   only: [branches]
   script:
     - pip install --upgrade pip flake8 black
