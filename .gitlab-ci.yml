@@ -13,9 +13,9 @@ variables:
   DOCKER_TAG: $CI_COMMIT_REF_SLUG
 
   # Use Docker BuildKit for better caching and faster builds
-  DOCKER_BUILDKIT: 1
-  BUILDKIT_INLINE_CACHE: 1
-  COMPOSE_DOCKER_CLI_BUILD: 1
+#  DOCKER_BUILDKIT: 1
+#  BUILDKIT_INLINE_CACHE: 1
+#  COMPOSE_DOCKER_CLI_BUILD: 1
 
 
 formatter-check:
