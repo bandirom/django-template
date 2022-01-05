@@ -20,3 +20,12 @@ formatter-check:
     - cd web
     - flake8 .
     - black . --check
+
+tests:
+  image: python:3.9.9-alpine
+  only: [branches]
+  script:
+    - docker-compose build
+    - docker-compose run --entrypoint="" web python manage.py makemigrations --check
+    - docker-compose run --entrypoint="" -u root web coverage run manage.py test
+    - docker-compose run --entrypoint="" -u root web coverage report --fail-under=$COVERAGE_THRESHOLD
