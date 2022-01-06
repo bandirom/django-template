@@ -17,6 +17,8 @@ variables:
   BUILDKIT_INLINE_CACHE: 1
   COMPOSE_DOCKER_CLI_BUILD: 1
 
+  COVERAGE_THRESHOLD: 95
+
 
 formatter-check:
   image: python:3.9.9-alpine
