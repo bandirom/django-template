@@ -12,10 +12,27 @@ variables:
   DOCKER_REGISTRY: ""
   DOCKER_TAG: $CI_COMMIT_REF_SLUG
 
-pep8-check:
-  image: python:3.9.6-alpine
+  # Use Docker BuildKit for better caching and faster builds
+  DOCKER_BUILDKIT: 1
+  BUILDKIT_INLINE_CACHE: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
+  COVERAGE_THRESHOLD: 95
+
+
+formatter-check:
+  image: python:3.9.9-alpine
   only: [branches]
   script:
+    - pip install --upgrade pip flake8 black
     - cd web
-    - pip install flake8
     - flake8 .
+    - black . --check
+
+tests:
+  only: [branches]
+  script:
+    - docker-compose build
+    - docker-compose run --entrypoint="" web python manage.py makemigrations --check
+    - docker-compose run --entrypoint="" -u root web coverage run manage.py test
+    - docker-compose run --entrypoint="" -u root web coverage report --fail-under=$COVERAGE_THRESHOLD
