@@ -1,7 +1,6 @@
 ### Required dependencies ###
 
 django==3.2.11
-django-filter==2.4.0
 psycopg2-binary==2.9.2
 redis==3.5.3
 djangorestframework==3.13.1
@@ -11,6 +10,9 @@ pyamqp==0.1.0.7
 uvicorn[standard]==0.16.0
 
 ### Optional dependencies ###
+
+# Filtering
+django-filter==2.4.0
 
 # for react
 django-cors-headers==3.10.1
