@@ -44,9 +44,10 @@ tests:
     - docker-compose run --entrypoint="" -u root web coverage run manage.py test
     - docker-compose run --entrypoint="" -u root web coverage report --fail-under=$COVERAGE_THRESHOLD
     - docker-compose run --entrypoint="" -u root web coverage xml
-    - docker-compose run --entrypoint="" web pwd
     - docker-compose run --entrypoint="" web ls -la
-    - docker cp $(docker-compose ps -q web):coverage.xml .
+    - docker-compose run --entrypoint="" web cat /usr/src/web/coverage.xml
+    - docker-compose ps -q web
+    - docker cp $(docker-compose ps -q web):/usr/src/web/coverage.xml .
   artifacts:
     reports:
       cobertura: coverage.xml
