@@ -31,8 +31,13 @@ formatter-check:
 
 tests:
   only: [branches]
+  coverage: '/TOTAL.*\s+(\d+%)$/'
   script:
     - docker-compose build
     - docker-compose run --entrypoint="" web python manage.py makemigrations --check
     - docker-compose run --entrypoint="" -u root web coverage run manage.py test
     - docker-compose run --entrypoint="" -u root web coverage report --fail-under=$COVERAGE_THRESHOLD
+    - docker cp $(docker ps -alq):/usr/src/web/coverage.xml .
+  artifacts:
+    reports:
+      cobertura: coverage.xml
