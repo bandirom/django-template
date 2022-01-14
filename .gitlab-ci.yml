@@ -4,6 +4,10 @@ image:
 services:
   - docker:19-dind
 
+stages:
+  - test
+  - build
+
 variables:
   # use overlays driver for improved performance
   DOCKER_DRIVER: overlay2
@@ -22,6 +26,7 @@ variables:
 
 formatter-check:
   image: python:3.9.9-alpine
+  stage: test
   only: [branches]
   script:
     - pip install --upgrade pip flake8 black
@@ -31,6 +36,7 @@ formatter-check:
 
 tests:
   only: [branches]
+  stage: test
   coverage: '/TOTAL.*\s+(\d+%)$/'
   script:
     - docker-compose build
