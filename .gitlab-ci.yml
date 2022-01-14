@@ -41,7 +41,7 @@ tests:
   script:
     - docker-compose build
     - docker-compose run --rm --entrypoint="" web python manage.py makemigrations --check
-    - docker-compose run --entrypoint="/test.sh"
+    - docker-compose run --entrypoint="/test.sh" web
     - docker-compose ps -q web
     - docker cp $(docker-compose ps -q web):/usr/src/web/coverage.xml .
   artifacts:
