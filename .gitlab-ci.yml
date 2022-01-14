@@ -46,7 +46,7 @@ tests:
     - docker-compose run --entrypoint="" -u root web coverage xml
     - docker-compose run --entrypoint="" web pwd
     - docker-compose run --entrypoint="" web ls -la
-    - docker cp $(docker-compose ps -q web):$PWD/coverage.xml .
+    - docker cp $(docker-compose ps -q web):coverage.xml .
   artifacts:
     reports:
       cobertura: coverage.xml
