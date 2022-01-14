@@ -4,6 +4,10 @@ image:
 services:
   - docker:19-dind
 
+stages:
+  - test
+  - build
+
 variables:
   # use overlays driver for improved performance
   DOCKER_DRIVER: overlay2
@@ -22,6 +26,7 @@ variables:
 
 formatter-check:
   image: python:3.9.9-alpine
+  stage: test
   only: [branches]
   script:
     - pip install --upgrade pip flake8 black
@@ -31,8 +36,13 @@ formatter-check:
 
 tests:
   only: [branches]
+  stage: test
+  coverage: '/TOTAL.*\s+(\d+%)$/'
   script:
     - docker-compose build
-    - docker-compose run --entrypoint="" web python manage.py makemigrations --check
-    - docker-compose run --entrypoint="" -u root web coverage run manage.py test
-    - docker-compose run --entrypoint="" -u root web coverage report --fail-under=$COVERAGE_THRESHOLD
+    - docker-compose run --rm --entrypoint="" web python manage.py makemigrations --check
+    - docker-compose run --entrypoint="/test.sh" -e COVERAGE_THRESHOLD=$COVERAGE_THRESHOLD web
+    - docker cp $(docker-compose ps -qa web):/usr/src/web/coverage.xml .
+  artifacts:
+    reports:
+      cobertura: coverage.xml
