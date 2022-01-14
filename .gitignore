@@ -22,3 +22,4 @@ backup
 .key
 build
 *.mo
+coverage.xml
