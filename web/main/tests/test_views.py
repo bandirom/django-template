@@ -1,11 +1,10 @@
-from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.test import modify_settings
 from django.utils import timezone
 from rest_framework.reverse import reverse_lazy
-from rest_framework.test import APITestCase
 from rest_framework.status import HTTP_200_OK
-
+from rest_framework.test import APITestCase
 
 User = get_user_model()
 

@@ -1,5 +1,6 @@
-from typing import Union
 from os import environ
+from typing import Union
+
 from django.core.mail import EmailMultiAlternatives
 from django.template import loader
 from django.utils.translation import activate

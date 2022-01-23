@@ -60,3 +60,9 @@ ignore_missing_model_attributes = true
 
 [tool.doc8]
 max_line_length = 110
+
+[tool.isort]
+multi_line_output = 3
+skip = "migrations"
+line_length = 110
+include_trailing_comma = true

@@ -1,5 +1,6 @@
 from os import environ
-from kombu import Queue, Exchange
+
+from kombu import Exchange, Queue
 
 CELERY_BROKER_URL = environ.get('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = environ.get('CELERY_RESULT_BACKEND')

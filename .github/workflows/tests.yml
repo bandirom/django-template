@@ -39,6 +39,18 @@ jobs:
           --health-retries 5
         env:
           POSTGRES_PASSWORD: postgres
+
+  test_isort:
+    runs-on: ubuntu-latest
+    steps:
+      - name: CheckOut Repo
+        uses: actions/checkout@v2
+      - name: Run the isort
+        run: |
+          pip install isort
+          cd web
+          isort . --check
+
   test_black:
     runs-on: ubuntu-latest
     steps:

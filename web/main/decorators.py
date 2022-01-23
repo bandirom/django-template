@@ -1,13 +1,14 @@
 import logging
 from functools import wraps
+from smtplib import SMTPRecipientsRefused
+from timeit import default_timer
 from typing import Union
 
 from django.core.cache import cache
-from requests.exceptions import RequestException
 from kombu.exceptions import OperationalError
+from requests.exceptions import RequestException
+
 from celery.exceptions import TimeoutError
-from timeit import default_timer
-from smtplib import SMTPRecipientsRefused
 
 logger = logging.getLogger(__name__)
 

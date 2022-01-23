@@ -1,5 +1,5 @@
-from .settings import INSTALLED_APPS, MIDDLEWARE, ENABLE_SILK, INTERNAL_IPS
 from .settings import *
+from .settings import ENABLE_SILK, INSTALLED_APPS, INTERNAL_IPS, MIDDLEWARE
 
 CORS_ORIGIN_ALLOW_ALL = True
 
