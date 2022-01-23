@@ -29,9 +29,10 @@ formatter-check:
   stage: test
   only: [branches]
   script:
-    - pip install --upgrade pip flake8 black
+    - pip install --upgrade pip flake8 black isort
     - cd web
     - flake8 .
+    - isort . --check
     - black . --check
 
 tests:
