@@ -25,6 +25,8 @@ jobs:
         run: docker-compose build
       - name: flake8
         run: docker-compose run --entrypoint="" web flake8 .
+      - name: isort test
+        run: docker-compose run --entrypoint="" web isort . --check
       - name: black test
         run: docker-compose run --entrypoint="" web black . --check
       - name: Migration check
