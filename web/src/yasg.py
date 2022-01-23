@@ -1,11 +1,10 @@
 from django.conf import settings
-from django.urls import path
 from django.contrib.auth.decorators import login_required
-from rest_framework.authentication import SessionAuthentication
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
+from django.urls import path
 from drf_yasg import openapi
-
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
+from rest_framework.authentication import SessionAuthentication
 
 schema_view_param = {
     'public': True,

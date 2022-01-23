@@ -3,7 +3,6 @@ from django.test import TestCase, override_settings
 
 from main import tasks
 
-
 locmem_email_backend = override_settings(
     EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend',
     CELERY_TASK_ALWAYS_EAGER=True,

@@ -1,5 +1,5 @@
-from .settings import USE_HTTPS
 from .settings import *
+from .settings import USE_HTTPS
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost',
