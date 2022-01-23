@@ -26,3 +26,4 @@ flake8==4.0.1
 mypy==0.930
 django-stubs==1.9.0
 djangorestframework-stubs==1.4.0
+isort==5.10.1
