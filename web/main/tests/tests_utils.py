@@ -1,4 +1,5 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
+from django.test.client import RequestFactory
 
 from main import utils
 
@@ -43,3 +44,19 @@ class UtilsTestCase(TestCase):
         self.assertEqual(result, list_1[3])
         result = utils.find_dict_in_list(target=list_1, dict_key='key2', lookup_value=False)
         self.assertEqual(result, list_1[2])
+
+    @override_settings(
+        LANGUAGES=(
+            ('en', 'English'),
+            ('fr', 'French'),
+            ('uk', 'Ukrainian'),
+        )
+    )
+    def test_supported_languages(self):
+        factory = RequestFactory()
+        request = factory.get('/')
+        self.assertEqual(utils.get_supported_user_language(request), 'en')
+        request.META['HTTP_ACCEPT_LANGUAGE'] = 'uk'
+        self.assertEqual(utils.get_supported_user_language(request), 'uk')
+        request.META['HTTP_ACCEPT_LANGUAGE'] = 'ru;q=0.9,en-US;q=0.8,en;q=0.7,ru-RU;q=0.6'
+        self.assertEqual(utils.get_supported_user_language(request), 'en')
