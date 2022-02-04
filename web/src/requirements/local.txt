@@ -5,25 +5,23 @@
 django-silk>=4.2.0
 
 # Test coverage
-coverage[toml]==6.2
+coverage[toml]==6.3.1
 
-# command line utility for displaying the installed python packages in form of a dependency tree
-pipdeptree==2.2.0
+# Freeze time in tests
+freezegun==1.1.0
 
-# Utility for organizing Python imports using PEP8
-importanize==0.7.0
-
-# Vulture finds unused code in Python programs.
-vulture==2.3
+# Utility for displaying the installed python packages in a form of a dependency tree
+pipdeptree==2.2.1
 
 # Debug Toolbar
 django-debug-toolbar==3.2.2
 django-debug-toolbar-request-history==0.1.4
 
 # Linters
-black==21.12b0
+black==22.1.0
 flake8==4.0.1
-mypy==0.930
+isort==5.10.1
+mypy==0.931
 django-stubs==1.9.0
 djangorestframework-stubs==1.4.0
-isort==5.10.1
+
