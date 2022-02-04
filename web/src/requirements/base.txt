@@ -38,7 +38,7 @@ django-rosetta==0.9.8
 sentry-sdk==1.5.1
 
 # MicroService Requests
-django-microservice-request==0.1.4.8
+django-microservice-request==0.5.1
 
 # JsonValidator
 jsonschema==4.4.0
