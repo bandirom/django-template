@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+
 from django.utils.translation import get_language_from_request
 
 if TYPE_CHECKING:
