@@ -6,14 +6,16 @@ redis==3.5.3
 djangorestframework==3.13.1
 drf-yasg==1.20.0
 celery==5.2.3
-pyamqp==0.1.0.7
 
 ### Optional dependencies ###
+
+# AMQP for RabbitMQ
+pyamqp==0.1.0.7
 
 # Filtering
 django-filter==2.4.0
 
-# for react
+# Cors headers
 django-cors-headers==3.11.0
 
 # Ddos defender: required redis
@@ -35,10 +37,10 @@ pillow==8.1.1
 django-rosetta==0.9.8
 
 # Monitoring System
-sentry-sdk==1.5.1
+sentry-sdk==1.5.4
 
 # MicroService Requests
-django-microservice-request==0.1.4.8
+django-microservice-request==0.5.1
 
 # JsonValidator
 jsonschema==4.4.0

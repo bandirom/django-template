@@ -41,10 +41,10 @@ def send_information_email(
     if file_path := kwargs.get('file_path'):
         file_path = environ.get('APP_HOME', environ.get('HOME')) + file_path
         email_message.attach_file(file_path, kwargs.get('mimetype'))
-    send_email(email_message)
+    return send_email(email_message)
 
 
 @smtp_shell
-def send_email(email_message):
+def send_email(email_message: EmailMultiAlternatives):
     email_message.send()
     return True
