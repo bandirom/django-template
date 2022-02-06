@@ -43,8 +43,9 @@ COPY --chown=$USER:$USER ./docker/prod/web/entrypoints /
 COPY --chown=$USER:$USER ./web $APP_HOME
 
 RUN chmod +x /*.sh && \
-    mkdir -p static logs  && \
-    chown -R $USER:$USER $APP_HOME
+    mkdir -p media logs  && \
+    python manage.py collectstatic --no-input && \
+    chown -R $USER:$USER $APP_HOME media logs
 
 USER $USER
 

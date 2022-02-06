@@ -1,4 +1,3 @@
 [flake8]
-ignore = F401
 exclude = .ash_history, .cache, venv, media, db.sqlite3, .mypy_cache, .idea */migrations/* src/settings*
 max-line-length = 120
