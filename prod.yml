@@ -7,8 +7,8 @@ services:
       dockerfile: docker/prod/nginx/Dockerfile
     image: bandirom/django-template-nginx:${DOCKER_TAG:-latest}
     volumes:
-      - static_volume:/home/ubuntu/web/static
-      - media_volume:/home/ubuntu/web/media
+      - static_volume:/app/static
+      - media_volume:/app/media
       - gunicorn_socket:/gunicorn_socket
     depends_on: [web]
     restart: always
@@ -33,9 +33,6 @@ services:
       - redis_socket:/redis_socket
       - gunicorn_socket:/gunicorn_socket
       - postgres_socket:/postgres_socket
-      - ./logs/django:/home/ubuntu/web/logs:delegated
-    expose:
-      - 8000
     environment:
       - USE_HTTPS=0
     env_file:
@@ -54,7 +51,7 @@ services:
       timeout: 3s
       retries: 3
     extra_hosts:
-      - "docker-gateway-host:172.17.0.1"
+      - "gateway-host:172.17.0.1"
   celery:
     build:
       context: .
@@ -72,7 +69,7 @@ services:
     networks:
       - separated_network
     extra_hosts:
-      - "docker-gateway-host:172.17.0.1"
+      - "gateway-host:172.17.0.1"
   db:
     build:
       context: .
