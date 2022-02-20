@@ -44,6 +44,7 @@ output = "coverage.xml"
 [tool.mypy]
 python_version = "3.9"
 cache_dir = ".cache/mypy"
+exclude = "tests"
 disallow_untyped_defs = true
 plugins = [
   "mypy_django_plugin.main",
