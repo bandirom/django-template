@@ -32,7 +32,7 @@ ENABLE_SILK = int(os.environ.get('ENABLE_SILK', 0))
 ENABLE_DEBUG_TOOLBAR = int(os.environ.get('ENABLE_DEBUG_TOOLBAR', 0))
 ENABLE_RENDERING = int(os.environ.get('ENABLE_RENDERING', 0))
 
-INTERNAL_IPS = []
+INTERNAL_IPS: list[str] = []
 
 ADMIN_URL = os.environ.get('ADMIN_URL', 'admin')
 
