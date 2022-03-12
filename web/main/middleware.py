@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 import pytz
 from django.conf import settings
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 class HealthCheckMiddleware(MiddlewareMixin):
-    def process_request(self, request: 'HttpRequest') -> HttpResponse:
+    def process_request(self, request: 'HttpRequest') -> Optional[HttpResponse]:
         if request.META['PATH_INFO'] == settings.HEALTH_CHECK_URL:
             return HttpResponse('pong')
 
