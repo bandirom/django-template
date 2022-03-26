@@ -47,6 +47,8 @@ RUN chmod +x /*.sh && \
     python manage.py collectstatic --no-input && \
     chown -R $USER:$USER $APP_HOME media logs
 
-USER $USER
+ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 8000
+
+USER $USER
