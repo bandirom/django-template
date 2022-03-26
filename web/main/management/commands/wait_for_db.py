@@ -16,8 +16,8 @@ class Command(BaseCommand):
             try:
                 connection.ensure_connection()
                 db_conn = True
-            except OperationalError:
-                self.stdout.write('Database unavailable, waiting 1 second...')
+            except OperationalError as e:  # pragma: no cover
+                self.stdout.write(f'Database unavailable, waiting 1 second... {e}')
                 sleep(1)
 
         self.stdout.write(self.style.SUCCESS('Database available!'))

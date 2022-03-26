@@ -31,4 +31,6 @@ RUN chmod +x /*.sh && \
     chown -R $USER:$USER $APP_HOME && \
     chmod -R 777 /redis_socket
 
+ENTRYPOINT ["/entrypoint.sh"]
+
 USER $USER
