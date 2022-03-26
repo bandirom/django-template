@@ -23,3 +23,5 @@ backup
 build
 *.mo
 coverage.xml
+postgresql-*.tgz
+redis-*.tgz

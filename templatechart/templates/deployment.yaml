@@ -42,15 +42,19 @@ spec:
               value: {{ required "Django secret key is required!" .Values.project.secretKey | quote }}
             - name: HEALTH_CHECK_URL
               value: {{ .Values.project.healthCheckUrl }}
-            - name: POSTGRES_DB
-              value: {{ .Values.postgresql.auth.database | quote }}
-            - name: POSTGRES_USER
-              value: {{ .Values.postgresql.auth.username | quote }}
-            - name: POSTGRES_PASSWORD
-              value: {{ .Values.postgresql.auth.password | quote }}
+            - name: REDIS_URL
+              value: {{ default (printf "redis://%s-redis-master:%s" .Release.Name  .Values.redis.port) .Values.redis.host | quote }}
             - name: POSTGRES_HOST
-              value: {{ default (printf "%s-postgresql" .Release.Name) .Values.project.postgresHost | quote }}
-
+              value: {{ default (printf "%s-postgresql" .Release.Name) .Values.postgresql.host | quote }}
+            - name: POSTGRES_DB
+              value: {{ .Values.postgresql.postgresqlDatabase | quote }}
+            - name: POSTGRES_USER
+              value: {{ .Values.postgresql.username | quote }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: postgresql-password
+                  name: {{ default (printf "%s-postgresql" .Release.Name) .Values.postgresql.secret | quote }}
           livenessProbe:
             initialDelaySeconds: 30
             periodSeconds: 60

@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: "bandirom/django-template"
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
@@ -83,15 +83,21 @@ affinity: {}
 
 postgresql:
   enabled: true
-  auth:
-    postgresPassword: "postgres123"
-    username: "developer"
-    password: "developer"
-    database: "template"
+  secret: false
+  username: "postgres"
+  host: false
+  postgresqlDatabase: "template"
+  postgresqlPassword: "postgres123"
 
+redis:
+  enabled: true
+  host: false
+  port: "6379"
+  auth:
+    enabled: false
 
 
 project:
   secretKey: "abcEFG"
   healthCheckUrl: "/application/health/"
-  postgresHost: false
+

@@ -10,3 +10,7 @@ dependencies:
     version: 10.12.7
     repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled, global.postgresql.enabled
+  - name: redis
+    version: 16.6.0
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled, global.redis.enabled
