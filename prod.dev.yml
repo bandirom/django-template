@@ -5,13 +5,11 @@ x-variables: &variables
   USE_HTTPS: 0
 
 services:
-  nginx:
-    ports:
-      - "9000:9000"
   web:
+    ports:
+      - "8000:8000"
     environment:
       <<: *variables
-      SWAGGER_URL: http://localhost:9000
   celery:
     environment:
       <<: *variables

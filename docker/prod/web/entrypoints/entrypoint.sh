@@ -6,4 +6,5 @@ python manage.py check --deploy
 
 python manage.py migrate
 
+nginx -g 'daemon on;'
 gunicorn src.asgi:application
