@@ -48,13 +48,12 @@ services:
     extra_hosts:
       - "gateway-host:172.17.0.1"
   db:
-    build:
-      context: .
-      dockerfile: docker/prod/db/Dockerfile
-    image: bandirom/django-template-db:${DOCKER_TAG:-latest}
+    image: postgres:12.6-alpine
+    command: ["-c", "config_file=/etc/postgresql/postgresql.conf"]
     volumes:
+      - ./docker/prod/db/pg.conf:/etc/postgresql/postgresql.conf
       - postgres_data:/var/lib/postgresql/data/
-      - postgres_socket:/postgres_socket
+      - postgres_socket:/var/run/postgresql/
     env_file:
       - docker/prod/env/.db.env
     restart: always
