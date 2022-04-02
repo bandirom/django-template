@@ -1,7 +1,7 @@
 from multiprocessing import cpu_count
 from os import environ
 
-bind: list = ['0.0.0.0:8000', 'unix:/gunicorn_socket/gunicorn.sock']
+bind: list = ['unix:/gunicorn_socket/gunicorn.sock']
 
 workers: int = int(environ.get('GUNICORN_WORKERS', cpu_count() * 2 + 1))
 

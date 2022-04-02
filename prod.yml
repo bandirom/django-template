@@ -1,36 +1,13 @@
-version: '3.7'
+version: "3.7"
 
 services:
-  nginx:
-    build:
-      context: .
-      dockerfile: docker/prod/nginx/Dockerfile
-    image: bandirom/django-template-nginx:${DOCKER_TAG:-latest}
-    volumes:
-      - static_volume:/app/static
-      - media_volume:/app/media
-      - gunicorn_socket:/gunicorn_socket
-    depends_on: [web]
-    restart: always
-    healthcheck:
-      test: service nginx status || exit 1
-      interval: 20s
-      timeout: 3s
-      retries: 3
-    networks:
-      - microservice_network
-    extra_hosts:
-      - "docker-gateway-host:172.17.0.1"
   web:
     build:
       context: .
       dockerfile: docker/prod/web/Dockerfile
     image: bandirom/django-template:${DOCKER_TAG:-latest}
     volumes:
-      - static_volume:/home/ubuntu/web/static
-      - media_volume:/home/ubuntu/web/media
       - redis_socket:/redis_socket
-      - gunicorn_socket:/gunicorn_socket
       - postgres_socket:/postgres_socket
     environment:
       - USE_HTTPS=0
@@ -71,13 +48,12 @@ services:
     extra_hosts:
       - "gateway-host:172.17.0.1"
   db:
-    build:
-      context: .
-      dockerfile: docker/prod/db/Dockerfile
-    image: bandirom/django-template-db:${DOCKER_TAG:-latest}
+    image: postgres:12.6-alpine
+    command: ["-c", "config_file=/etc/postgresql/postgresql.conf"]
     volumes:
+      - ./docker/prod/db/pg.conf:/etc/postgresql/postgresql.conf
       - postgres_data:/var/lib/postgresql/data/
-      - postgres_socket:/postgres_socket
+      - postgres_socket:/var/run/postgresql/
     env_file:
       - docker/prod/env/.db.env
     restart: always
@@ -111,10 +87,7 @@ volumes:
   postgres_data:
   redis_data:
   redis_socket:
-  gunicorn_socket:
   postgres_socket:
-  static_volume:
-  media_volume:
 
 networks:
   microservice_network:

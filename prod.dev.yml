@@ -1,17 +1,15 @@
-version: '3.7'
+version: "3.7"
 
 x-variables: &variables
   ENV_STAGE: dev
   USE_HTTPS: 0
 
 services:
-  nginx:
-    ports:
-      - "9000:9000"
   web:
+    ports:
+      - "9000:8000"
     environment:
       <<: *variables
-      SWAGGER_URL: http://localhost:9000
   celery:
     environment:
       <<: *variables
