@@ -11,7 +11,7 @@ User = get_user_model()
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
     ordering = ('-id',)
-    list_display = ('email', 'full_name', 'is_active')
+    list_display = ('email', 'full_name', 'is_active', 'enable_2fa')
     search_fields = ('first_name', 'last_name', 'email')
 
     fieldsets = (
