@@ -1,12 +1,12 @@
 import logging
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import GenericAPIView, CreateAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 
-from .permissions import UserNotActive2FA
+from .permissions import UserWithNotActive2FA
 from .services import Google2FAHandler
 from . import serializers
 
@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class TwoFAGenerateQRCodeView(APIView):
-    permission_classes = (UserNotActive2FA, )
+    permission_classes = (UserWithNotActive2FA, )
 
     def get(self, request):
         handler = Google2FAHandler()
@@ -26,4 +26,14 @@ class TwoFAGenerateQRCodeView(APIView):
 
 class Activate2FAView(CreateAPIView):
     permission_classes = (IsAuthenticated,)
-    serializer_class = serializers.TwoFASerializer
+    serializer_class = serializers.Activate2FASerializer
+
+
+class Login2FAView(GenericAPIView):
+    serializer_class = serializers.Login2FASecondStepSerializer
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data)

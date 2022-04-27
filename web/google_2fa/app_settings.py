@@ -3,6 +3,7 @@ from urllib.parse import urljoin
 
 from django.core.exceptions import ImproperlyConfigured
 
+TWO_FA_CODE_LENGTH = 6
 TWO_FA_RESERVE_KEY_SALT: str = getattr(settings, 'TWO_FA_RESERVE_KEY_SALT', 'reserve_key')
 
 GOOGLE_2FA_API_KEY: str = getattr(settings, "GOOGLE_2FA_API_KEY", None)

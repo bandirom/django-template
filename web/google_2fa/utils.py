@@ -3,12 +3,12 @@ from . import app_settings
 
 
 def make_reserve_key(reserve_key: str) -> str:
-    return signing.dumps(reserve_key, salt=app_settings.RESERVE_KEY_SALT)
+    return signing.dumps(reserve_key, salt=app_settings.TWO_FA_RESERVE_KEY_SALT)
 
 
-def is_reserve_key_valid(reserve_key: str) -> bool:
+def is_reserve_key_valid(reserve_key: str, hashed_reserve_key: str) -> bool:
     try:
-        signing.loads(reserve_key, salt=app_settings.RESERVE_KEY_SALT)
-        return True
-    except:
+        decoded = signing.loads(hashed_reserve_key, salt=app_settings.TWO_FA_RESERVE_KEY_SALT)
+        return reserve_key == decoded
+    except (signing.BadSignature, signing.SignatureExpired):
         return False

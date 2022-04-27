@@ -7,7 +7,7 @@ from django.db import transaction
 from google_2fa import app_settings
 
 from .models import Google2FA, generate_reserve_key
-from .utils import make_reserve_key
+from .utils import make_reserve_key, is_reserve_key_valid
 
 User = get_user_model()
 
@@ -52,6 +52,10 @@ class Google2FARequest:
 class Google2FAHandler:
 
     @staticmethod
+    def get_user(user_id: int):
+        return User.objects.select_related('two_fa').get(id=user_id)
+
+    @staticmethod
     def get_google_2fa(user) -> Optional[Google2FA]:
         try:
             return Google2FA.objects.get(user=user)
@@ -81,4 +85,15 @@ class Google2FAHandler:
         )
         user.enable_2fa = True
         user.save(update_fields=['enable_2fa'])
+        return user
+
+    @staticmethod
+    def validate_reserve_key(reserve_key: str, hashed_reserve_key: str) -> bool:
+        return is_reserve_key_valid(reserve_key, hashed_reserve_key)
+
+    @transaction.atomic()
+    def deactivate_user_2fa(self, user):
+        user.enable_2fa = False
+        user.save(update_fields=['enable_2fa'])
+        user.two_fa.delete()
         return user
