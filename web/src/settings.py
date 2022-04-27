@@ -34,6 +34,8 @@ ENABLE_RENDERING = int(os.environ.get('ENABLE_RENDERING', 0))
 
 INTERNAL_IPS: list[str] = []
 
+GOOGLE_2FA_API_KEY = '3b9ffc193cmsh9b469829d2de540p1f5970jsn1d72614be70a'
+
 ADMIN_URL = os.environ.get('ADMIN_URL', 'admin')
 
 SWAGGER_URL = os.environ.get('SWAGGER_URL')

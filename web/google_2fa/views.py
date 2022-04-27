@@ -10,4 +10,9 @@ from . import serializers
 
 logger = logging.getLogger(__name__)
 
-# Create your views here.
+
+class Google2FAGenerateQRCodeView(GenericAPIView):
+
+    def get(self, request):
+
+        return Response()
