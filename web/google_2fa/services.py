@@ -2,9 +2,12 @@ from typing import Optional
 from django.contrib.auth import get_user_model
 
 import requests
+from django.db import transaction
+
 from google_2fa import app_settings
 
 from .models import Google2FA, generate_reserve_key
+from .utils import make_reserve_key
 
 User = get_user_model()
 
@@ -22,8 +25,6 @@ class Google2FARequest:
         }
 
     def qr_code_generate(self, account: str, issuer: str = None, secret: str = None) -> str:
-        if not secret:
-            secret = self.get_secret()
         params = {
             "secret": secret,
             "issuer": issuer or self.ISSUER,
@@ -54,16 +55,30 @@ class Google2FAHandler:
     def get_google_2fa(user) -> Optional[Google2FA]:
         try:
             return Google2FA.objects.get(user=user)
-        except User.DoesNotExist:
+        except Google2FA.DoesNotExist:
             return None
 
-    def generate_user_qr_code(self, user):
+    @staticmethod
+    def generate_user_qr_code(user) -> dict:
         service = Google2FARequest()
-        google_2fa = self.get_google_2fa(user)
-        if not google_2fa:
-            reserve_key = generate_reserve_key()
-            Google2FA.objects.create(
-                user=user,
-                secret=service.get_secret(),
-            )
+        reserve_key: str = generate_reserve_key()
+        secret: str = service.get_secret()
+        qr_code: str = service.qr_code_generate(account=getattr(user, user.USERNAME_FIELD), secret=secret)
+        data = {
+            'qr_code': qr_code,
+            'reserve_key': reserve_key,
+            'secret': secret,
+        }
+        return data
 
+    @staticmethod
+    @transaction.atomic()
+    def enable_user_2fa(user, secret: str, reserve_key: str):
+        Google2FA.objects.create(
+            user=user,
+            secret=secret,
+            reserve_key=make_reserve_key(reserve_key),
+        )
+        user.enable_2fa = True
+        user.save(update_fields=['enable_2fa'])
+        return user

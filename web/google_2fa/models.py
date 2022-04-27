@@ -11,19 +11,18 @@ User = get_user_model()
 User.add_to_class('enable_2fa', models.BooleanField(default=False))
 
 
-def generate_reserve_key():
-    """Hashed 12 digit key"""
-    return randint(100000000000, 999999999999)
+def generate_reserve_key() -> str:
+    return str(randint(100000000000, 999999999999))
 
 
 class Google2FA(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='google_2fa')
-    reserve_key = models.CharField(max_length=12, default=generate_reserve_key)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='two_fa')
+    reserve_key = models.CharField(max_length=200, default=generate_reserve_key)
     secret = models.CharField(max_length=16)
 
     class Meta:
-        verbose_name = _('Google 2FA')
-        verbose_name_plural = _('Google 2FA')
+        verbose_name = _('Two Factor Authentication')
+        verbose_name_plural = _('Two Factor Authentications')
 
     def __str__(self) -> str:
         return f'{self.user} 2FA'
