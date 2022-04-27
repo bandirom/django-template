@@ -1,13 +1,13 @@
 from typing import Optional
-from django.contrib.auth import get_user_model
 
 import requests
+from django.contrib.auth import get_user_model
 from django.db import transaction
 
 from google_2fa import app_settings
 
 from .models import Google2FA, generate_reserve_key
-from .utils import make_reserve_key, is_reserve_key_valid
+from .utils import is_reserve_key_valid, make_reserve_key
 
 User = get_user_model()
 
@@ -50,7 +50,6 @@ class Google2FARequest:
 
 
 class Google2FAHandler:
-
     @staticmethod
     def get_user(user_id: int):
         return User.objects.select_related('two_fa').get(id=user_id)

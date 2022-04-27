@@ -1,7 +1,8 @@
-from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
-from .services import Google2FARequest, Google2FAHandler
+from rest_framework import serializers
+
 from . import app_settings
+from .services import Google2FAHandler, Google2FARequest
 
 
 class ValidateCodeMixin(serializers.Serializer):
@@ -9,7 +10,6 @@ class ValidateCodeMixin(serializers.Serializer):
 
 
 class Activate2FASerializer(ValidateCodeMixin, serializers.Serializer):
-
     def validate_code(self, code: str) -> str:
         request = self.context['request']
         secret: str = request.session.get('secret')
@@ -36,7 +36,6 @@ class Activate2FASerializer(ValidateCodeMixin, serializers.Serializer):
 
 
 class Login2FASecondStepSerializer(ValidateCodeMixin):
-
     def validate(self, data: dict):
         code: str = data['code']
         request = self.context['request']
@@ -44,7 +43,10 @@ class Login2FASecondStepSerializer(ValidateCodeMixin):
         user_id = int(request.session.pop('user_id', 1))
         user = handler.get_user(user_id)
         if len(code) > app_settings.TWO_FA_CODE_LENGTH:
-            valid: bool = handler.validate_reserve_key(code, user.two_fa.reserve_key,)
+            valid: bool = handler.validate_reserve_key(
+                code,
+                user.two_fa.reserve_key,
+            )
             if not valid:
                 raise serializers.ValidationError(_("Reserve key is not valid"))
             handler.deactivate_user_2fa(user)

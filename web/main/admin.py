@@ -20,7 +20,14 @@ class CustomUserAdmin(UserAdmin):
         (
             _('Permissions'),
             {
-                'fields': ('is_active', 'enable_2fa', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
+                'fields': (
+                    'is_active',
+                    'enable_2fa',
+                    'is_staff',
+                    'is_superuser',
+                    'groups',
+                    'user_permissions',
+                ),
             },
         ),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
