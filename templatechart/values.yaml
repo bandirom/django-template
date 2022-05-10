@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: "bandirom/django-template"
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
@@ -70,9 +70,9 @@ resources: {}
 
 autoscaling:
   enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50
   # targetMemoryUtilizationPercentage: 80
 
 nodeSelector: {}
