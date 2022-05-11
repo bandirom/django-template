@@ -71,7 +71,7 @@ services:
       context: .
       dockerfile: docker/dev/web/Dockerfile
     entrypoint: ""
-    command: celery -A src worker -l info
+    command: celery -A src worker --beat -l info
     volumes:
       - ./web/:/usr/src/web/:cached
       - redis_socket:/redis_socket
