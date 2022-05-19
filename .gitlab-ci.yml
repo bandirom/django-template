@@ -46,4 +46,6 @@ tests:
     - docker cp $(docker-compose ps -qa web):/usr/src/web/coverage.xml .
   artifacts:
     reports:
-      cobertura: coverage.xml
+      coverage_report:
+       coverage_format: cobertura
+       path: coverage.xml
