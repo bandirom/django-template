@@ -80,7 +80,3 @@ To set https for 2 and more nginx servers:
 Run command:
 
     docker-compose -f prod.yml -f prod.certbot.yml up -d --build
-    
-### Will be added 
-
-* PgBouncer
