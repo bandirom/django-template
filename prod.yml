@@ -65,10 +65,7 @@ services:
       timeout: 5s
       retries: 5
   redis:
-    build:
-      context: .
-      dockerfile: docker/prod/redis/Dockerfile
-    image: bandirom/django-template-redis:${DOCKER_TAG:-latest}
+    image: redis:6.0.6-alpine
     restart: always
     volumes:
       - redis_data:/data
