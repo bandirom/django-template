@@ -182,33 +182,8 @@ LANGUAGES = (('en', _('English')),)
 SESSION_COOKIE_NAME = 'sessionid'
 CSRF_COOKIE_NAME = 'csrftoken'
 
-if DEBUG:
-    ROSETTA_SHOW_AT_ADMIN_PANEL = True
+ROSETTA_SHOW_AT_ADMIN_PANEL = DEBUG
 
-
-if JAEGER_AGENT_HOST := os.environ.get('JAEGER_AGENT_HOST'):
-    from django_opentracing import DjangoTracing
-    from jaeger_client import Config
-    from jaeger_client.config import DEFAULT_REPORTING_PORT
-
-    """If you don't need to trace all requests, comment middleware and set OPENTRACING_TRACE_ALL = False
-        More information https://github.com/opentracing-contrib/python-django/#tracing-individual-requests
-    """
-    MIDDLEWARE.insert(0, 'django_opentracing.OpenTracingMiddleware')
-    OPENTRACING_TRACE_ALL = True
-    tracer = Config(
-        config={
-            'sampler': {'type': 'const', 'param': 1},
-            'local_agent': {
-                'reporting_port': os.environ.get('JAEGER_AGENT_PORT', DEFAULT_REPORTING_PORT),
-                'reporting_host': JAEGER_AGENT_HOST,
-            },
-            'logging': int(os.environ.get('JAEGER_LOGGING', False)),
-        },
-        service_name=MICROSERVICE_TITLE,
-        validate=True,
-    ).initialize_tracer()
-    OPENTRACING_TRACING = DjangoTracing(tracer)
 
 if (SENTRY_DSN := os.environ.get('SENTRY_DSN')) and ENABLE_SENTRY:
     # More information on site https://sentry.io/

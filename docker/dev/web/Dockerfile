@@ -1,4 +1,4 @@
-FROM python:3.9.9-alpine3.13
+FROM python:3.10.4-alpine3.15
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -18,7 +18,7 @@ RUN apk update && \
     jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev && \
     pip install --upgrade pip setuptools && \
     addgroup -g $GID -S $USER && \
-    adduser -S $USER -G $USER --disabled-password --uid "$UID"
+    adduser -S $USER -G $USER --uid "$UID"
 
 COPY ./web/src/requirements  ./requirements
 RUN pip install -r ./requirements/local.txt
