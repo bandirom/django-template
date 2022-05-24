@@ -41,8 +41,6 @@ services:
       - postgres_socket:/var/run/postgresql/
     env_file:
       - docker/dev/env/.db.env
-    ports:
-      - 5432:5432
     networks:
       - separated_network
     healthcheck:
