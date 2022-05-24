@@ -67,7 +67,10 @@ services:
   redis:
     image: redis:6.0.6-alpine
     restart: always
+    command:
+      - /var/lib/redis/redis.conf
     volumes:
+      - ./docker/prod/redis/redis.conf:/var/lib/redis/redis.conf
       - redis_data:/data
       - redis_socket:/redis_socket
     networks:
