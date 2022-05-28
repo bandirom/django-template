@@ -34,7 +34,7 @@ services:
       dockerfile: docker/prod/web/Dockerfile
     image: bandirom/django-template:${DOCKER_TAG:-latest}
     entrypoint: ""
-    command: celery -A src worker -l info
+    command: celery -A src worker --beat -l info
     env_file:
       - docker/prod/env/.env
       - docker/prod/env/.db.env
@@ -65,12 +65,12 @@ services:
       timeout: 5s
       retries: 5
   redis:
-    build:
-      context: .
-      dockerfile: docker/prod/redis/Dockerfile
-    image: bandirom/django-template-redis:${DOCKER_TAG:-latest}
+    image: redis:6.0.6-alpine
     restart: always
+    command:
+      - /var/lib/redis/redis.conf
     volumes:
+      - ./docker/prod/redis/redis.conf:/var/lib/redis/redis.conf
       - redis_data:/data
       - redis_socket:/redis_socket
     networks:
