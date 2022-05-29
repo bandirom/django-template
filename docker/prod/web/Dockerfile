@@ -1,4 +1,4 @@
-FROM python:3.9.9-alpine3.13 as builder
+FROM python:3.10.4-alpine3.15 as builder
 
 RUN apk update && \
     apk add --no-cache build-base postgresql-dev gcc python3-dev musl-dev openssl libffi-dev openssl-dev \
@@ -13,7 +13,7 @@ RUN pip install --upgrade pip setuptools && \
     pip install --no-warn-script-location --prefix=/install -r $TEMP_PATH/requirements/production.txt
 
 
-FROM python:3.9.9-alpine3.13
+FROM python:3.10.4-alpine3.15
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -30,7 +30,7 @@ RUN apk update && \
     apk add --no-cache postgresql-dev curl nginx \
     jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev && \
     addgroup -g $GID -S $USER && \
-    adduser -S $USER -G $USER --disabled-password --uid "$UID" && \
+    adduser -S $USER -G $USER --uid "$UID" && \
     mkdir -p /gunicorn_socket /redis_socket && \
     chmod -R 777 /gunicorn_socket /redis_socket && \
     chown -R $USER:$USER /gunicorn_socket

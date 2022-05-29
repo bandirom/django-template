@@ -3,9 +3,7 @@ version: '3.7'
 services:
   runner:
     container_name: gitlab-runner
-    build:
-      context: .
-      dockerfile: ./runner/Dockerfile
+    image: gitlab/gitlab-runner:latest
     volumes:
       - gitlab_runner_config:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock

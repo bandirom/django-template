@@ -11,9 +11,6 @@ worker_class: str = 'uvicorn.workers.UvicornWorker'
 
 loglevel: str = 'info'
 
-accesslog = None  # environ.get('APP_HOME', '') + '/logs/gunicorn_access.log'
-errorlog = '-'  # environ.get('APP_HOME', '') + '/logs/gunicorn_errors.log'
-
 reload: bool = bool(environ.get('GUNICORN_RELOAD', 0))
 
 # Reload gunicorn worker if request count > max_requests

@@ -53,8 +53,8 @@ spec:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ default (printf "%s-postgresql" .Release.Name) .Values.postgresql.secret | quote }}
                   key: postgresql-password
+                  name: {{ default (printf "%s-postgresql" .Release.Name) .Values.postgresql.secret | quote }}
           livenessProbe:
             initialDelaySeconds: 30
             periodSeconds: 60
