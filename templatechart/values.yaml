@@ -40,28 +40,13 @@ service:
   type: ClusterIP
   port: 80
 
-#ingress:
-#  enabled: false
-#  className: ""
-#  annotations: {}
-#    # kubernetes.io/ingress.class: nginx
-#    # kubernetes.io/tls-acme: "true"
-#  hosts:
-#    - host: chart-example.local
-#      paths:
-#        - path: /
-#          pathType: ImplementationSpecific
-#  tls: []
-#  #  - secretName: chart-example-tls
-#  #    hosts:
-#  #      - chart-example.local
-
 ingress:
   enabled: true
-  paths:
-    - /
   hosts:
-    - template.jollymanager.com
+    - host: template.jollymanager.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
   annotations:
     traefik.ingress.kubernetes.io/router.tls.certresolver: le
     traefik.ingress.kubernetes.io/router.tls: "true"
