@@ -2,7 +2,6 @@
 ![Codecov](https://img.shields.io/codecov/c/gh/bandirom/DjangoTemplateWithDocker?style=plastic)
 [![Documentation Status](https://readthedocs.org/projects/djangotemplatewithdocker/badge/?version=latest)](https://djangotemplatewithdocker.readthedocs.io/en/latest/?badge=latest)
 [![Docker Image CI](https://github.com/bandirom/DjangoTemplateWithDocker/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/bandirom/DjangoTemplateWithDocker/actions/workflows/main.yml)
-[![Github All Releases](https://img.shields.io/github/downloads/bandirom/DjangoTemplateWithDocker/total.svg?style=plastic)]()
 
 # Django template in docker with docker-compose
 
@@ -16,9 +15,8 @@
 * Celery worker
 * Redis service for caching using socket. Also message broker for queue
 * RabbitMQ configuration
-* Debug mode (PyCharm Professional)
 * ASGI support
-* Flake8 integration
+* Linters integration (flake7, black, isort)
 * Swagger in Django Admin Panel
 * Ready for deploy by one click
 * Separated configuration for dev and prod (requirements and settings)
