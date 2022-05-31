@@ -24,8 +24,6 @@ jobs:
         run: docker-compose run --entrypoint="" --no-deps web python manage.py makemigrations --check
       - name: Tests
         run: docker-compose run --entrypoint="/test.sh" -e COVERAGE_THRESHOLD=$COVERAGE_THRESHOLD -u root web
-#      - name: Coverage check
-#        run: docker-compose run --entrypoint="" -u root web coverage report --fail-under=$COVERAGE_THRESHOLD
 
     services:
       postgres:
