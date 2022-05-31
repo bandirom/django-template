@@ -53,6 +53,8 @@ RUN chmod +x /*.sh && \
 
 ENTRYPOINT ["/entrypoint.sh"]
 
+CMD ["gunicorn", "src.asgi:application"]
+
 EXPOSE 8000
 
 USER $USER

@@ -10,7 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+      SECRET_KEY: dummy
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
@@ -23,13 +23,11 @@ jobs:
       - name: Migration check
         run: docker-compose run --entrypoint="" --no-deps web python manage.py makemigrations --check
       - name: Tests
-        run: docker-compose run --entrypoint="" -u root web coverage run manage.py test
-      - name: Coverage check
-        run: docker-compose run --entrypoint="" -u root web coverage report --fail-under=$COVERAGE_THRESHOLD
+        run: docker-compose run --entrypoint="/test.sh" -e COVERAGE_THRESHOLD=$COVERAGE_THRESHOLD -u root web
 
     services:
       postgres:
-        image: bandirom/django-template-db:latest
+        image: postgres:12.6-alpine
         ports:
           - 5432:5432
         options: >-
