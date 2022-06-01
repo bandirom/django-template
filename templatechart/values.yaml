@@ -8,7 +8,7 @@ image:
   repository: "bandirom/django-template"
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1.0.0"
+  tag: "pingdom"
 
 imagePullSecrets: []
 nameOverride: ""
