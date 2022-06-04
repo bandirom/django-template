@@ -7,7 +7,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: postgresql
-    version: 10.12.7
+    version: 10.16.2
     repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled, global.postgresql.enabled
   - name: redis
