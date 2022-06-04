@@ -12,7 +12,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+      SECRET_KEY: dummy
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
@@ -35,7 +35,7 @@ jobs:
         run: docker-compose run --entrypoint="" web python manage.py test
     services:
       postgres:
-        image: bandirom/django-template-db:latest
+        image: postgres:12.6-alpine
         ports:
           - 5432:5432
         options: >-
