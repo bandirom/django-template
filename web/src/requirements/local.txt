@@ -2,10 +2,10 @@
 -r ./base.txt
 
 # For SQL debug
-django-silk==4.3.0
+django-silk==4.4.0
 
 # Test coverage
-coverage[toml]==6.4
+coverage[toml]==6.4.1
 
 # Freeze time in tests
 freezegun==1.2.1

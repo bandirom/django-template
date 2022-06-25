@@ -2,10 +2,10 @@
 
 django==3.2.13
 psycopg2-binary==2.9.3
-redis==4.3.1
+redis~=4.3.3
 djangorestframework==3.13.1
 drf-yasg==1.20.0
-celery==5.2.6
+celery~=5.2
 
 ### Optional dependencies ###
 
@@ -13,18 +13,18 @@ celery==5.2.6
 pyamqp==0.1.0.7
 
 # Filtering
-django-filter==21.1
+django-filter==22.1
 
 # Cors headers
-django-cors-headers==3.12.0
+django-cors-headers~=3.13.0
 
 # Ddos defender: required redis
-django-defender==0.9.4
+django-defender==0.9.5
 
 # for auth system
 django-allauth==0.50.0
 dj-rest-auth==2.2.4
-djangorestframework-simplejwt==5.1.0
+djangorestframework-simplejwt==5.2.0
 
 # Cashe Support
 django-cacheops==6.0
@@ -37,10 +37,10 @@ pillow==9.1.1
 django-rosetta==0.9.8
 
 # Monitoring System
-sentry-sdk==1.5.12
+sentry-sdk~=1.6
 
 # MicroService Requests
-django-microservice-request==0.5.1
+django-microservice-request~=0.5
 
 # JsonValidator
-jsonschema==4.5.1
+jsonschema==4.6.0
