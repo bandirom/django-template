@@ -25,6 +25,4 @@ if settings.DEBUG:
     if settings.ENABLE_SILK:
         urlpatterns.append(path('silk/', include('silk.urls', namespace='silk')))
     if settings.ENABLE_DEBUG_TOOLBAR:
-        from debug_toolbar import urls
-
-        urlpatterns.append(path('__debug__/', include(urls)))
+        urlpatterns.append(path('__debug__/', include('debug_toolbar.urls')))
