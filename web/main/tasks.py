@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
@@ -16,7 +16,7 @@ def send_information_email(
     context: dict,
     to_email: Union[list[str], str],
     letter_language: str = 'en',
-    **kwargs: Optional[any],
+    **kwargs: Optional[Any],
 ) -> bool:
     """
     :param subject: email subject

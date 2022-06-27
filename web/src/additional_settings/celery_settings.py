@@ -40,4 +40,4 @@ CELERY_TASK_QUEUES = (
 )
 
 
-CELERY_BEAT_SCHEDULE = {}
+CELERY_BEAT_SCHEDULE: dict[str, dict] = {}

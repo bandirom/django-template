@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from django.contrib.auth.base_user import BaseUserManager
 
@@ -12,7 +12,7 @@ class UserManager(BaseUserManager):
     for authentication instead of usernames.
     """
 
-    def create_user(self, email: str, password: str, **extra_fields: any) -> 'UserType':
+    def create_user(self, email: str, password: str, **extra_fields: Any) -> 'UserType':
         """
         Create and save a User with the given email and password.
         """
@@ -22,7 +22,7 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
-    def create_superuser(self, email: str, password: str, **extra_fields: any) -> 'UserType':
+    def create_superuser(self, email: str, password: str, **extra_fields: Any) -> 'UserType':
         """
         Create and save a SuperUser with the given email and password.
         """
