@@ -7,6 +7,7 @@ on:
 
 env:
   REPOSITORY: "bandirom/django-template"
+  IMAGE_TAG_LATEST: "latest"
 
 jobs:
   release:
@@ -34,8 +35,11 @@ jobs:
           echo ${{ env.IMAGE_TAG }}
           echo ${{ env.IMAGE_TAG_LATEST }}
 
-#      - name: Build the Docker image
-#        run: |
-#          docker build -t ${{ env.RELEASE_VERSION }} -t $IMAGE_TAG_LATEST -f docker/prod/web/Dockerfile .
+      - name: Build the Docker image
+        run: |
+          docker build -t $REPOSITORY:$RELEASE_VERSION -t $REPOSITORY:$IMAGE_TAG_LATEST -f docker/prod/web/Dockerfile .
+          echo "DIVIDE"
+          docker build -t $IMAGE_TAG -f docker/prod/web/Dockerfile .
+#      - name: Push docker image
 #          docker push $IMAGE_TAG
 #          docker push $IMAGE_TAG_LATEST
