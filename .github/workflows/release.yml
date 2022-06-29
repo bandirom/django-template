@@ -1,0 +1,65 @@
+name: "Release CI/CD"
+
+on:
+  push:
+    tags:
+      - "v*"
+#  release:
+#    types: [ published ]
+
+
+env:
+  DOCKER_REPOSITORY: "bandirom/django-template"
+
+
+jobs:
+  tests:
+    uses: ./.github/workflows/tests.yml
+  build:
+    name: "Release"
+    runs-on: ubuntu-latest
+    needs: [tests]
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKER_REPOSITORY }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: docker/prod/web/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+  deploy:
+    name: "Deploy"
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKER_REPOSITORY }}
+      - name: deploy
+        run: |
+          echo "Tags: $DOCKER_REPOSITORY:$DOCKER_METADATA_OUTPUT_VERSION"
+          docker pull "$DOCKER_REPOSITORY:$DOCKER_METADATA_OUTPUT_VERSION"
