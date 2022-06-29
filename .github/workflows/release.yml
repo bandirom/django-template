@@ -1,4 +1,4 @@
-name: Upload Python Package django_microservice_request
+name: Release
 
 on:
   push:
