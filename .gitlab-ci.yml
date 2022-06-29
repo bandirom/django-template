@@ -1,6 +1,10 @@
 image:
   name: docker/compose:latest
 
+#default:
+#  tags:
+#    - bandirom-local
+
 services:
   - docker:19-dind
 
@@ -22,30 +26,59 @@ variables:
   COMPOSE_DOCKER_CLI_BUILD: 1
 
   COVERAGE_THRESHOLD: 95
+  APP_FLAVOR: ${APP_FLAVOR:-schaffhausen}
+  APP_VERSION: $CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+  IMAGE_NAME: $CI_REGISTRY_IMAGE/$APP_FLAVOR
+  IMAGE_TAG: $IMAGE_NAME:$APP_VERSION
+
+#formatter-check:
+#  image: python:3.10.4-alpine3.15
+#  stage: test
+#  only: [branches]
+#  script:
+#    - pip install --upgrade pip flake8 black isort
+#    - cd web
+#    - flake8 .
+#    - isort . --check
+#    - black . --check
+#
+#tests:
+#  only: [branches]
+#  stage: test
+#  coverage: '/TOTAL.*\s+(\d+%)$/'
+#  script:
+#    - docker-compose build
+#    - docker-compose run --rm --entrypoint="" web python manage.py makemigrations --check
+#    - docker-compose run --entrypoint="/test.sh" -e COVERAGE_THRESHOLD=$COVERAGE_THRESHOLD web
+#    - docker cp $(docker-compose ps -qa web):/usr/src/web/coverage.xml .
+#  artifacts:
+#    reports:
+#      coverage_report:
+#       coverage_format: cobertura
+#       path: coverage.xml
+#
 
 
-formatter-check:
-  image: python:3.10.4-alpine3.15
-  stage: test
-  only: [branches]
+
+deploy:
+  image: kiwigrid/gcloud-kubectl-helm
+#  only: [ main ]
+  variables:
+    DEPLOY_IMAGE_TAG: $CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+    K8S_TYPE: statefulset
+    HELM_APP_NAME: age-detection
+    HELM_PATH: age-detection-helm-chart
+  before_script:
+    - echo "$SERVICE_ACCOUNT_KEY" > key.json
+    - gcloud auth activate-service-account --key-file=key.json
+    - gcloud config set project "ornate-hour-372018"
+    - gcloud config set container/cluster age-detection-k8s
+    - gcloud config set compute/zone europe-north1
+    - gcloud container clusters get-credentials age-detection-k8s --zone europe-north1 --project ornate-hour-372018
   script:
-    - pip install --upgrade pip flake8 black isort
-    - cd web
-    - flake8 .
-    - isort . --check
-    - black . --check
-
-tests:
-  only: [branches]
-  stage: test
-  coverage: '/TOTAL.*\s+(\d+%)$/'
-  script:
-    - docker-compose build
-    - docker-compose run --rm --entrypoint="" web python manage.py makemigrations --check
-    - docker-compose run --entrypoint="/test.sh" -e COVERAGE_THRESHOLD=$COVERAGE_THRESHOLD web
-    - docker cp $(docker-compose ps -qa web):/usr/src/web/coverage.xml .
-  artifacts:
-    reports:
-      coverage_report:
-       coverage_format: cobertura
-       path: coverage.xml
+    - kubectl get pods
+#    - cd "$HELM_PATH"
+#    - helm repo add bitnami https://charts.bitnami.com/bitnami
+#    - helm dep build
+#    - helm upgrade --install $HELM_APP_NAME .
+#      --set "image.tag=latest"
