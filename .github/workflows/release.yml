@@ -5,12 +5,13 @@ on:
     tags:
       - "v*.*.*"
 
+env:
+  REPOSITORY: "bandirom/django-template"
+
 jobs:
   release:
     name: "Release"
     runs-on: ubuntu-latest
-    env:
-      REPOSITORY: "bandirom/django-template"
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -28,6 +29,8 @@ jobs:
         run: |
           echo $RELEASE_VERSION
           echo ${{ env.RELEASE_VERSION }}
+          echo ${{ env.REPOSITORY }}
+          echo $REPOSITORY
           echo ${{ env.IMAGE_TAG }}
           echo ${{ env.IMAGE_TAG_LATEST }}
 
