@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - "v*"
+      - "v*.*.*"
 
 jobs:
   release:
@@ -17,6 +17,14 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-      - name: Build the Docker image
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Test
         run: |
-          pwd
+          echo $RELEASE_VERSION
+          echo ${{ env.RELEASE_VERSION }}
+#      - name: Build the Docker image
+#        run: |
+#          docker build -t $IMAGE_TAG -t $IMAGE_TAG_LATEST -f docker/prod/web/Dockerfile .
+#          docker push $IMAGE_TAG
+#          docker push $IMAGE_TAG_LATEST
