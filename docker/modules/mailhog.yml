@@ -3,23 +3,14 @@
 version: '3.7'
 
 services:
-  celery:
-    env_file:
-      - docker/dev/env/.mailhog.env
-  web:
-    env_file:
-      - docker/dev/env/.mailhog.env
   mailhog:
     image: mailhog/mailhog
     ports:
-      - 1025:1025 # smtp server
-      - 8025:8025 # web ui. http://localhost:8025/
+      - "1025:1025" # smtp server
+      - "8025:8025" # web ui. http://localhost:8025/
     restart: unless-stopped
     volumes:
       - mailbox_data:/maildir
-    networks:
-      - separated_network
-
 
 volumes:
   mailbox_data:
