@@ -1,15 +1,11 @@
 # OpenTracing helps developers trace a request in a complicated distributed systems
-# to figure out bottlenecks and and slow components in the request path
+# to figure out bottlenecks and slow components in the request path
 # which need optimizations, fixes or deeper debugging
 # For using GUI: http://localhost:16686
 
 version: '3.7'
 
 services:
-  payment:
-    environment:
-      - JAEGER_AGENT_HOST=jaeger
-      - JAEGER_LOGGING=1
   jaeger:
     image: jaegertracing/all-in-one
     ports:
@@ -21,5 +17,3 @@ services:
       - "14268:14268"
       - "9411:9411"
     restart: unless-stopped
-    networks:
-      - separated_network

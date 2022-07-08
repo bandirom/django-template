@@ -6,8 +6,8 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - 5672:5672
-      - 15672:15672
+      - "5672:5672"
+      - "15672:15672"
     volumes:
       - rabbitmq:/var/lib/rabbitmq
     env_file:
@@ -20,17 +20,6 @@ services:
       interval: 10s
       timeout: 30s
       retries: 3
-  web:
-    env_file:
-      - docker/modules/rabbitmq/.env
-  celery:
-    networks:
-      - queue_network
-    env_file:
-      - docker/modules/rabbitmq/.env
-    depends_on:
-      rabbitmq:
-        condition: service_started
 
 volumes:
   rabbitmq:
