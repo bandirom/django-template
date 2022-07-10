@@ -28,9 +28,9 @@
 
 ### How to use:
 
-#### Clone the repo:
+#### Clone the repo or click "Use this template" button:
 
-    git clone https://github.com/bandirom/DjangoTemplateWithDocker.git ./project_name
+    git clone https://github.com/bandirom/django-template.git./project_name
     
 
 #### Before running add your superuser email/password and project name in docker/prod/env/.data.env file
@@ -57,7 +57,6 @@
 
 ##### For testing mail backend you can use MailHog service
     docker-compose -f docker-compose -f docker/modules/mailhog.yml up -d --build
-    docker-compose -f prod.yml -f prod.dev.yml -f docker/modules/mailhog.yml up -d --build
 
 <b>Don't forget to set SMTP mail backend in settings</b>
 
