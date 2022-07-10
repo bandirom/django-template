@@ -2,25 +2,25 @@
 -r ./base.txt
 
 # For SQL debug
-django-silk==4.4.0
+django-silk~=5.0
 
 # Test coverage
-coverage[toml]==6.4.1
+coverage[toml]~=6.4
 
 # Freeze time in tests
-freezegun==1.2.1
+freezegun~=1.2
 
 # Data factory
-factory-boy==3.2.1
+factory-boy~=3.2
 
 # Utility for displaying the installed python packages in a form of a dependency tree
-pipdeptree==2.2.1
+pipdeptree~=2.2
 
 # Debug Toolbar
-django-debug-toolbar==3.4.0
-django-debug-toolbar-request-history==0.1.4
+django-debug-toolbar~=3.5
+django-debug-toolbar-request-history~=0.1
 
 # Linters
-black==22.3.0
+black==22.6.0
 flake8==4.0.1
 isort==5.10.1
