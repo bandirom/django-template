@@ -1,8 +1,7 @@
 import logging
 from functools import wraps
-from smtplib import SMTPRecipientsRefused
 from timeit import default_timer
-from typing import Union
+from typing import Any, Callable, TypeVar, Union
 
 from django.core.cache import cache
 from kombu.exceptions import OperationalError
@@ -12,11 +11,13 @@ from celery.exceptions import TimeoutError
 
 logger = logging.getLogger(__name__)
 
+RT = TypeVar('RT')
+
 
 def cached_result(cache_key: str, timeout: int = 300, version: Union[int, str] = 1):
-    def decorator(function):
+    def decorator(function: Callable[..., RT]) -> Callable[..., RT]:
         @wraps(function)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> RT:
             key = cache.make_key(cache_key, version)
             if key in cache:
                 return cache.get(key)
@@ -34,9 +35,9 @@ def execution_time(stdout: str = 'console'):
     :param stdout: 'console' or 'tuple'
     """
 
-    def decorator(func):
+    def decorator(func: Callable[..., RT]) -> Callable[..., RT]:
         @wraps(func)
-        def delta_time(*args, **kwargs):
+        def delta_time(*args: Any, **kwargs: Any) -> RT:
             t1 = default_timer()
             data = func(*args, **kwargs)
             delta = default_timer() - t1
@@ -53,10 +54,10 @@ def execution_time(stdout: str = 'console'):
     return decorator
 
 
-def except_shell(errors=(Exception,), default_value=None):
-    def decorator(func):
+def except_shell(errors=(Exception,), default_value: Any = None):
+    def decorator(func: Callable[..., RT]) -> Callable[..., RT]:
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> RT:
             try:
                 return func(*args, **kwargs)
             except errors as e:
@@ -70,4 +71,3 @@ def except_shell(errors=(Exception,), default_value=None):
 
 request_shell = except_shell((RequestException,))
 celery_shell = except_shell((OperationalError, TimeoutError))
-smtp_shell = except_shell((SMTPRecipientsRefused,), default_value=False)
