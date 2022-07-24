@@ -1,7 +1,7 @@
 import logging
 from functools import wraps
 from timeit import default_timer
-from typing import Any, Callable, TypeVar, Union
+from typing import Any, Callable, Iterable, Literal, TypeVar, Union
 
 from django.core.cache import cache
 from kombu.exceptions import OperationalError
@@ -14,7 +14,9 @@ logger = logging.getLogger(__name__)
 RT = TypeVar('RT')
 
 
-def cached_result(cache_key: str, timeout: int = 300, version: Union[int, str] = 1):
+def cached_result(
+    cache_key: str, timeout: int = 300, version: Union[int, str] = 1
+) -> Callable[[Callable[..., RT]], Callable[..., RT]]:
     def decorator(function: Callable[..., RT]) -> Callable[..., RT]:
         @wraps(function)
         def wrapper(*args: Any, **kwargs: Any) -> RT:
@@ -30,14 +32,16 @@ def cached_result(cache_key: str, timeout: int = 300, version: Union[int, str] =
     return decorator
 
 
-def execution_time(stdout: str = 'console'):
+def execution_time(
+    stdout: Literal['console', 'tuple'] = 'console'
+) -> Callable[[Callable[..., RT]], Callable[..., RT]]:
     """
     :param stdout: 'console' or 'tuple'
     """
 
     def decorator(func: Callable[..., RT]) -> Callable[..., RT]:
         @wraps(func)
-        def delta_time(*args: Any, **kwargs: Any) -> RT:
+        def delta_time(*args: Any, **kwargs: Any) -> RT | tuple[RT, float]:
             t1 = default_timer()
             data = func(*args, **kwargs)
             delta = default_timer() - t1
@@ -54,7 +58,9 @@ def execution_time(stdout: str = 'console'):
     return decorator
 
 
-def except_shell(errors=(Exception,), default_value: Any = None):
+def except_shell(
+    errors: Iterable = (Exception,), default_value: Any = None
+) -> Callable[[Callable[..., RT]], Callable[..., RT]]:
     def decorator(func: Callable[..., RT]) -> Callable[..., RT]:
         @wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> RT:

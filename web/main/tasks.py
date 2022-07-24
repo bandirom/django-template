@@ -36,10 +36,10 @@ def send_information_email(
     :param kwargs: from_email, bcc, cc, reply_to and file_path params
     """
     activate(letter_language)
-    to_email: list = [to_email] if isinstance(to_email, str) else to_email
+    _to_email: list[str] = [to_email] if isinstance(to_email, str) else to_email
     email_message = EmailMultiAlternatives(
         subject=subject,
-        to=to_email,
+        to=_to_email,
         from_email=kwargs.get('from_email'),
         bcc=kwargs.get('bcc'),
         cc=kwargs.get('cc'),
