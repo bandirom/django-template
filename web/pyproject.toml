@@ -54,8 +54,13 @@ plugins = [
 ]
 
 [[tool.mypy.overrides]]
-module = ["*.migrations.*", "__init__"]
+module = ["*.migrations.*", "manage"]
 ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = ['celery.*', 'django_filters', 'kombu.*', 'drf_yasg.*', 'factory.*', 'src.additional_settings.*']
+ignore_missing_imports = true
+
 
 [tool.django-stubs]
 django_settings_module = "src.settings_prod"
