@@ -4,7 +4,7 @@ django~=3.2
 psycopg2-binary==2.9.3
 redis~=4.3.3
 djangorestframework==3.13.1
-drf-yasg==1.20.0
+drf-yasg==1.21.3
 celery~=5.2
 
 ### Optional dependencies ###
@@ -40,3 +40,6 @@ sentry-sdk~=1.6
 
 # MicroService Requests
 django-microservice-request~=0.5
+
+
+weasyprint==56.1

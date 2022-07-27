@@ -15,7 +15,8 @@ ARG USER=ubuntu
 RUN apk update && \
     apk add --no-cache curl postgresql-dev gcc python3-dev musl-dev openssl libffi-dev openssl-dev build-base \
     # install Pillow dependencies
-    jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev && \
+    jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev \
+    pango py3-pillow py3-cffi py3-brotli msttcorefonts-installer fontconfig cairo-dev && \
     pip install --upgrade pip setuptools && \
     addgroup -g $GID -S $USER && \
     adduser -S $USER -G $USER --uid "$UID"
@@ -35,5 +36,5 @@ ENTRYPOINT ["/entrypoint.sh"]
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
 EXPOSE 8000
-
+RUN update-ms-fonts
 USER $USER
