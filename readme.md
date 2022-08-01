@@ -16,11 +16,11 @@
 * Redis service for caching using socket. Also message broker for queue
 * RabbitMQ configuration
 * ASGI support
-* Linters integration (flake7, black, isort)
+* Linters integration (flake8, black, isort)
 * Swagger in Django Admin Panel
 * Ready for deploy by one click
 * Separated configuration for dev and prod (requirements and settings)
-* GitHub Actions
+* CI/CD: GitHub Actions/GitlabCI
 * Redefined default User model (main.models.py)
 * MailHog, Jaeger, RabbitMQ integrations
 * Multi-stage build for prod versions
