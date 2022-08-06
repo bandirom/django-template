@@ -9,6 +9,7 @@ services:
     volumes:
       - redis_socket:/redis_socket
       - postgres_socket:/postgres_socket
+      - media_files:/web/media/
     environment:
       - USE_HTTPS=0
     env_file:
@@ -43,6 +44,7 @@ services:
     restart: always
     volumes:
       - redis_socket:/redis_socket
+      - postgres_socket:/postgres_socket
     networks:
       - separated_network
     extra_hosts:
@@ -67,8 +69,7 @@ services:
   redis:
     image: redis:6.0.6-alpine
     restart: always
-    command:
-      - /var/lib/redis/redis.conf
+    command: ["/var/lib/redis/redis.conf"]
     volumes:
       - ./docker/prod/redis/redis.conf:/var/lib/redis/redis.conf
       - redis_data:/data
@@ -88,6 +89,7 @@ volumes:
   redis_data:
   redis_socket:
   postgres_socket:
+  media_files:
 
 networks:
   microservice_network:
