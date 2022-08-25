@@ -27,7 +27,7 @@ services:
       - separated_network
     extra_hosts:
       - "gateway-host:172.17.0.1"  # Linux OS get access from docker container to localhost
-      # host.docker.internal - For docker in Windows. No other action is required.
+      # host.docker.internal - For docker in Windows and macOS. No other action is required.
       # If You need to connect to Postgresql in localhost, just use host.docker.internal instead of localhost
     healthcheck:
       test: curl --fail -s http://localhost:8000$$HEALTH_CHECK_URL || exit 1
