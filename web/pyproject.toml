@@ -74,3 +74,4 @@ multi_line_output = 3
 skip = "migrations"
 line_length = 110
 include_trailing_comma = true
+profile = "black"
