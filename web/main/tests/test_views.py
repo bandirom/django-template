@@ -16,7 +16,7 @@ class ViewsTest(APITestCase):
         }
     )
     def test_set_timezone(self):
-        test_timezone = 'Europe/Kiev'
+        test_timezone = 'Europe/Kyiv'
         user = User.objects.get(email=settings.SUPERUSER_EMAIL)
 
         self.client.force_login(user)

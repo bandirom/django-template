@@ -3,7 +3,7 @@
 django~=3.2
 psycopg2-binary==2.9.3
 redis~=4.3.3
-djangorestframework==3.13.1
+djangorestframework~=3.14
 drf-yasg~=1.21
 celery~=5.2
 
@@ -16,10 +16,10 @@ pyamqp==0.1.0.7
 django-filter==22.1
 
 # Cors headers
-django-cors-headers~=3.13.0
+django-cors-headers~=3.13
 
 # Ddos defender: required redis
-django-defender==0.9.5
+django-defender~=0.9
 
 # for auth system
 dj-rest-auth~=2.2
@@ -33,7 +33,7 @@ django-redis==5.2.0
 pillow~=9.2
 
 # Translation
-django-rosetta==0.9.8
+django-rosetta~=0.9
 
 # Monitoring System
 sentry-sdk~=1.9

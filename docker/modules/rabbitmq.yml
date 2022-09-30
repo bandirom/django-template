@@ -11,7 +11,7 @@ services:
     volumes:
       - rabbitmq:/var/lib/rabbitmq
     env_file:
-      - docker/modules/rabbitmq/.env
+      - ./rabbitmq/.env
     networks:
       - queue_network
     restart: always

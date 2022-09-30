@@ -47,18 +47,19 @@
 ##### Server will bind 8000 port. You can get access to server by browser [http://localhost:8000](http://localhost:8000)
 
 
-#### Configuration for develop stage at 9000 port:
-    docker-compose -f prod.yml -f prod.dev.yml up -d --build
-
-##### The same configuration could be for stage and prod:
-    docker-compose -f prod.yml -f prod.stage.yml up -d --build
-    docker-compose -f prod.yml -f prod.prod.yml up -d --build
-
 
 ##### For testing mail backend you can use MailHog service
-    docker-compose -f docker-compose -f docker/modules/mailhog.yml up -d --build
+    docker-compose -f docker-compose.yml -f docker/modules/mailhog.yml up -d --build
 
 <b>Don't forget to set SMTP mail backend in settings</b>
+
+
+### Production environment
+
+If your server under LoadBalancer with SSL/TLS certificate you could run simple `prod.yml` configuration
+
+    docker-compose -f prod.yml up -d --build
+
 
 #### For set https connection you should have a domain name
 <b> In prod.certbot.yml: </b>
