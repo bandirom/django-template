@@ -3,22 +3,19 @@ version: "3.7"
 services:
   nginx:
     image: staticfloat/nginx-certbot
+    network_mode: host
+    restart: 'always'
     container_name: nginx
     volumes:
       - letsencrypt:/etc/letsencrypt
       - ./docker/prod/nginx/certbot.conf:/etc/nginx/user.conf.d/nginx_template.conf:ro
       - ./docker/prod/nginx/conf.d/proxy.conf:/etc/nginx/user.conf.d/proxy.conf:ro
-    ports:
-      - "443:443"
-      - "80:80"
     environment:
       CERTBOT_EMAIL: your@email.com
       # variable names are space-separated
       ENVSUBST_VARS: APP
       APP: your.domain.com
-  web:
-    environment:
-      USE_HTTPS: 1
+
 
 volumes:
   letsencrypt:
