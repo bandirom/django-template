@@ -38,18 +38,16 @@ RUN apk update && \
 WORKDIR $APP_HOME
 
 COPY --from=builder /install /usr/local
-COPY --chown=$USER:$USER ./docker/prod/web/entrypoints /
-COPY --chown=$USER:$USER ./web $APP_HOME
+COPY --chown=$USER:$USER ./docker/prod/web/entrypoint.sh /
 COPY ./docker/prod/nginx/conf.d /etc/nginx/conf.d
-COPY ./docker/prod/nginx/nginx.conf /etc/nginx/nginx.conf
-
+#COPY ./docker/prod/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./web $APP_HOME
 
 RUN chmod +x /*.sh && \
-    mkdir -p media logs  && \
+    mkdir -p media && \
     python manage.py collectstatic --no-input && \
-    chown -R $USER:$USER $APP_HOME media logs && \
-    touch /var/run/nginx.pid && \
-    chown -R $USER:$USER /etc/nginx /var/lib/nginx/ /var/log /var/run/nginx.pid
+    chown -R $USER:$USER $APP_HOME media && \
+    chown -R $USER:$USER /etc/nginx /var/lib/nginx/ /var/log /run/nginx/
 
 ENTRYPOINT ["/entrypoint.sh"]
 
