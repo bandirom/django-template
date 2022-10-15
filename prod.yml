@@ -17,7 +17,7 @@ services:
     environment:
       <<: *variables
     ports:
-      - "80:8000"
+      - "8000:8000"
     env_file:
       - docker/prod/env/.env
       - docker/prod/env/.db.env

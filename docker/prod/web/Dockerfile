@@ -1,7 +1,7 @@
-FROM python:3.10.5-alpine3.15 as builder
+FROM python:3.10.7-alpine3.15 as builder
 
-RUN apk update && \
-    apk add --no-cache build-base postgresql-dev gcc python3-dev musl-dev openssl libffi-dev openssl-dev \
+RUN apk add --update --no-cache --virtual .build-deps \
+    build-base postgresql-dev gcc python3-dev musl-dev openssl libffi-dev openssl-dev \
     # install Pillow dependencies
     jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev
 
@@ -13,7 +13,7 @@ RUN pip install --upgrade pip setuptools && \
     pip install --no-warn-script-location --prefix=/install -r $TEMP_PATH/requirements/production.txt
 
 
-FROM python:3.10.5-alpine3.15
+FROM python:3.10.7-alpine3.15
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -26,9 +26,7 @@ ARG UID=1000
 ARG USER=ubuntu
 
 
-RUN apk update && \
-    apk add --no-cache postgresql-dev curl nginx \
-    jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev && \
+RUN apk add --update --no-cache --virtual .build-deps postgresql-dev curl nginx && \
     addgroup -g $GID -S $USER && \
     adduser -S $USER -G $USER --uid "$UID" && \
     mkdir -p /gunicorn_socket /redis_socket && \
@@ -38,18 +36,16 @@ RUN apk update && \
 WORKDIR $APP_HOME
 
 COPY --from=builder /install /usr/local
-COPY --chown=$USER:$USER ./docker/prod/web/entrypoints /
-COPY --chown=$USER:$USER ./web $APP_HOME
+COPY --chown=$USER:$USER ./docker/prod/web/entrypoint.sh /
 COPY ./docker/prod/nginx/conf.d /etc/nginx/conf.d
 COPY ./docker/prod/nginx/nginx.conf /etc/nginx/nginx.conf
-
+COPY ./web $APP_HOME
 
 RUN chmod +x /*.sh && \
-    mkdir -p media logs  && \
+    mkdir -p media && \
     python manage.py collectstatic --no-input && \
-    chown -R $USER:$USER $APP_HOME media logs && \
-    touch /var/run/nginx.pid && \
-    chown -R $USER:$USER /etc/nginx /var/lib/nginx/ /var/log /var/run/nginx.pid
+    chown -R $USER:$USER $APP_HOME media && \
+    chown -R $USER:$USER /etc/nginx /var/lib/nginx/ /var/log /run/nginx/
 
 ENTRYPOINT ["/entrypoint.sh"]
 
