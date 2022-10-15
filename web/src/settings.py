@@ -2,9 +2,7 @@ import os
 
 from django.utils.translation import gettext_lazy as _
 
-from .additional_settings.cacheops_settings import *
 from .additional_settings.celery_settings import *
-from .additional_settings.defender_settings import *
 from .additional_settings.logging_settings import *
 from .additional_settings.swagger_settings import *
 
@@ -82,7 +80,7 @@ MIDDLEWARE = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('microservice_request.permissions.HasApiKeyOrIsAuthenticated',),
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.SessionAuthentication',),
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
 }
@@ -141,11 +139,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 CACHES = {
     'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
         'LOCATION': REDIS_URL,
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        },
     }
 }
 
@@ -174,6 +169,8 @@ CSRF_COOKIE_NAME = 'csrftoken'
 
 ROSETTA_SHOW_AT_ADMIN_PANEL = DEBUG
 
+DEFENDER_REDIS_URL = REDIS_URL + '/1'
+DEFENDER_USE_CELERY = False
 
 if (SENTRY_DSN := os.environ.get('SENTRY_DSN')) and ENABLE_SENTRY:
     # More information on site https://sentry.io/

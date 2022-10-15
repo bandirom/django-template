@@ -1,7 +1,7 @@
 ### Required dependencies ###
 
-django~=3.2
-psycopg2-binary==2.9.3
+django~=4.1
+psycopg2-binary==2.9.4
 redis~=4.3.3
 djangorestframework~=3.14
 drf-yasg~=1.21
@@ -23,11 +23,7 @@ django-defender~=0.9
 
 # for auth system
 dj-rest-auth~=2.2
-djangorestframework-simplejwt==5.2.0
-
-# Cashe Support
-django-cacheops==6.1
-django-redis==5.2.0
+djangorestframework-simplejwt~=5.2
 
 # ImageField
 pillow~=9.2
