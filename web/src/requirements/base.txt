@@ -1,7 +1,7 @@
 ### Required dependencies ###
 
 django~=4.1
-psycopg2-binary==2.9.4
+psycopg2-binary~=2.9
 redis~=4.3.3
 djangorestframework~=3.14
 drf-yasg~=1.21
@@ -32,7 +32,7 @@ pillow~=9.2
 django-rosetta~=0.9
 
 # Monitoring System
-sentry-sdk~=1.9
+sentry-sdk~=1.11
 
 # MicroService Requests
 django-microservice-request~=0.5

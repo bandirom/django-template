@@ -1,4 +1,4 @@
-FROM python:3.10.7-alpine3.15 as builder
+FROM python:3.11-alpine3.15 as builder
 
 RUN apk add --update --no-cache --virtual .build-deps \
     build-base postgresql-dev gcc python3-dev musl-dev openssl libffi-dev openssl-dev \
@@ -13,7 +13,7 @@ RUN pip install --upgrade pip setuptools && \
     pip install --no-warn-script-location --prefix=/install -r $TEMP_PATH/requirements/production.txt
 
 
-FROM python:3.10.7-alpine3.15
+FROM python:3.11-alpine3.15
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
