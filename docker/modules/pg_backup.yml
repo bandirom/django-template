@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   pgbackups:
     image: prodrigestivill/postgres-backup-local

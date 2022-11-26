@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   runner:
     container_name: gitlab-runner

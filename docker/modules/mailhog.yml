@@ -1,7 +1,5 @@
 # SMTP Server for mail testing
 
-version: '3.7'
-
 services:
   mailhog:
     image: mailhog/mailhog

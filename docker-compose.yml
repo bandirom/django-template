@@ -1,5 +1,3 @@
-version: "3.7"
-
 x-variables: &variables
   ENV_STAGE: local
 
