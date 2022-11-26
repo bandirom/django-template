@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=64.0.0"]
+build-backend = "setuptools.build_meta"
+
 [tool.black]
 line-length = 110
 exclude = "migrations"
@@ -13,7 +17,6 @@ python_classes = "*Test*"
 DJANGO_SETTINGS_MODULE = "src.settings_prod"
 log_cli = "true"
 log_cli_level = "info"
-
 
 [tool.coverage.run]
 omit = [
@@ -75,3 +78,5 @@ skip = "migrations"
 line_length = 110
 include_trailing_comma = true
 profile = "black"
+known_third_party = "celery"
+known_local_folder = ["src", "main"]

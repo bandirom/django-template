@@ -3,11 +3,10 @@ from functools import wraps
 from timeit import default_timer
 from typing import Any, Callable, Iterable, Literal, TypeVar, Union
 
+from celery.exceptions import TimeoutError
 from django.core.cache import cache
 from kombu.exceptions import OperationalError
 from requests.exceptions import RequestException
-
-from celery.exceptions import TimeoutError
 
 logger = logging.getLogger(__name__)
 
