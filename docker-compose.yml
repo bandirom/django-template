@@ -10,6 +10,7 @@ services:
       dockerfile: docker/dev/web/Dockerfile
     volumes:
       - ./web/:/usr/src/web/:cached
+      - ./tests/:/usr/src/tests/:cached
       - postgres_socket:/postgres_socket
     ports:
       - "8000:8000"
