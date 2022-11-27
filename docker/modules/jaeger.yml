@@ -3,8 +3,6 @@
 # which need optimizations, fixes or deeper debugging
 # For using GUI: http://localhost:16686
 
-version: '3.7'
-
 services:
   jaeger:
     image: jaegertracing/all-in-one

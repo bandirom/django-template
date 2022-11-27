@@ -1,7 +1,5 @@
 .. code-block:: yaml
 
-   version: "3.7"
-
    x-variables: &variables
      ENV_STAGE: dev
      USE_HTTPS: 0

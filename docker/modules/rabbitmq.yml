@@ -1,7 +1,5 @@
 # Message Broker RabbitMQ for Celery queues
 
-version: '3.7'
-
 services:
   rabbitmq:
     image: rabbitmq:3-management
