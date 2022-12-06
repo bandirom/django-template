@@ -9,9 +9,7 @@ services:
       context: .
       dockerfile: docker/dev/web/Dockerfile
     volumes:
-      - ./web/main/:/usr/src/web/main/:cached
-      - ./web/src/:/usr/src/web/src/:cached
-      - ./tests/:/usr/src/tests/:cached
+      - ./web/:/usr/src/web/:cached
       - postgres_socket:/postgres_socket
     ports:
       - "8000:8000"

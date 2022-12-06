@@ -1,0 +1,23 @@
+# For SQL debug
+django-silk~=5.0
+
+# Test coverage
+coverage[toml]~=6.5
+
+# Freeze time in tests
+freezegun~=1.2
+
+# Data factory
+factory-boy~=3.2
+
+# Utility for displaying the installed python packages in a form of a dependency tree
+pipdeptree~=2.2
+
+# Debug Toolbar
+django-debug-toolbar~=3.7
+django-debug-toolbar-request-history~=0.1
+
+# Linters
+black~=22.6
+flake8~=5.0
+isort~=5.10

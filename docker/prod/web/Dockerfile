@@ -6,7 +6,8 @@ RUN apk add --update --no-cache --virtual .build-deps \
     # install Pillow dependencies
     jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev
 
-COPY ./setup.cfg ./pyproject.toml ./
+COPY ./web/setup.cfg ./web/pyproject.toml ./
+COPY ./web/src/requirements  ./src/requirements
 
 RUN pip wheel --wheel-dir=$WHEELS_PATH .[production]
 
@@ -34,7 +35,8 @@ RUN apk add --update --no-cache --virtual .build-deps postgresql-dev curl nginx 
 WORKDIR $APP_HOME
 
 COPY --from=builder $WHEELS_PATH $WHEELS_PATH
-COPY ./setup.cfg ./pyproject.toml ./readme.md ./
+COPY ./web/setup.cfg ./web/pyproject.toml ./
+COPY ./web/src/requirements  ./src/requirements
 RUN pip install --no-build-isolation --no-index --find-links=$WHEELS_PATH --editable .[production] && \
     rm -rf $WHEELS_PATH
 
