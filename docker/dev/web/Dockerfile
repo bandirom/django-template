@@ -19,8 +19,9 @@ RUN apk add --update --no-cache curl postgresql-dev gcc python3-dev musl-dev ope
     addgroup -g $GID -S $USER && \
     adduser -S $USER -G $USER --uid "$UID"
 
-COPY ./web/src/requirements  ./requirements
-RUN pip install -r ./requirements/local.txt
+COPY ./web/setup.cfg ./web/pyproject.toml $APP_HOME/
+COPY ./web/src/requirements  ./src/requirements
+RUN pip install -e .[local]
 
 COPY --chown=$USER:$USER ./docker/dev/web/entrypoints /
 COPY --chown=$USER:$USER ./web $APP_HOME
