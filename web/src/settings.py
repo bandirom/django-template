@@ -88,8 +88,8 @@ REST_FRAMEWORK = {
 
 ROOT_URLCONF = 'src.urls'
 
-LOGIN_URL = 'rest_framework:login'
-LOGOUT_URL = 'rest_framework:logout'
+LOGIN_URL = 'rest_login'
+# LOGOUT_URL = 'rest_framework:logout'
 
 TEMPLATES = [
     {

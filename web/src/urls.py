@@ -11,7 +11,6 @@ urlpatterns = [
     path('', include('main.urls')),
     path(f'{admin_url}/', admin.site.urls),
     path(f'{admin_url}/defender/', include('defender.urls')),
-    path('api/', include('rest_framework.urls')),
     path('rosetta/', include('rosetta.urls')),
 ]
 
