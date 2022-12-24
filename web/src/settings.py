@@ -1,26 +1,27 @@
 import os
-
-from django.utils.translation import gettext_lazy as _
+from pathlib import Path
 
 from .additional_settings.celery_settings import *
 from .additional_settings.logging_settings import *
 from .additional_settings.swagger_settings import *
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'L7HTf4$@jQXj1sRSrOqVokthx1vgd1Zdq7H&PeHPLKXD')
 
 DEBUG = int(os.environ.get('DEBUG', 0))
 
-ALLOWED_HOSTS: list = os.environ.get('DJANGO_ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS: list = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',')
+
+if DEBUG:
+    ALLOWED_HOSTS: list = ['*']
 
 AUTH_USER_MODEL = 'main.User'
 
 SUPERUSER_EMAIL = os.environ.get('SUPERUSER_EMAIL', 'test@test.com')
 SUPERUSER_PASSWORD = os.environ.get('SUPERUSER_PASSWORD', 'tester26')
 
-MICROSERVICE_TITLE = os.environ.get('MICROSERVICE_TITLE', 'Template')
-MICROSERVICE_PREFIX = os.environ.get('MICROSERVICE_PREFIX', '')
+PROJECT_TITLE = os.environ.get('PROJECT_TITLE', 'Template')
 
 REDIS_URL = os.environ.get('REDIS_URL', 'redis://redis:6379')
 
@@ -34,9 +35,6 @@ INTERNAL_IPS: list[str] = []
 ADMIN_URL = os.environ.get('ADMIN_URL', 'admin')
 
 SWAGGER_URL = os.environ.get('SWAGGER_URL')
-
-API_KEY_HEADER = os.environ.get('API_KEY_HEADER')
-API_KEY = os.environ.get('API_KEY')
 
 HEALTH_CHECK_URL = os.environ.get('HEALTH_CHECK_URL', '/application/health/')
 
@@ -112,8 +110,8 @@ ASGI_APPLICATION = 'src.asgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('SQL_ENGINE', 'django.db.backends.postgresql'),
-        'NAME': os.environ.get('POSTGRES_DB'),
+        'ENGINE': os.environ.get('SQL_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.environ.get('POSTGRES_DB', BASE_DIR / 'db.sqlite3'),
         'USER': os.environ.get('POSTGRES_USER'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
         'HOST': os.environ.get('POSTGRES_HOST'),
@@ -154,15 +152,15 @@ USE_L10N = True
 
 USE_TZ = True
 
-STATIC_URL = f'{MICROSERVICE_PREFIX}/static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_URL = f'{MICROSERVICE_PREFIX}/media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
 
-LANGUAGES = (('en', _('English')),)
+LANGUAGES = (('en', 'English'),)
 
 SESSION_COOKIE_NAME = 'sessionid'
 CSRF_COOKIE_NAME = 'csrftoken'
