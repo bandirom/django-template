@@ -7,7 +7,7 @@ from .additional_settings.swagger_settings import *
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'L7HTf4$@jQXj1sRSrOqVokthx1vgd1Zdq7H&PeHPLKXD')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-b2sh!qk&=%azim-=s&=d1(-1upbq7H&-^-=tmPeHPLKXD')
 
 DEBUG = int(os.environ.get('DEBUG', 0))
 
