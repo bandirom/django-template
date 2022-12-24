@@ -5,8 +5,8 @@ register = template.Library()
 
 
 @register.simple_tag
-def microservice_title() -> str:
-    return settings.MICROSERVICE_TITLE
+def project_title() -> str:
+    return settings.PROJECT_TITLE
 
 
 @register.simple_tag

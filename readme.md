@@ -37,7 +37,7 @@
 
     SUPERUSER_EMAIL=example@email.com
     SUPERUSER_PASSWORD=secretp@ssword
-    MICROSERVICE_TITLE=MyProject
+    PROJECT_TITLE=MyProject
 
 #### Run the local develop server:
 
