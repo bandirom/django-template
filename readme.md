@@ -37,7 +37,7 @@
 
     SUPERUSER_EMAIL=example@email.com
     SUPERUSER_PASSWORD=secretp@ssword
-    MICROSERVICE_TITLE=MyProject
+    PROJECT_TITLE=MyProject
 
 #### Run the local develop server:
 
@@ -46,7 +46,12 @@
     
 ##### Server will bind 8000 port. You can get access to server by browser [http://localhost:8000](http://localhost:8000)
 
+Run django commands through exec:
+```shell
+docker-compose exec web python manage.py makemigrations
 
+docker-compose exec web python manage.py shell
+```
 
 ##### For testing mail backend you can use MailHog service
     docker-compose -f docker-compose.yml -f docker/modules/mailhog.yml up -d --build
