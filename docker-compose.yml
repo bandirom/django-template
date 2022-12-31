@@ -54,8 +54,6 @@ services:
       - redis_data:/data
     networks:
       - separated_network
-    logging:
-      driver: none
     healthcheck:
       test: [ "CMD", "redis-cli","ping" ]
       interval: 1m20s

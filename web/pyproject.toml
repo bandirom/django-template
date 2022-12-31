@@ -8,10 +8,7 @@ exclude = "migrations"
 skip-string-normalization = true
 
 [tool.pytest.ini_options]
-norecursedirs = [
-  ".git ",
-  "node_modules",
-]
+norecursedirs = [".git ", "node_modules", "venv"]
 python_files = "*test*.py"
 python_classes = "*Test*"
 DJANGO_SETTINGS_MODULE = "src.settings_prod"
