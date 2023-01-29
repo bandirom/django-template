@@ -3,10 +3,7 @@ services:
     container_name: gitlab-runner
     image: gitlab/gitlab-runner:latest
     volumes:
-      - gitlab_runner_config:/etc/gitlab-runner
+      - ./runner/:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always
 
-
-volumes:
-  gitlab_runner_config:

@@ -2,8 +2,7 @@ import os
 from pathlib import Path
 
 from .additional_settings.celery_settings import *
-from .additional_settings.logging_settings import *
-from .additional_settings.swagger_settings import *
+from .additional_settings.smtp_settings import *
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -17,9 +16,6 @@ if DEBUG:
     ALLOWED_HOSTS: list = ['*']
 
 AUTH_USER_MODEL = 'main.User'
-
-SUPERUSER_EMAIL = os.environ.get('SUPERUSER_EMAIL', 'test@test.com')
-SUPERUSER_PASSWORD = os.environ.get('SUPERUSER_PASSWORD', 'tester26')
 
 PROJECT_TITLE = os.environ.get('PROJECT_TITLE', 'Template')
 
@@ -52,7 +48,7 @@ INSTALLED_APPS = [
 THIRD_PARTY_APPS = [
     'defender',
     'rest_framework',
-    'drf_yasg',
+    'drf_spectacular',
     'corsheaders',
     'rosetta',
 ]
@@ -81,6 +77,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.SessionAuthentication',),
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 
@@ -169,6 +166,95 @@ ROSETTA_SHOW_AT_ADMIN_PANEL = DEBUG
 
 DEFENDER_REDIS_URL = REDIS_URL + '/1'
 DEFENDER_USE_CELERY = False
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'root': {'level': 'INFO', 'handlers': ['default']},
+    'formatters': {
+        'simple': {'format': '%(levelname)s %(message)s'},
+        'verbose': {'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'},
+        'django.server': {
+            '()': 'django.utils.log.ServerFormatter',
+            'format': '[{server_time}] {message}',
+            'style': '{',
+        },
+    },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'null': {
+            'class': 'logging.NullHandler',
+        },
+        'default': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'django.server': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'django.server',
+        },
+    },
+    'loggers': {
+        'django': {'level': 'INFO', 'propagate': True},
+        'django.request': {
+            'handlers': ['django.server'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.server': {
+            'handlers': ['django.server'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': PROJECT_TITLE,
+    'DESCRIPTION': 'API description',
+    'VERSION': '1.0.0',
+    'SCHEMA_PATH_PREFIX': '/api/v[0-9]',
+    'SERVE_PERMISSIONS': ['rest_framework.permissions.IsAdminUser'],
+    'SERVE_AUTHENTICATION': ['rest_framework.authentication.SessionAuthentication'],
+    'SWAGGER_UI_SETTINGS': {
+        'tryItOutEnabled': True,
+        'displayRequestDuration': True,
+        "persistAuthorization": True,
+        'filter': True,
+    },
+    'APPEND_COMPONENTS': {
+        'securitySchemes': {
+            'Authorization': {
+                'type': 'apiKey',
+                'in': 'header',
+                'name': 'Authorization',
+                'description': 'Bearer jwt token',
+            },
+            'Language': {
+                'type': 'apiKey',
+                'in': 'header',
+                'name': 'Accept-Language',
+                'description': 'Authorization by Token',
+            },
+        },
+    },
+    'SECURITY': [
+        {'Authorization': [], 'Language': []},
+    ],
+}
+
 
 if (SENTRY_DSN := os.environ.get('SENTRY_DSN')) and ENABLE_SENTRY:
     # More information on site https://sentry.io/

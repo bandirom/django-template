@@ -10,6 +10,10 @@ User = get_user_model()
 
 
 class ViewsTest(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create(email='james.cameron@test.com')
+
     @modify_settings(
         MIDDLEWARE={
             'append': 'main.middleware.TimezoneMiddleware',
@@ -17,9 +21,8 @@ class ViewsTest(APITestCase):
     )
     def test_set_timezone(self):
         test_timezone = 'Europe/Kyiv'
-        user = User.objects.get(email=settings.SUPERUSER_EMAIL)
 
-        self.client.force_login(user)
+        self.client.force_login(self.user)
 
         url = reverse_lazy('set_user_timezone')
         data = {'timezone': test_timezone}
