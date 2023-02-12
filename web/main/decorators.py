@@ -31,9 +31,7 @@ def cached_result(
     return decorator
 
 
-def execution_time(
-    stdout: Literal['console', 'tuple'] = 'console'
-) -> Callable[[Callable[..., RT]], Callable[..., RT]]:
+def execution_time(stdout: Literal['console', 'tuple'] = 'console') -> Callable[[Callable[..., RT]], Callable[..., RT]]:
     """
     :param stdout: 'console' or 'tuple'
     """

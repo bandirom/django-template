@@ -4,7 +4,7 @@ django~=4.1
 psycopg2-binary~=2.9
 redis~=4.4
 djangorestframework~=3.14
-drf-yasg~=1.21
+drf-spectacular~=0.25
 celery~=5.2
 
 ### Optional dependencies ###
@@ -32,7 +32,7 @@ pillow~=9.2
 django-rosetta~=0.9
 
 # Monitoring System
-sentry-sdk~=1.11
+sentry-sdk~=1.15
 
 # MicroService Requests
 django-microservice-request~=0.5

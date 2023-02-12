@@ -2,13 +2,9 @@
 requires = ["setuptools>=64.0.0"]
 build-backend = "setuptools.build_meta"
 
-[tool.black]
-line-length = 110
-exclude = "migrations"
-skip-string-normalization = true
-
 [tool.pytest.ini_options]
 norecursedirs = [".git ", "node_modules", "venv"]
+addopts = "--tb=short --nomigrations -s"
 python_files = "*test*.py"
 python_classes = "*Test*"
 DJANGO_SETTINGS_MODULE = "src.settings_prod"
@@ -67,12 +63,17 @@ django_settings_module = "src.settings_prod"
 ignore_missing_model_attributes = true
 
 [tool.doc8]
-max_line_length = 110
+max_line_length = 120
+
+[tool.black]
+line-length = 120
+extend-exclude = "migrations"
+skip-string-normalization = true
 
 [tool.isort]
 multi_line_output = 3
-skip = "migrations"
-line_length = 110
+skip = ["migrations", "venv"]
+line_length = 120
 include_trailing_comma = true
 profile = "black"
 known_third_party = "celery"

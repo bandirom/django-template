@@ -11,9 +11,7 @@ class UtilsTestCase(TestCase):
         str2 = ' You are looking great   '
         self.assertEqual(utils.parse_str_with_space(str2), 'You are looking great')
         str3 = ' This    double  life you    lead is   eating you   up from  within    '
-        self.assertEqual(
-            utils.parse_str_with_space(str3), 'This double life you lead is eating you up from within'
-        )
+        self.assertEqual(utils.parse_str_with_space(str3), 'This double life you lead is eating you up from within')
 
     def test_find_dict_in_list(self):
         list_1 = [

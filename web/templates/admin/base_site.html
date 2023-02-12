@@ -5,8 +5,8 @@
 
 {% block branding %}
 <h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header }}</a>&emsp;
-    <a target="_blank" style="color:black" href="{% url 'schema-swagger-ui' %}">
-        <img width="25" src="{% static 'drf-yasg/swagger-ui-dist/favicon-32x32.png' %}">&nbsp;<b>Swagger</b>
+    <a target="_blank" style="color:black" href="{% url 'swagger-ui' %}">
+        <img width="25" src="//unpkg.com/swagger-ui-dist@3.44.0/favicon-32x32.png">&nbsp;<b>Swagger</b>
     </a>
 </h1>
 {% endblock %}
