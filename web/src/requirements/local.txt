@@ -14,13 +14,13 @@ factory-boy~=3.2
 pipdeptree~=2.2
 
 # Debug Toolbar
-django-debug-toolbar~=3.7
+django-debug-toolbar~=4.0
 django-debug-toolbar-request-history~=0.1
 
 # Linters
-black~=23.1
+black~=23.3
 flake8~=6.0
-isort~=5.10
+isort~=5.12
 
 pytest~=7.2
 pytest-django~=4.5
