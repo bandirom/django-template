@@ -53,6 +53,7 @@ class UtilsTestCase(TestCase):
     def test_supported_languages(self):
         factory = RequestFactory()
         request = factory.get('/')
+        request.META['HTTP_ACCEPT_LANGUAGE'] = 'en'
         self.assertEqual(utils.get_supported_user_language(request), 'en')
         request.META['HTTP_ACCEPT_LANGUAGE'] = 'uk'
         self.assertEqual(utils.get_supported_user_language(request), 'uk')
