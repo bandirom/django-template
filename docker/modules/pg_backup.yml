@@ -3,9 +3,9 @@ services:
     image: prodrigestivill/postgres-backup-local
     restart: always
     volumes:
-      - ./backup:/backups
+      - ../../backup:/backups
     env_file:
-      - docker/prod/env/.db.env
+      - ../prod/env/.db.env
     environment:
       - POSTGRES_EXTRA_OPTS=-Z9 --schema=public --blobs
       - SCHEDULE=@daily  # @every 0h30m00s  # @daily
@@ -15,3 +15,7 @@ services:
       - HEALTHCHECK_PORT=81
     networks:
       - separated_network
+
+networks:
+  separated_network:
+    driver: bridge
