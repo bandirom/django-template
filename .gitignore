@@ -23,3 +23,4 @@ backup
 build
 *.mo
 coverage.xml
+.runner_system_id
