@@ -1,10 +1,12 @@
-FROM python:3.11-alpine3.15
+FROM python:3.12-alpine
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     TZ=Europe/Kiev \
     LANG=C.UTF-8 \
-    APP_HOME=/usr/src/web
+    APP_HOME=/usr/src/web \
+    DJANGO_SETTINGS_MODULE=src.settings_dev
+
 
 WORKDIR $APP_HOME
 

@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-
+from drf_spectacular.utils import extend_schema
 from django.conf import settings
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.generics import GenericAPIView
@@ -19,11 +19,11 @@ class TemplateAPIView(APIView):
     path('some-path/', TemplateAPIView.as_view(template_name='template.html'))
     """
 
-    swagger_schema = None
     permission_classes = (AllowAny,)
     renderer_classes = (JSONRenderer, TemplateHTMLRenderer)
     template_name: str = ''
 
+    @extend_schema(exclude=True)
     def get(self, request: 'Request', *args, **kwargs):
         return Response()
 

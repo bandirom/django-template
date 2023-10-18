@@ -1,4 +1,4 @@
-FROM python:3.11-alpine3.15 as builder
+FROM python:3.12-alpine as builder
 ARG WHEELS_PATH=/etc/wheels
 
 RUN apk add --update --no-cache --virtual .build-deps \
@@ -12,13 +12,14 @@ COPY ./web/src/requirements  ./src/requirements
 RUN pip wheel --wheel-dir=$WHEELS_PATH .[production]
 
 
-FROM python:3.11-alpine3.15
+FROM python:3.12-alpine
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     TZ=Europe/Kiev \
     LANG=C.UTF-8 \
-    APP_HOME=/web
+    APP_HOME=/web \
+    DJANGO_SETTINGS_MODULE=src.settings_prod
 
 ARG GID=1000
 ARG UID=1000
