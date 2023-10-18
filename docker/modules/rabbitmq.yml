@@ -3,8 +3,6 @@
 # CELERY_BROKER_URL=pyamqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq/${RABBITMQ_DEFAULT_VHOST}
 # CELERY_RESULT_BACKEND=rpc://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq/${RABBITMQ_DEFAULT_VHOST}
 
-
-
 services:
   rabbitmq:
     image: rabbitmq:3-management
