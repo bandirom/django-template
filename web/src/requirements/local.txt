@@ -2,26 +2,27 @@
 django-silk~=5.0
 
 # Test coverage
-coverage~=7.1
+coverage~=7.2
 
 # Freeze time in tests
 freezegun~=1.2
 
 # Data factory
-factory-boy~=3.2
+factory-boy~=3.3
 
 # Utility for displaying the installed python packages in a form of a dependency tree
-pipdeptree~=2.2
+pipdeptree~=2.13
 
 # Debug Toolbar
-django-debug-toolbar~=4.0
+django-debug-toolbar~=4.2
 django-debug-toolbar-request-history~=0.1
 
 # Linters
-black~=23.3
-flake8~=6.0
+black~=23.10
+flake8~=6.1
 isort~=5.12
 
-pytest~=7.2
+pytest~=7.4
 pytest-django~=4.5
-pytest-cov~=4.0
+pytest-cov~=4.1
+pytest-freezegun~=0.4

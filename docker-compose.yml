@@ -16,7 +16,7 @@ services:
     env_file:
       - docker/dev/env/.env
       - docker/dev/env/.db.env
-      - docker/dev/env/.mailhog.env
+      - docker/dev/env/.email.env
       - docker/prod/env/.data.env
     depends_on: [db, redis]
     restart: unless-stopped
@@ -73,7 +73,7 @@ services:
     env_file:
       - docker/dev/env/.env
       - docker/dev/env/.db.env
-      - docker/dev/env/.mailhog.env
+      - docker/dev/env/.email.env
       - docker/prod/env/.data.env
     depends_on: [redis]
     restart: unless-stopped

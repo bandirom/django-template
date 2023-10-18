@@ -1,4 +1,7 @@
 # Message Broker RabbitMQ for Celery queues
+# In celery:
+# CELERY_BROKER_URL=pyamqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq/${RABBITMQ_DEFAULT_VHOST}
+# CELERY_RESULT_BACKEND=rpc://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq/${RABBITMQ_DEFAULT_VHOST}
 
 services:
   rabbitmq:
@@ -8,8 +11,10 @@ services:
       - "15672:15672"
     volumes:
       - rabbitmq:/var/lib/rabbitmq
-    env_file:
-      - ./rabbitmq/.env
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: password
+      RABBITMQ_DEFAULT_VHOST: host
     networks:
       - queue_network
     restart: always
