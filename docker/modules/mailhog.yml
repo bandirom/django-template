@@ -7,8 +7,3 @@ services:
       - "1025:1025" # smtp server
       - "8025:8025" # web ui. http://localhost:8025/
     restart: unless-stopped
-    volumes:
-      - mailbox_data:/maildir
-
-volumes:
-  mailbox_data:
