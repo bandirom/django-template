@@ -9,7 +9,7 @@ on:
 
 
 env:
-  REPOSITORY: "bandirom/django-template"
+  DOCKER_REPOSITORY: "bandirom/django-template"
 
 
 jobs:
@@ -31,7 +31,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REPOSITORY }}
+          images: ${{ env.DOCKER_REPOSITORY }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Build and push
