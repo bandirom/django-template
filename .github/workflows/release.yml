@@ -62,7 +62,5 @@ jobs:
       - name: deploy
         run: |
           echo "Tags: ${{ steps.meta.outputs.tags }}"
-#          export DOCKER_IMAGE="${{ steps.meta.outputs.tags }}"
-#          echo $DOCKER_IMAGE
           docker pull "${{ steps.meta.outputs.tags }}"
           docker images
