@@ -61,6 +61,6 @@ jobs:
           images: ${{ env.DOCKER_REPOSITORY }}
       - name: deploy
         run: |
-          echo "Tags: ${{ steps.meta.outputs.tags }}"
+#          echo "Tags: ${{ steps.meta.outputs.tags }}"
           docker pull "${{ steps.meta.outputs.tags }}"
           docker images
