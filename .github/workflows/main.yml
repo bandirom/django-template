@@ -12,10 +12,26 @@ jobs:
 #  tests:
 #    uses: ./.github/workflows/tests.yml
   push:
-    uses: ./.github/workflows/push.yml
+    runs-on: ubuntu-latest
 #    needs: [tests]
-    with:
-      repository: "bandirom/django-template"
-    secrets:
-      docker_hub_username: ${{ secrets.DOCKER_HUB_USERNAME }}
-      docker_hub_password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - name: Set environment docker tag
+        run: echo "DOCKER_TAG=${GITHUB_SHA::6}" >> $GITHUB_ENV
+      - name: Set environment docker image
+        run: echo "DOCKER_IMAGE=${{ env.DOCKER_IMAGE_REPO }}:${{ env.DOCKER_TAG }}" >> $GITHUB_ENV
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          context: .
+          tags: ${{ env.DOCKER_IMAGE }},latest
+          file: docker/prod/web/Dockerfile
