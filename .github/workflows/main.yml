@@ -13,7 +13,7 @@ jobs:
 #    uses: ./.github/workflows/tests.yml
   push:
     uses: ./.github/workflows/push.yml
-    needs: [tests]
+#    needs: [tests]
     with:
       repository: "bandirom/django-template"
     secrets:
