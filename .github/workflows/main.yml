@@ -15,7 +15,7 @@ jobs:
     uses: ./.github/workflows/push.yml
     needs: [tests]
     with:
-      repository: ${{ env.DOCKER_IMAGE_REPO }}
+      repository: "bandirom/django-template"
     secrets:
       docker_hub_username: ${{ secrets.DOCKER_HUB_USERNAME }}
       docker_hub_password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}

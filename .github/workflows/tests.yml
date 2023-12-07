@@ -8,7 +8,7 @@ on:
   workflow_call:
   push:
     branches-ignore:
-      - master
+      - push_workflow
     tags-ignore:
       - v*
 
