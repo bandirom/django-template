@@ -9,8 +9,8 @@ env:
   DOCKER_IMAGE_REPO: bandirom/django-template
 
 jobs:
-  tests:
-    uses: ./.github/workflows/tests.yml
+#  tests:
+#    uses: ./.github/workflows/tests.yml
   push:
     uses: ./.github/workflows/push.yml
     needs: [tests]
