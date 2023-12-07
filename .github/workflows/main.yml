@@ -28,6 +28,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - run: echo "${{ env.DOCKER_IMAGE }}"
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
