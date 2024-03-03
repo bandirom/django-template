@@ -8,7 +8,7 @@ from django.template import loader
 from django.utils.html import strip_tags
 from django.utils.translation import activate
 
-from src.celery import app
+from src import celery_app as app
 
 
 class SendingEmailTaskArgs(app.Task):
@@ -49,8 +49,6 @@ def send_information_email(
         cc=kwargs.get('cc'),
         reply_to=kwargs.get('reply_to'),
     )
-    if file_path := kwargs.get('file_path'):
-        file_path = path.join(settings.BASE_DIR, file_path)
-        email_message.attach_file(file_path, kwargs.get('mimetype'))
+    email_message.attach_alternative(html_email, 'text/html')
     email_message.send()
     return True

@@ -18,11 +18,11 @@ django-debug-toolbar~=4.2
 django-debug-toolbar-request-history~=0.1
 
 # Linters
-black~=23.10
-flake8~=6.1
-isort~=5.12
+black~=24.2
+flake8~=7.0
+isort~=5.13
 
-pytest~=7.4
-pytest-django~=4.5
+pytest~=8.0
+pytest-django~=4.8
 pytest-cov~=4.1
 pytest-freezegun~=0.4

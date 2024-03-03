@@ -1,8 +1,7 @@
 import os
 from pathlib import Path
 
-from .additional_settings.celery_settings import *
-from .additional_settings.smtp_settings import *
+from .additional_settings import *
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
