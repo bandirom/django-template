@@ -1,8 +1,6 @@
-from os import path
 from smtplib import SMTPRecipientsRefused
 from typing import Any, Optional
 
-from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template import loader
 from django.utils.html import strip_tags
