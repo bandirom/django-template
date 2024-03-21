@@ -25,5 +25,6 @@ class User(AbstractUser):
     def __str__(self) -> str:
         return self.email
 
+    @property
     def full_name(self) -> str:
         return super().get_full_name()
