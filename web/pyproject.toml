@@ -1,3 +1,13 @@
+[tool.poetry]
+name = "Django Template"
+version = "0.1.0"
+description = ""
+authors = ["Nazarii <bandirom@ukr.net>"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
 [build-system]
 requires = ["setuptools>=64.0.0"]
 build-backend = "setuptools.build_meta"
