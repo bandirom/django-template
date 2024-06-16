@@ -72,14 +72,15 @@ docker-compose -f docker/modules/mailpit.yml up -d
 ```
 
 <b>Don't forget to set SMTP mail backend in settings</b>
- 
+
 ```dotenv
 # docker/dev/env/.email.env
-EMAIL_HOST=mailpit_hostname
+EMAIL_HOST=<mailpit_hostname>
 ```
-Where `mailpit_hostname` is
-* `docker.host.internal` for Window and macOS
-* `gateway-host` for Linux OS
+
+**Where `<mailpit_hostname>`:**
+* `host.docker.internal` for Window and macOS
+* `172.17.0.1` for Linux OS
 
 ---
 
