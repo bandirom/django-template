@@ -9,12 +9,12 @@ env:
   DOCKER_IMAGE_REPO: bandirom/django-template
 
 jobs:
-#  tests:
-#    uses: ./.github/workflows/tests.yml
-#    secrets: inherit
+  tests:
+    uses: ./.github/workflows/tests.yml
+    secrets: inherit
   push:
     runs-on: ubuntu-latest
-#    needs: [tests]
+    needs: [tests]
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
