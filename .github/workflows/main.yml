@@ -11,6 +11,7 @@ env:
 jobs:
   tests:
     uses: ./.github/workflows/tests.yml
+    secrets: inherit
   push:
     runs-on: ubuntu-latest
     needs: [tests]
@@ -24,10 +25,22 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKER_IMAGE_REPO }}
+          tags: |
+            type=sha,format=short,prefix=
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           push: ${{ github.event_name != 'pull_request' }}
           context: .
-          tags: ${{ env.DOCKER_IMAGE }},latest
+          tags: |
+            ${{ steps.meta.outputs.tags }}
+            ${{ env.DOCKER_IMAGE_REPO }}:latest
+          labels: ${{ steps.meta.outputs.labels }}
           file: docker/prod/web/Dockerfile
+          cache-from: type=registry,ref=${{ env.DOCKER_IMAGE_REPO }}:latest
+          cache-to: type=inline
