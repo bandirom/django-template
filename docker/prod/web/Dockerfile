@@ -38,7 +38,8 @@ WORKDIR $APP_HOME
 COPY --from=builder $WHEELS_PATH $WHEELS_PATH
 COPY ./web/setup.cfg ./web/pyproject.toml ./
 COPY ./web/src/requirements  ./src/requirements
-RUN pip install --no-build-isolation --no-index --find-links=$WHEELS_PATH --editable .[production] && \
+RUN pip install --upgrade pip setuptools &&  \
+    pip install --no-build-isolation --no-index --find-links=$WHEELS_PATH --editable .[production] && \
     rm -rf $WHEELS_PATH
 
 COPY --chown=$USER:$USER ./docker/prod/web/entrypoint.sh /
