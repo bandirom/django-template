@@ -1,57 +1,50 @@
-FROM python:3.12-alpine as builder
-ARG WHEELS_PATH=/etc/wheels
+ARG PYTHON_VERSION=3.13
+ARG WORK_DIR=/app
+
+FROM python:${PYTHON_VERSION}-alpine AS builder
+ARG WORK_DIR
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    POETRY_NO_INTERACTION=1
+
+WORKDIR ${WORK_DIR}
 
 RUN apk add --update --no-cache --virtual .build-deps \
     build-base postgresql-dev gcc python3-dev musl-dev openssl libffi-dev openssl-dev \
-    # install Pillow dependencies
-    jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev
+    jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev && \
+    pip install --upgrade poetry setuptools
 
-COPY ./web/setup.cfg ./web/pyproject.toml ./
-COPY ./web/src/requirements  ./src/requirements
+COPY ["./web/pyproject.toml", "./web/poetry.lock", "./"]
 
-RUN pip wheel --wheel-dir=$WHEELS_PATH .[production]
+RUN poetry install --with prod
 
-
-FROM python:3.12-alpine
+FROM python:${PYTHON_VERSION}-alpine
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     TZ=Europe/Kiev \
     LANG=C.UTF-8 \
-    APP_HOME=/web \
-    DJANGO_SETTINGS_MODULE=src.settings_prod
+    DJANGO_SETTINGS_MODULE=src.settings
 
 ARG GID=1000
 ARG UID=1000
 ARG USER=ubuntu
-ARG WHEELS_PATH=/etc/wheels
+ARG PYTHON_VERSION
+ARG WORK_DIR
 
 RUN apk add --update --no-cache --virtual .build-deps postgresql-dev curl nginx && \
     addgroup -g $GID -S $USER && \
-    adduser -S $USER -G $USER --uid "$UID" && \
-    mkdir -p /gunicorn_socket /redis_socket && \
-    chmod -R 777 /gunicorn_socket /redis_socket && \
-    chown -R $USER:$USER /gunicorn_socket
+    adduser -S $USER -G $USER --uid "$UID"
+# && \
+ #    mkdir -p /gunicorn_socket /redis_socket && \
+ #    chmod -R 777 /gunicorn_socket /redis_socket && \
+ #    chown -R $USER:$USER /gunicorn_socket
 
-WORKDIR $APP_HOME
+WORKDIR ${WORK_DIR}
 
-COPY --from=builder $WHEELS_PATH $WHEELS_PATH
-COPY ./web/setup.cfg ./web/pyproject.toml ./
-COPY ./web/src/requirements  ./src/requirements
-RUN pip install --upgrade pip setuptools &&  \
-    pip install --no-build-isolation --no-index --find-links=$WHEELS_PATH --editable .[production] && \
-    rm -rf $WHEELS_PATH
-
-COPY --chown=$USER:$USER ./docker/prod/web/entrypoint.sh /
-COPY ./docker/prod/nginx/conf.d /etc/nginx/conf.d
-COPY ./docker/prod/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY ./web $APP_HOME
-
-RUN chmod +x /*.sh && \
-    mkdir -p media && \
-    python manage.py collectstatic --no-input && \
-    chown -R $USER:$USER $APP_HOME media && \
-    chown -R $USER:$USER /etc/nginx /var/lib/nginx/ /var/log /run/nginx/
+COPY --from=builder /app/dist /wheels
+RUN pip install --no-index --find-links=/wheels *.whl
 
 ENTRYPOINT ["/entrypoint.sh"]
 
