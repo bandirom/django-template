@@ -43,5 +43,3 @@ admin.site.site_title = title
 admin.site.site_header = title
 admin.site.site_url = '/'
 admin.site.index_title = title
-
-admin.site.unregister(Group)
