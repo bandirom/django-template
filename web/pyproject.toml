@@ -1,16 +1,62 @@
 [tool.poetry]
 name = "Django Template"
-version = "0.1.0"
-description = ""
+version = "2.0.0"
+description = "Django template with REST API, JWT authentication, Celery, Redis, and PostgreSQL"
+license = "MIT"
 authors = ["Nazarii <bandirom@ukr.net>"]
+package-mode = false
+
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Framework :: Django",
+    "Topic :: Internet",
+    "Topic :: Internet :: WWW/HTTP",
+]
+
+[tool.poetry.urls]
+homepage = "https://github.com/bandirom/django-template"
+repository = "https://github.com/bandirom/django-template"
+
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.13"
+django = "~=5.2.5"
+psycopg = {extras = ["binary"], version = "~=3.2"}
+redis = "~=6.4"
+djangorestframework = "~=3.16"
+drf-spectacular = "~=0.28"
+celery = "~=5.5"
+django-filter = "~=25.1"
+django-cors-headers = "~=4.7"
+djangorestframework-simplejwt = "~=5.5"
+pillow = "~=11.3"
+django-rosetta = "~=0.10"
+sentry-sdk = "~=2.35"
 
+[tool.poetry.group.dev.dependencies]
+django-silk = "~=5.4"
+factory-boy = "~=3.3"
+black = "~=25.1"
+ruff = "~=0.12"
+pytest = "~=8.4"
+pytest-django = "~=4.11"
+pytest-cov = "~=6.2"
+pytest-freezegun = "~=0.4"
+
+
+[tool.poetry.group.prod]
+optional = true
+[tool.poetry.group.prod.dependencies]
+gunicorn = "~=23.0"
+uvicorn = {extras = ["standard"], version = "~=0.35"}
 
 [build-system]
-requires = ["setuptools>=64.0.0"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 norecursedirs = [".git ", "node_modules", "venv"]
@@ -30,6 +76,9 @@ omit = [
 ]
 
 [tool.coverage.report]
+show_missing = true
+skip_covered = true
+sort = "-Cover"
 exclude_lines = [
   "^\\s*@(abc.)?abstractmethod",
   "^\\s*@(typing.)?overload",
@@ -48,7 +97,7 @@ exclude_lines = [
 output = "coverage.xml"
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.13"
 cache_dir = ".cache/mypy"
 exclude = [
   "tests"
@@ -88,3 +137,47 @@ include_trailing_comma = true
 profile = "black"
 known_third_party = "celery"
 known_local_folder = ["src", "main"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+extend-exclude = [
+  "migrations",
+  ".venv",
+  "venv",
+  "node_modules",
+]
+fix = true
+unsafe-fixes = false
+
+[tool.ruff.lint]
+select = [
+  "E", # pycodestyle errors
+  "W", # pycodestyle warnings
+  "F", # pyflakes
+  "I", # isort
+  "D",  # pydocstyle
+  "DJ", # Django rules
+  "B", # flake8-bugbear
+  "C4", # flake8-comprehensions
+  "UP", # pyupgrade
+  "N",  # pep8-naming
+]
+ignore = [
+  "D",
+]
+
+[tool.ruff.format]
+quote-style = "preserve"
+indent-style = "space"
+line-ending = "lf"
+skip-magic-trailing-comma = false
+docstring-code-format = true
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401", "D104"]
+"src/additional_settings/__init__.py" = ["F403"]
+"settings.py" = ["E501", "F403"]
+"manage.py" = ["D"]
+"migrations/*" = ["ALL"]
+"tests/*" = ["D", "S101", "S104", "S106"]

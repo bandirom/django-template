@@ -4,8 +4,14 @@
 .coverage
 .vscode
 .idea
+.DS_Store
+.env
 htmlcov
 venv
 __pycache__
 backup
 node_modules
+celerybeat-schedule
+LICENSE
+docker-compose.yml
+prod.yml

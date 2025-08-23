@@ -8,4 +8,4 @@ python manage.py migrate
 
 nginx -g 'daemon on;'
 
-exec "$@"
+gunicorn -c src/gunicorn.conf.py src.asgi:application
