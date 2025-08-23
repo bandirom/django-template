@@ -1,5 +1,6 @@
 ARG PYTHON_VERSION=3.13
 ARG WHEELS_PATH=/wheels
+
 FROM python:${PYTHON_VERSION}-alpine AS base
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -11,31 +12,34 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     WORK_DIR=/app \
     DJANGO_SETTINGS_MODULE=src.settings
 
-RUN apk add --update --no-cache --virtual .build-deps \
-    build-base postgresql-dev gcc python3-dev musl-dev openssl libffi-dev openssl-dev \
-    jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev && \
-    pip install --upgrade pip
+# Minimal runtime libraries required for Django & Pillow
+RUN apk add --update --no-cache \
+    libpq jpeg zlib openjpeg lcms2 tiff harfbuzz fribidi curl nginx
 
-
+# ================================= BUILDER =================================
 FROM base AS builder
+WORKDIR ${WORK_DIR}
 ARG WHEELS_PATH
 
-WORKDIR ${WORK_DIR}
+# Build dependencies for compiling wheels
+RUN apk add --update --no-cache --virtual .build-deps \
+    build-base postgresql-dev gcc python3-dev musl-dev \
+    openssl-dev libffi-dev jpeg-dev zlib-dev lcms2-dev \
+    openjpeg-dev tiff-dev
 
-ENV POETRY_VIRTUALENVS_IN_PROJECT=true
-
-RUN pip install --upgrade poetry setuptools && \
+VOLUME ${WHEELS_PATH}
+# Install Poetry and export plugin
+RUN pip install --upgrade pip poetry setuptools && \
     poetry self add poetry-plugin-export
 
-COPY ["./web/pyproject.toml", "./web/poetry.lock", "./"]
+COPY ./web/pyproject.toml ./web/poetry.lock ./
 
+# Export requirements and build wheel files
 RUN poetry export -f requirements.txt --without-hashes --without dev --with prod -o requirements.txt && \
     pip wheel --wheel-dir=${WHEELS_PATH} -r requirements.txt
 
-# ================= RUNTIME =================
+# ================================= RUNTIME =================================
 FROM base AS runtime
-
-ARG PYTHON_VERSION
 ARG WHEELS_PATH
 
 ARG GID=1000
@@ -43,20 +47,23 @@ ARG UID=1000
 ARG NGINX_GID=101
 ARG USER=django
 
-RUN apk add --update --no-cache --virtual .build-deps postgresql-dev curl nginx && \
-    addgroup -g $GID -S $USER && \
+RUN addgroup -g $GID -S $USER && \
     adduser -S $USER -G $USER --uid "$UID"
 
 WORKDIR ${WORK_DIR}
+
 COPY --chown=$USER:$USER ./docker/prod/web/entrypoint.sh /
 COPY ./docker/prod/nginx/ /etc/nginx/
 
+# Copy wheels and requirements from builder
 COPY --from=builder ${WHEELS_PATH} ${WHEELS_PATH}
-RUN pip install --no-build-isolation --no-cache-dir --no-index --find-links=${WHEELS_PATH} ${WHEELS_PATH}/* && \
-    rm -rf ${WHEELS_PATH}
+COPY --from=builder ${WORK_DIR}/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir --no-index --find-links=${WHEELS_PATH} -r requirements.txt && \
+    rm -rf ${WHEELS_PATH} /root/.cache/pip
 
 COPY ./web .
 
+# Set permissions and prepare Gunicorn socket
 RUN chown -R $USER:$USER /etc/nginx /var/lib/nginx/ /var/log /run/nginx/ && \
     chmod +x /entrypoint.sh && \
     mkdir -p /gunicorn_socket && \
