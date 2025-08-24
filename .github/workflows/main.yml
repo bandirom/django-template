@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  DOCKER_IMAGE_REPO: bandirom/django-template
+  DOCKER_REPOSITORY: bandirom/django-template
 
 jobs:
   tests:
@@ -29,7 +29,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.DOCKER_IMAGE_REPO }}
+          images: ${{ env.DOCKER_REPOSITORY }}
           tags: |
             type=sha,format=short,prefix=
       - name: Build and push
@@ -39,8 +39,8 @@ jobs:
           context: .
           tags: |
             ${{ steps.meta.outputs.tags }}
-            ${{ env.DOCKER_IMAGE_REPO }}:latest
+            ${{ env.DOCKER_REPOSITORY }}:latest
           labels: ${{ steps.meta.outputs.labels }}
           file: docker/prod/web/Dockerfile
-          cache-from: type=registry,ref=${{ env.DOCKER_IMAGE_REPO }}:latest
+          cache-from: type=registry,ref=${{ env.DOCKER_REPOSITORY }}:latest
           cache-to: type=inline
