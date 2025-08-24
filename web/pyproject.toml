@@ -181,3 +181,4 @@ docstring-code-format = true
 "manage.py" = ["D"]
 "migrations/*" = ["ALL"]
 "tests/*" = ["D", "S101", "S104", "S106"]
+"gunicorn.conf.py" = ["N999"]

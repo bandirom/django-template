@@ -60,7 +60,7 @@ COPY ./docker/prod/nginx/ /etc/nginx/
 COPY --from=builder ${WHEELS_PATH} ${WHEELS_PATH}
 COPY --from=builder ${WORK_DIR}/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir --no-index --find-links=${WHEELS_PATH} -r requirements.txt && \
-    rm -rf ${WHEELS_PATH} /root/.cache/pip
+    rm -rf ${WHEELS_PATH} /root/.cache/pip requirements.txt
 
 COPY ./web .
 
