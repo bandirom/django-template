@@ -11,8 +11,11 @@ if TYPE_CHECKING:
 
 
 class TemplateAPIView(APIView):
-    """Help to build CMS System using DRF, JWT and Cookies
-    path('some-path/', TemplateAPIView.as_view(template_name='template.html'))
+    """Help to build CMS System using DRF, JWT and Cookies.
+
+    Example:
+        path('some-path/', TemplateAPIView.as_view(template_name='template.html'))
+
     """
 
     permission_classes = (AllowAny,)
@@ -20,5 +23,5 @@ class TemplateAPIView(APIView):
     template_name: str = ''
 
     @extend_schema(exclude=True)
-    def get(self, request: 'Request', *args, **kwargs):
+    def get(self, request: "Request", *args, **kwargs):
         return Response()

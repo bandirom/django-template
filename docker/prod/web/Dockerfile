@@ -28,6 +28,7 @@ RUN apk add --update --no-cache --virtual .build-deps \
     openjpeg-dev tiff-dev
 
 VOLUME ${WHEELS_PATH}
+
 # Install Poetry and export plugin
 RUN pip install --upgrade pip poetry setuptools && \
     poetry self add poetry-plugin-export
@@ -66,8 +67,9 @@ COPY ./web .
 # Set permissions and prepare Gunicorn socket
 RUN chown -R $USER:$USER /etc/nginx /var/lib/nginx/ /var/log /run/nginx/ && \
     chmod +x /entrypoint.sh && \
-    mkdir -p /gunicorn_socket && \
+    mkdir -p /gunicorn_socket /var/run/celery && \
     chown $USER:$NGINX_GID /gunicorn_socket && \
+    chown -R $USER:$USER /var/run/celery && \
     chmod 770 /gunicorn_socket && \
     python manage.py collectstatic --no-input
 
