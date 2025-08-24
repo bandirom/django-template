@@ -28,6 +28,7 @@ def cached_result(
     :param version: Cache version identifier (default: 1).
     :return: A decorator that caches the result of the wrapped function.
     """
+
     def decorator(function: Callable[..., RT]) -> Callable[..., RT]:
         @wraps(function)
         def wrapper(*args: Any, **kwargs: Any) -> RT:
@@ -55,6 +56,7 @@ def except_shell(
     :param default_value: Value to return if an exception is caught (default: None).
     :return: A decorated function that handles specified exceptions.
     """
+
     def decorator(func: Callable[..., RT]) -> Callable[..., RT]:
         @wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> RT:

@@ -1,86 +1,45 @@
-x-variables: &variables
-  ENV_STAGE: local
-
 services:
   web:
+    extends:
+      file: docker/modules/docker-compose.common.yml
+      service: web
     build:
       context: .
       dockerfile: docker/dev/web/Dockerfile
     volumes:
-      - ./web/:/usr/src/web/:cached
-      - postgres_socket:/postgres_socket
+      - ./web/:/app/:cached
     ports:
       - "8000:8000"
-    environment:
-      <<: *variables
     env_file:
       - docker/dev/env/.env
       - docker/dev/env/.db.env
       - docker/dev/env/.email.env
       - docker/prod/env/.data.env
-    depends_on: [db, redis]
-    restart: unless-stopped
-    networks:
-      - microservice_network
-      - separated_network
-    extra_hosts:
-      - "gateway-host:172.17.0.1"  # Linux OS get access from docker container to localhost
-      # host.docker.internal - For docker in Windows and macOS. No other action is required.
-      # If You need to connect to Postgresql in localhost, just use host.docker.internal instead of localhost
-    healthcheck:
-      test: curl --fail -s http://localhost:8000$$HEALTH_CHECK_URL || exit 1
-      interval: 1m30s
-      timeout: 3s
-      retries: 3
   db:
-    image: postgres:15.1-alpine
-    restart: unless-stopped
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-      - postgres_socket:/var/run/postgresql/
+    extends:
+      file: docker/modules/docker-compose.common.yml
+      service: db
     env_file:
       - docker/dev/env/.db.env
-    networks:
-      - separated_network
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER" ]
-      interval: 50s
-      timeout: 5s
-      retries: 5
   redis:
-    image: redis:7.0.8-alpine
-    restart: unless-stopped
-    volumes:
-      - redis_data:/data
-    networks:
-      - separated_network
-    healthcheck:
-      test: [ "CMD", "redis-cli","ping" ]
-      interval: 1m20s
-      timeout: 5s
-      retries: 3
+    extends:
+      file: docker/modules/docker-compose.common.yml
+      service: redis
+
   celery:
+    extends:
+      file: docker/modules/docker-compose.common.yml
+      service: celery
     build:
       context: .
       dockerfile: docker/dev/web/Dockerfile
-    entrypoint: ""
-    command: celery -A src worker --beat -l info
     volumes:
-      - ./web/:/usr/src/web/:cached
-      - postgres_socket:/postgres_socket
-    environment:
-      <<: *variables
+      - ./web/:/app/:cached
     env_file:
       - docker/dev/env/.env
       - docker/dev/env/.db.env
       - docker/dev/env/.email.env
       - docker/prod/env/.data.env
-    depends_on: [redis]
-    restart: unless-stopped
-    networks:
-      - separated_network
-    extra_hosts:
-      - "gateway-host:172.17.0.1"
 
 volumes:
   postgres_data:
@@ -88,8 +47,5 @@ volumes:
   redis_data:
 
 networks:
-  microservice_network:
-    driver: bridge
-    name: local_microservice_network
   separated_network:
     driver: bridge

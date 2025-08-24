@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from .additional_settings import *
+from kombu import Exchange, Queue
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -10,6 +10,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-b2sh!qk&=%azim-=s&=d1
 DEBUG = int(os.environ.get('DEBUG', 0))
 
 ALLOWED_HOSTS: list = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',')
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000']
 
 if DEBUG:
     ALLOWED_HOSTS: list = ['*']
@@ -45,7 +46,6 @@ INSTALLED_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    'defender',
     'rest_framework',
     'drf_spectacular',
     'corsheaders',
@@ -58,6 +58,9 @@ LOCAL_APPS = [
 
 INSTALLED_APPS += THIRD_PARTY_APPS + LOCAL_APPS
 
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'main.middleware.HealthCheckMiddleware',
@@ -68,7 +71,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'defender.middleware.FailedLoginMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 ]
 
@@ -78,7 +80,6 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
-
 
 ROOT_URLCONF = 'src.urls'
 
@@ -138,6 +139,15 @@ CACHES = {
     }
 }
 
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = os.environ.get('TZ', 'UTC')
@@ -163,68 +173,12 @@ CSRF_COOKIE_NAME = 'csrftoken'
 
 ROSETTA_SHOW_AT_ADMIN_PANEL = DEBUG
 
-DEFENDER_REDIS_URL = REDIS_URL + '/1'
-DEFENDER_USE_CELERY = False
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'root': {'level': 'INFO', 'handlers': ['default']},
-    'formatters': {
-        'simple': {'format': '%(levelname)s %(message)s'},
-        'verbose': {'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'},
-        'django.server': {
-            '()': 'django.utils.log.ServerFormatter',
-            'format': '[{server_time}] {message}',
-            'style': '{',
-        },
-    },
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse',
-        },
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-        'null': {
-            'class': 'logging.NullHandler',
-        },
-        'default': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
-        },
-        'django.server': {
-            'level': 'INFO',
-            'class': 'logging.StreamHandler',
-            'formatter': 'django.server',
-        },
-    },
-    'loggers': {
-        'django': {'level': 'INFO', 'propagate': True},
-        'django.request': {
-            'handlers': ['django.server'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-        'django.server': {
-            'handlers': ['django.server'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-    },
-}
-
 SPECTACULAR_SETTINGS = {
     'TITLE': PROJECT_TITLE,
     'DESCRIPTION': 'API description',
     'VERSION': '1.0.0',
     'SCHEMA_PATH_PREFIX': '/api/v[0-9]',
+    'COMPONENT_SPLIT_REQUEST': True,
     'SERVE_PERMISSIONS': ['rest_framework.permissions.IsAdminUser'],
     'SERVE_AUTHENTICATION': ['rest_framework.authentication.SessionAuthentication'],
     'SWAGGER_UI_SETTINGS': {
@@ -254,7 +208,6 @@ SPECTACULAR_SETTINGS = {
     ],
 }
 
-
 if (SENTRY_DSN := os.environ.get('SENTRY_DSN')) and ENABLE_SENTRY:
     # More information on site https://sentry.io/
     from sentry_sdk import init
@@ -279,3 +232,94 @@ if (SENTRY_DSN := os.environ.get('SENTRY_DSN')) and ENABLE_SENTRY:
         # django.contrib.auth) you may enable sending PII data.
         send_default_pii=True,
     )
+
+
+
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 1025))
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
+EMAIL_TIMEOUT = int(os.environ.get('EMAIL_TIMEOUT', 15))
+EMAIL_USE_SSL = int(os.environ.get('EMAIL_USE_SSL', 0))
+EMAIL_USE_TLS = int(os.environ.get('EMAIL_USE_TLS', 0))
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+X_FRAME_OPTIONS = 'DENY'
+# Only via HTTPS
+if USE_HTTPS:
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_REFERRER_POLICY = 'strict-origin'
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    USE_X_FORWARDED_HOST = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+
+
+if DEBUG and ENABLE_SILK:
+    INSTALLED_APPS += ['silk']
+    MIDDLEWARE += ['silk.middleware.SilkyMiddleware']
+
+
+if DEBUG and ENABLE_DEBUG_TOOLBAR:
+    from socket import gethostbyname_ex, gethostname
+
+    INSTALLED_APPS += ['debug_toolbar']
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+    hostname, d, ips = gethostbyname_ex(gethostname())
+    INTERNAL_IPS += [ip[:-1] + '1' for ip in ips]
+    # More info: https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-panels
+    DEBUG_TOOLBAR_PANELS = [
+        'ddt_request_history.panels.request_history.RequestHistoryPanel',
+        'debug_toolbar.panels.timer.TimerPanel',
+        'debug_toolbar.panels.settings.SettingsPanel',
+        'debug_toolbar.panels.headers.HeadersPanel',
+        'debug_toolbar.panels.request.RequestPanel',
+        'debug_toolbar.panels.sql.SQLPanel',
+        'debug_toolbar.panels.profiling.ProfilingPanel',
+    ]
+    DEBUG_TOOLBAR_CONFIG = {'RESULTS_CACHE_SIZE': 100}
+
+
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', REDIS_URL)
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', REDIS_URL)
+
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_RESULT_PERSISTENT = True
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_BROKER_HEARTBEAT_CHECKRATE = 10
+CELERY_EVENT_QUEUE_EXPIRES = 10
+CELERY_EVENT_QUEUE_TTL = 10
+CELERY_TASK_SOFT_TIME_LIMIT = 60
+
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    'max_retries': 4,
+    'interval_start': 0,
+    'interval_step': 0.5,
+    'interval_max': 3,
+}
+
+celery_exchange = Exchange('celery', type='direct')  # topic, fanout
+
+CELERY_TASK_ROUTES = {
+    '*': {'queue': 'celery'},
+}
+
+CELERY_TASK_QUEUES = (
+    Queue(
+        name='celery',
+        exchange=celery_exchange,
+        queue_arguments={'x-queue-mode': 'lazy'},
+    ),
+)
+
+
+CELERY_BEAT_SCHEDULE: dict[str, dict] = {}

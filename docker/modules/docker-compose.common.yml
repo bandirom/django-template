@@ -1,0 +1,57 @@
+services:
+  web:
+    volumes:
+      - postgres_socket:/postgres_socket
+    depends_on:
+      - db
+      - redis
+    restart: always
+    healthcheck:
+      test: curl --fail -s http://localhost:8000$$HEALTH_CHECK_URL || exit 1
+      interval: 1m30s
+      timeout: 3s
+      retries: 3
+    extra_hosts:
+      - "gateway-host:172.17.0.1"  # Linux OS get access from docker container to localhost
+      # host.docker.internal - For docker in Windows and macOS. No other action is required.
+      # If You need to connect to Postgresql in localhost, just use host.docker.internal instead of localhost
+    networks:
+      - separated_network
+  celery:
+    extends:
+      service: web
+    entrypoint: ""
+    command: celery -A src worker --beat -l info --schedule=/var/run/celery/celerybeat-schedule
+    networks:
+      - separated_network
+  db:
+    image: postgres:15.1-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - postgres_socket:/var/run/postgresql/
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER" ]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+    networks:
+      - separated_network
+  redis:
+    image: redis:7-alpine
+    restart: always
+    healthcheck:
+      test: [ "CMD", "redis-cli","ping" ]
+      interval: 1m20s
+      timeout: 5s
+      retries: 3
+    networks:
+      - separated_network
+
+volumes:
+  postgres_data:
+  postgres_socket:
+
+networks:
+  separated_network:
+    driver: bridge

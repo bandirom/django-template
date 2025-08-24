@@ -16,6 +16,7 @@ class HealthCheckMiddleware(MiddlewareMixin):
             return HttpResponse('pong')
         return None
 
+
 class TimezoneMiddleware:
     def __init__(self, get_response) -> None:
         self.get_response = get_response
