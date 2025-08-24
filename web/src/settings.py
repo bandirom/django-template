@@ -234,7 +234,6 @@ if (SENTRY_DSN := os.environ.get('SENTRY_DSN')) and ENABLE_SENTRY:
     )
 
 
-
 EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
 EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 1025))
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
