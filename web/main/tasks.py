@@ -1,5 +1,5 @@
 from smtplib import SMTPRecipientsRefused
-from typing import Any, Optional
+from typing import Any
 
 from django.core.mail import EmailMultiAlternatives
 from django.template import loader
