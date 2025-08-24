@@ -1,12 +1,13 @@
 import logging
+from collections.abc import Callable, Iterable
 from functools import wraps
-from timeit import default_timer
-from typing import Any, Callable, Iterable, Literal, TypeVar, Union
+from typing import Any, TypeVar
 
-from celery.exceptions import TimeoutError
 from django.core.cache import cache
 from kombu.exceptions import OperationalError
 from requests.exceptions import RequestException
+
+from celery.exceptions import TimeoutError
 
 logger = logging.getLogger(__name__)
 
@@ -14,8 +15,20 @@ RT = TypeVar('RT')
 
 
 def cached_result(
-    cache_key: str, timeout: int = 300, version: Union[int, str] = 1
+    cache_key: str, timeout: int = 300, version: int | str = 1
 ) -> Callable[[Callable[..., RT]], Callable[..., RT]]:
+    """Cache the result of a function using Django's cache system.
+
+    This decorator stores the function's return value in the cache
+    for the specified duration. If the value is already cached, it
+    returns the cached result instead of calling the function again.
+
+    :param cache_key: The key to store and retrieve the cached result.
+    :param timeout: Cache timeout in seconds (default: 300).
+    :param version: Cache version identifier (default: 1).
+    :return: A decorator that caches the result of the wrapped function.
+    """
+
     def decorator(function: Callable[..., RT]) -> Callable[..., RT]:
         @wraps(function)
         def wrapper(*args: Any, **kwargs: Any) -> RT:
@@ -31,33 +44,19 @@ def cached_result(
     return decorator
 
 
-def execution_time(stdout: Literal['console', 'tuple'] = 'console') -> Callable[[Callable[..., RT]], Callable[..., RT]]:
-    """
-    :param stdout: 'console' or 'tuple'
-    """
-
-    def decorator(func: Callable[..., RT]) -> Callable[..., RT]:
-        @wraps(func)
-        def delta_time(*args: Any, **kwargs: Any) -> RT | tuple[RT, float]:
-            t1 = default_timer()
-            data = func(*args, **kwargs)
-            delta = default_timer() - t1
-            if stdout == "console":
-                logger.debug(f"Function: {func.__name__}, Run time: {delta}")
-                logger.debug(f"Returned data: {data}, Type: {type(data)}")
-                logger.debug("############ SEPARATING ############")
-            elif stdout == "tuple":
-                return data, delta
-            return data
-
-        return delta_time
-
-    return decorator
-
-
 def except_shell(
     errors: Iterable = (Exception,), default_value: Any = None
 ) -> Callable[[Callable[..., RT]], Callable[..., RT]]:
+    """Catch specific exceptions and return a default value.
+
+    This decorator wraps a function and catches the given exceptions.
+    If an exception occurs, it logs the error and returns the specified default value.
+
+    :param errors: Iterable of exception classes to catch (default: (Exception,)).
+    :param default_value: Value to return if an exception is caught (default: None).
+    :return: A decorated function that handles specified exceptions.
+    """
+
     def decorator(func: Callable[..., RT]) -> Callable[..., RT]:
         @wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> RT:

@@ -25,3 +25,5 @@ build
 coverage.xml
 .runner_system_id
 db.sqlite3
+.ruff_cache
+.pytest_cache

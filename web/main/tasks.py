@@ -1,5 +1,5 @@
 from smtplib import SMTPRecipientsRefused
-from typing import Any, Optional
+from typing import Any
 
 from django.core.mail import EmailMultiAlternatives
 from django.template import loader
@@ -24,12 +24,13 @@ def send_information_email(
     context: dict,
     to_email: list[str] | str,
     letter_language: str = 'en',
-    **kwargs: Optional[Any],
+    **kwargs: Any | None,
 ) -> bool:
-    """
+    """Send an informational email.
+
     :param subject: email subject
     :param template_name: template path to email template
-    :param context: data what will be passed into email
+    :param context: data what will be passed into email template
     :param to_email: receiver email(s)
     :param letter_language: translate letter to selected lang
     :param kwargs: from_email, bcc, cc, reply_to and file_path params

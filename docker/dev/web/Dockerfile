@@ -1,36 +1,33 @@
-FROM python:3.12-alpine
+FROM python:3.13-alpine
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    TZ=Europe/Kiev \
+    TZ=Europe/Kyiv \
     LANG=C.UTF-8 \
-    APP_HOME=/usr/src/web \
-    DJANGO_SETTINGS_MODULE=src.settings_dev
+    WORK_DIR=/app \
+    POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_CREATE=false \
+    DJANGO_SETTINGS_MODULE=src.settings
 
-
-WORKDIR $APP_HOME
+WORKDIR ${WORK_DIR}
 
 ARG GID=1000
 ARG UID=1000
 ARG USER=ubuntu
 
-RUN apk add --update --no-cache curl postgresql-dev gcc python3-dev musl-dev openssl libffi-dev openssl-dev build-base \
-    # install Pillow dependencies
-    jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev && \
-    pip install --upgrade pip setuptools && \
+RUN apk add --update --no-cache curl libpq jpeg zlib openjpeg lcms2 tiff harfbuzz fribidi && \
+    pip install --upgrade pip poetry setuptools && \
     addgroup -g $GID -S $USER && \
-    adduser -S $USER -G $USER --uid "$UID"
+    adduser -S $USER -G $USER --uid "$UID" && \
+    mkdir -p /var/run/celery && \
+    chown -R $USER:$USER /var/run/celery
 
-COPY ./web/setup.cfg ./web/pyproject.toml $APP_HOME/
-COPY ./web/src/requirements  ./src/requirements
-RUN pip install -e .[local]
+COPY ./web/pyproject.toml ./web/poetry.lock ./
 
-COPY --chown=$USER:$USER ./docker/dev/web/entrypoints /
-COPY --chown=$USER:$USER ./web $APP_HOME
+RUN poetry install --with dev --no-ansi
 
-RUN chmod +x /*.sh && \
-    mkdir -p $APP_HOME/static && \
-    chown -R $USER:$USER $APP_HOME
+COPY --chown=$USER:$USER ./docker/dev/web/entrypoint.sh /
+COPY --chown=$USER:$USER ./web ${WORK_DIR}
 
 ENTRYPOINT ["/entrypoint.sh"]
 

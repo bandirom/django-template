@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 from zoneinfo import ZoneInfo
 
 from django.conf import settings
@@ -11,9 +11,10 @@ if TYPE_CHECKING:
 
 
 class HealthCheckMiddleware(MiddlewareMixin):
-    def process_request(self, request: 'HttpRequest') -> Optional[HttpResponse]:
+    def process_request(self, request: 'HttpRequest') -> HttpResponse | None:
         if request.META['PATH_INFO'] == settings.HEALTH_CHECK_URL:
             return HttpResponse('pong')
+        return None
 
 
 class TimezoneMiddleware:

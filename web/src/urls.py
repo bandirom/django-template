@@ -9,7 +9,6 @@ admin_url = settings.ADMIN_URL
 urlpatterns = [
     path('', include('main.urls')),
     path('api/', include('api.urls')),
-    path(f'{admin_url}/defender/', include('defender.urls')),
     path(f'{admin_url}/', admin.site.urls),
     path('api/', include('rest_framework.urls')),
     path('rosetta/', include('rosetta.urls')),

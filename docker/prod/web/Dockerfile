@@ -1,61 +1,79 @@
-FROM python:3.12-alpine as builder
-ARG WHEELS_PATH=/etc/wheels
+ARG PYTHON_VERSION=3.13
+ARG WHEELS_PATH=/wheels
 
-RUN apk add --update --no-cache --virtual .build-deps \
-    build-base postgresql-dev gcc python3-dev musl-dev openssl libffi-dev openssl-dev \
-    # install Pillow dependencies
-    jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev
-
-COPY ./web/setup.cfg ./web/pyproject.toml ./
-COPY ./web/src/requirements  ./src/requirements
-
-RUN pip wheel --wheel-dir=$WHEELS_PATH .[production]
-
-
-FROM python:3.12-alpine
+FROM python:${PYTHON_VERSION}-alpine AS base
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    TZ=Europe/Kiev \
+    POETRY_NO_INTERACTION=1 \
+    PIP_NO_CACHE_DIR=1 \
+    TZ=Europe/Kyiv \
     LANG=C.UTF-8 \
-    APP_HOME=/web \
-    DJANGO_SETTINGS_MODULE=src.settings_prod
+    WORK_DIR=/app \
+    DJANGO_SETTINGS_MODULE=src.settings
+
+# Minimal runtime libraries required for Django & Pillow
+RUN apk add --update --no-cache \
+    libpq jpeg zlib openjpeg lcms2 tiff harfbuzz fribidi curl nginx
+
+# ================================= BUILDER =================================
+FROM base AS builder
+WORKDIR ${WORK_DIR}
+ARG WHEELS_PATH
+
+# Build dependencies for compiling wheels
+RUN apk add --update --no-cache --virtual .build-deps \
+    build-base postgresql-dev gcc python3-dev musl-dev \
+    openssl-dev libffi-dev jpeg-dev zlib-dev lcms2-dev \
+    openjpeg-dev tiff-dev
+
+VOLUME ${WHEELS_PATH}
+
+# Install Poetry and export plugin
+RUN pip install --upgrade pip poetry setuptools && \
+    poetry self add poetry-plugin-export
+
+COPY ./web/pyproject.toml ./web/poetry.lock ./
+
+# Export requirements and build wheel files
+RUN poetry export -f requirements.txt --without-hashes --without dev --with prod -o requirements.txt && \
+    pip wheel --wheel-dir=${WHEELS_PATH} -r requirements.txt
+
+# ================================= RUNTIME =================================
+FROM base AS runtime
+ARG WHEELS_PATH
 
 ARG GID=1000
 ARG UID=1000
-ARG USER=ubuntu
-ARG WHEELS_PATH=/etc/wheels
+ARG NGINX_GID=101
+ARG USER=django
 
-RUN apk add --update --no-cache --virtual .build-deps postgresql-dev curl nginx && \
-    addgroup -g $GID -S $USER && \
-    adduser -S $USER -G $USER --uid "$UID" && \
-    mkdir -p /gunicorn_socket /redis_socket && \
-    chmod -R 777 /gunicorn_socket /redis_socket && \
-    chown -R $USER:$USER /gunicorn_socket
+RUN addgroup -g $GID -S $USER && \
+    adduser -S $USER -G $USER --uid "$UID"
 
-WORKDIR $APP_HOME
-
-COPY --from=builder $WHEELS_PATH $WHEELS_PATH
-COPY ./web/setup.cfg ./web/pyproject.toml ./
-COPY ./web/src/requirements  ./src/requirements
-RUN pip install --upgrade pip setuptools &&  \
-    pip install --no-build-isolation --no-index --find-links=$WHEELS_PATH --editable .[production] && \
-    rm -rf $WHEELS_PATH
+WORKDIR ${WORK_DIR}
 
 COPY --chown=$USER:$USER ./docker/prod/web/entrypoint.sh /
-COPY ./docker/prod/nginx/conf.d /etc/nginx/conf.d
-COPY ./docker/prod/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY ./web $APP_HOME
+COPY ./docker/prod/nginx/ /etc/nginx/
 
-RUN chmod +x /*.sh && \
-    mkdir -p media && \
-    python manage.py collectstatic --no-input && \
-    chown -R $USER:$USER $APP_HOME media && \
-    chown -R $USER:$USER /etc/nginx /var/lib/nginx/ /var/log /run/nginx/
+# Copy wheels and requirements from builder
+COPY --from=builder ${WHEELS_PATH} ${WHEELS_PATH}
+COPY --from=builder ${WORK_DIR}/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir --no-index --find-links=${WHEELS_PATH} -r requirements.txt && \
+    rm -rf ${WHEELS_PATH} /root/.cache/pip requirements.txt
+
+COPY ./web .
+
+# Set permissions and prepare Gunicorn socket
+RUN chown -R $USER:$USER /etc/nginx /var/lib/nginx/ /var/log /run/nginx/ && \
+    chmod +x /entrypoint.sh && \
+    mkdir -p /gunicorn_socket /var/run/celery && \
+    chown $USER:$NGINX_GID /gunicorn_socket && \
+    chown -R $USER:$USER /var/run/celery && \
+    chmod 770 /gunicorn_socket && \
+    python manage.py collectstatic --no-input
 
 ENTRYPOINT ["/entrypoint.sh"]
-
-CMD ["gunicorn", "src.asgi:application"]
 
 EXPOSE 8000
 

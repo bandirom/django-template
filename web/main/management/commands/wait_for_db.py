@@ -6,10 +6,9 @@ from django.db.utils import OperationalError
 
 
 class Command(BaseCommand):
-    """Django command that waits for database to be available"""
+    """Django command that waits for database to be available."""
 
     def handle(self, *args, **options):
-        """Handle the command"""
         self.stdout.write('Waiting for database...')
         db_conn = None
         while not db_conn:

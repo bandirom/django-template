@@ -1,2 +1,0 @@
-
-Decorator 'except_shell'

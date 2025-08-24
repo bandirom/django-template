@@ -2,7 +2,6 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
@@ -43,5 +42,3 @@ admin.site.site_title = title
 admin.site.site_header = title
 admin.site.site_url = '/'
 admin.site.index_title = title
-
-admin.site.unregister(Group)

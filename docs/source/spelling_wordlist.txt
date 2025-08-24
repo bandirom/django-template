@@ -1,8 +1,0 @@
-certbot
-gitlab
-github
-nginx
-http
-https
-utils
-integrations

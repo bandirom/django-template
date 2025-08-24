@@ -1,92 +1,48 @@
-x-variables: &variables
-  ENV_STAGE: dev
-  USE_HTTPS: 0
-
 services:
   web:
+    extends:
+      file: docker/modules/docker-compose.common.yml
+      service: web
     image: bandirom/django-template:${DOCKER_TAG:-latest}
+    build:
+      context: .
+      dockerfile: docker/prod/web/Dockerfile
     volumes:
-      - redis_socket:/redis_socket
-      - postgres_socket:/postgres_socket
-      - media_files:/web/media/
-    environment:
-      <<: *variables
+      - media_files:/app/media/
     ports:
       - "8000:8000"
+    environment:
+      USE_HTTPS: 0
     env_file:
       - docker/prod/env/.env
       - docker/prod/env/.db.env
       - docker/prod/env/.gunicorn.env
       - docker/prod/env/.data.env
-    depends_on: [db, redis]
-    restart: always
-    networks:
-      - separated_network
-    healthcheck:
-      test: curl --fail -s http://localhost:8000$$HEALTH_CHECK_URL || exit 1
-      interval: 1m30s
-      timeout: 3s
-      retries: 3
-    extra_hosts:
-      - "gateway-host:172.17.0.1"
+      - path: .secrets.env
+        required: false
   celery:
+    extends:
+      file: docker/modules/docker-compose.common.yml
+      service: celery
     image: bandirom/django-template:${DOCKER_TAG:-latest}
-    entrypoint: ""
-    command: celery -A src worker --beat -l info
-    env_file:
-      - docker/prod/env/.env
-      - docker/prod/env/.db.env
-      - docker/prod/env/.data.env
-    environment:
-      <<: *variables
-    depends_on: [redis]
-    restart: always
-    volumes:
-      - redis_socket:/redis_socket
-      - postgres_socket:/postgres_socket
-    networks:
-      - separated_network
-    extra_hosts:
-      - "gateway-host:172.17.0.1"
   db:
-    image: postgres:15.1-alpine
+    extends:
+      file: docker/modules/docker-compose.common.yml
+      service: db
     command: ["-c", "config_file=/etc/postgresql/postgresql.conf"]
     volumes:
       - ./docker/prod/db/pg.conf:/etc/postgresql/postgresql.conf
-      - postgres_data:/var/lib/postgresql/data/
-      - postgres_socket:/var/run/postgresql/
     env_file:
       - docker/prod/env/.db.env
-    restart: always
-    networks:
-      - separated_network
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
   redis:
-    image: redis:7.0.8-alpine
-    restart: always
-    command: ["/var/lib/redis/redis.conf"]
-    volumes:
-      - ./docker/prod/redis/redis.conf:/var/lib/redis/redis.conf
-      - redis_data:/data
-      - redis_socket:/redis_socket
-    networks:
-      - separated_network
-    healthcheck:
-      test: [ "CMD", "redis-cli","ping" ]
-      interval: 1m20s
-      timeout: 5s
-      retries: 3
+    extends:
+      file: docker/modules/docker-compose.common.yml
+      service: redis
 
 volumes:
-  postgres_data:
-  redis_data:
-  redis_socket:
-  postgres_socket:
   media_files:
+  postgres_data:
+  postgres_socket:
 
 networks:
   separated_network:
