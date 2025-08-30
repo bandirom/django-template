@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "Django Template"
-version = "2.0.0"
+version = "2.0.2"
 description = "Django template with REST API, JWT authentication, Celery, Redis, and PostgreSQL"
 license = "MIT"
 authors = ["Nazarii <bandirom@ukr.net>"]

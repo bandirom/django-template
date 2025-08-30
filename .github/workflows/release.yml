@@ -11,11 +11,11 @@ on:
 env:
   DOCKER_REPOSITORY: "bandirom/django-template"
 
-
 jobs:
   tests:
     uses: ./.github/workflows/tests.yml
     secrets: inherit
+
   build:
     name: "Release"
     runs-on: ubuntu-latest
@@ -23,26 +23,34 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.DOCKER_REPOSITORY }}
+          tags: |
+            type=ref,event=tag
+            type=raw,value=latest
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: .
           file: docker/prod/web/Dockerfile
-          push: ${{ github.event_name != 'pull_request' }}
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
   deploy:
     name: "Deploy"
     runs-on: ubuntu-latest
@@ -50,17 +58,22 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.DOCKER_REPOSITORY }}
-      - name: deploy
+          tags: |
+            type=ref,event=tag
+
+      - name: Deploy
         run: |
-          echo "Tags: $DOCKER_REPOSITORY:$DOCKER_METADATA_OUTPUT_VERSION"
-          docker pull "$DOCKER_REPOSITORY:$DOCKER_METADATA_OUTPUT_VERSION"
+          echo "Deploying image: $DOCKER_REPOSITORY:${{ steps.meta.outputs.version }}"
+          docker pull "$DOCKER_REPOSITORY:${{ steps.meta.outputs.version }}"
