@@ -63,7 +63,6 @@ norecursedirs = [".git ", "node_modules", "venv"]
 addopts = "--tb=short --nomigrations -s"
 python_files = "*test*.py"
 python_classes = "*Test*"
-DJANGO_SETTINGS_MODULE = "src.settings_prod"
 log_cli = "true"
 log_cli_level = "info"
 
@@ -165,6 +164,20 @@ select = [
 ]
 ignore = [
   "D",
+]
+
+[tool.ruff.lint.isort]
+case-sensitive = false
+combine-as-imports = true
+force-wrap-aliases = true
+split-on-trailing-comma = true
+known_local_folder = ["src", "main"]
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder",
 ]
 
 [tool.ruff.format]
