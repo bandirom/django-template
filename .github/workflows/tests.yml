@@ -61,7 +61,7 @@ jobs:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
-      POSTGRES_HOST: postgres
+      POSTGRES_HOST: 172.17.0.1
       POSTGRES_PORT: 5432
     steps:
       - name: Set environment docker tag
