@@ -31,8 +31,12 @@ jobs:
       - name: Set environment docker tag
         id: set-docker-tag
         run: |
-          BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}")
-          echo "DOCKER_TAG=${BRANCH_NAME}" >> $GITHUB_ENV
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            SAFE_TAG="${GITHUB_REF_NAME}"
+          else
+            SAFE_TAG=$(echo "${GITHUB_REF_NAME}" | tr '[:upper:]' '[:lower:]' | tr '/' '-')
+          fi
+          echo "DOCKER_TAG=${SAFE_TAG}" >> $GITHUB_ENV
       - name: Set environment docker image
         run: echo "DOCKER_IMAGE=${{ env.DOCKER_IMAGE_REPO }}:${{ env.DOCKER_TAG }}" >> $GITHUB_ENV
       - name: Set up Docker Buildx
