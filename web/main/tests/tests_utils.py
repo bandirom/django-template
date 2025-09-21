@@ -1,5 +1,4 @@
-from django.test import TestCase, override_settings
-from django.test.client import RequestFactory
+from django.test import TestCase
 
 from main import utils
 
