@@ -15,7 +15,6 @@ jobs:
   tests:
     uses: ./.github/workflows/tests.yml
     secrets: inherit
-
   build:
     name: "Release"
     runs-on: ubuntu-latest

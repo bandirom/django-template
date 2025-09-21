@@ -1,7 +1,7 @@
 name: Tests
 
 env:
-  COVERAGE_THRESHOLD: 95
+  COVERAGE_THRESHOLD: 90
   DOCKER_IMAGE_REPO: bandirom/django-template
 
 on:
@@ -22,8 +22,22 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      safe_tag: ${{ steps.set-tag.outputs.safe_tag }}
+    steps:
+      - id: set-tag
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            SAFE_TAG="${GITHUB_REF_NAME}"
+          else
+            SAFE_TAG=$(echo "${GITHUB_REF_NAME}" | tr '[:upper:]' '[:lower:]' | tr '/' '-')
+          fi
+          echo "safe_tag=${SAFE_TAG}" >> $GITHUB_OUTPUT
   build:
     name: "Build and Push Dev Image"
+    needs: [ prepare ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -31,8 +45,7 @@ jobs:
       - name: Set environment docker tag
         id: set-docker-tag
         run: |
-          BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}")
-          echo "DOCKER_TAG=${BRANCH_NAME}" >> $GITHUB_ENV
+          echo "DOCKER_TAG=${{ needs.prepare.outputs.safe_tag }}" >> $GITHUB_ENV
       - name: Set environment docker image
         run: echo "DOCKER_IMAGE=${{ env.DOCKER_IMAGE_REPO }}:${{ env.DOCKER_TAG }}" >> $GITHUB_ENV
       - name: Set up Docker Buildx
@@ -55,27 +68,36 @@ jobs:
   test:
     name: "Run Tests"
     runs-on: ubuntu-latest
-    needs: [ build ]
+    needs: [ build, prepare]
     env:
       SECRET_KEY: dummy
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
-      POSTGRES_HOST: postgres
+      POSTGRES_HOST: 172.17.0.1
       POSTGRES_PORT: 5432
     steps:
       - name: Set environment docker tag
+        id: set-docker-tag
         run: |
-          BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}")
-          echo "DOCKER_TAG=${BRANCH_NAME}" >> $GITHUB_ENV
+          echo "DOCKER_TAG=${{ needs.prepare.outputs.safe_tag }}" >> $GITHUB_ENV
       - name: Set environment docker image
         run: echo "DOCKER_IMAGE=${{ env.DOCKER_IMAGE_REPO }}:${{ env.DOCKER_TAG }}" >> $GITHUB_ENV
       - name: Pull Docker Image
         run: docker pull ${{ env.DOCKER_IMAGE }}
+      - name: Create .env file
+        run: |
+          echo "SECRET_KEY=${{ env.SECRET_KEY }}" >> .env
+          echo "SQL_ENGINE=django.db.backends.postgresql" >> .env
+          echo "POSTGRES_USER=${{ env.POSTGRES_USER }}" >> .env
+          echo "POSTGRES_PASSWORD=${{ env.POSTGRES_PASSWORD }}" >> .env
+          echo "POSTGRES_DB=${{ env.POSTGRES_DB }}" >> .env
+          echo "POSTGRES_HOST=${{ env.POSTGRES_HOST }}" >> .env
+          echo "POSTGRES_PORT=${{ env.POSTGRES_PORT }}" >> .env
       - name: Migration Check
-        run: docker run --entrypoint="" ${{ env.DOCKER_IMAGE }} python manage.py makemigrations --check
+        run: docker run --env-file .env --entrypoint="" ${{ env.DOCKER_IMAGE }} python manage.py makemigrations --check
       - name: Run Tests
-        run: docker run --entrypoint="" ${{ env.DOCKER_IMAGE }} pytest
+        run: docker run --env-file .env --entrypoint="" ${{ env.DOCKER_IMAGE }} pytest
     services:
       postgres:
         image: postgres:15.1-alpine

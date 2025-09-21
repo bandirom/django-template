@@ -63,7 +63,6 @@ norecursedirs = [".git ", "node_modules", "venv"]
 addopts = "--tb=short --nomigrations -s"
 python_files = "*test*.py"
 python_classes = "*Test*"
-DJANGO_SETTINGS_MODULE = "src.settings_prod"
 log_cli = "true"
 log_cli_level = "info"
 
@@ -129,15 +128,6 @@ line-length = 120
 extend-exclude = "migrations"
 skip-string-normalization = true
 
-[tool.isort]
-multi_line_output = 3
-skip = ["migrations", "venv"]
-line_length = 120
-include_trailing_comma = true
-profile = "black"
-known_third_party = "celery"
-known_local_folder = ["src", "main"]
-
 [tool.ruff]
 line-length = 120
 target-version = "py313"
@@ -165,6 +155,19 @@ select = [
 ]
 ignore = [
   "D",
+]
+
+[tool.ruff.lint.isort]
+case-sensitive = false
+combine-as-imports = true
+force-wrap-aliases = true
+split-on-trailing-comma = true
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder",
 ]
 
 [tool.ruff.format]
