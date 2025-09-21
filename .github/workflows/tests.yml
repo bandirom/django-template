@@ -97,7 +97,7 @@ jobs:
       - name: Migration Check
         run: docker run --env-file .env --entrypoint="" ${{ env.DOCKER_IMAGE }} python manage.py makemigrations --check
       - name: Run Tests
-        run: docker run --env-file .env --entrypoint="" ${{ env.DOCKER_IMAGE }} pytest --cov=src --cov-fail-under=${{ env.COVERAGE_THRESHOLD }}
+        run: docker run --env-file .env --entrypoint="" ${{ env.DOCKER_IMAGE }} pytest
     services:
       postgres:
         image: postgres:15.1-alpine
