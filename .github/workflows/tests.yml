@@ -1,8 +1,9 @@
 name: Tests
 
 env:
-  COVERAGE_THRESHOLD: 95
+  COVERAGE_THRESHOLD: 90
   DOCKER_IMAGE_REPO: bandirom/django-template
+  SAFE_TAG: ${{ github.ref_type == 'tag' && github.ref_name || github.ref_name | toLowerCase() | replace('/', '-') }}
 
 on:
   workflow_call:
@@ -31,11 +32,6 @@ jobs:
       - name: Set environment docker tag
         id: set-docker-tag
         run: |
-          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
-            SAFE_TAG="${GITHUB_REF_NAME}"
-          else
-            SAFE_TAG=$(echo "${GITHUB_REF_NAME}" | tr '[:upper:]' '[:lower:]' | tr '/' '-')
-          fi
           echo "DOCKER_TAG=${SAFE_TAG}" >> $GITHUB_ENV
       - name: Set environment docker image
         run: echo "DOCKER_IMAGE=${{ env.DOCKER_IMAGE_REPO }}:${{ env.DOCKER_TAG }}" >> $GITHUB_ENV
@@ -69,9 +65,9 @@ jobs:
       POSTGRES_PORT: 5432
     steps:
       - name: Set environment docker tag
+        id: set-docker-tag
         run: |
-          BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}")
-          echo "DOCKER_TAG=${BRANCH_NAME}" >> $GITHUB_ENV
+          echo "DOCKER_TAG=${SAFE_TAG}" >> $GITHUB_ENV
       - name: Set environment docker image
         run: echo "DOCKER_IMAGE=${{ env.DOCKER_IMAGE_REPO }}:${{ env.DOCKER_TAG }}" >> $GITHUB_ENV
       - name: Pull Docker Image
@@ -88,7 +84,7 @@ jobs:
       - name: Migration Check
         run: docker run --env-file .env --entrypoint="" ${{ env.DOCKER_IMAGE }} python manage.py makemigrations --check
       - name: Run Tests
-        run: docker run --env-file .env --entrypoint="" ${{ env.DOCKER_IMAGE }} pytest
+        run: docker run --env-file .env --entrypoint="" ${{ env.DOCKER_IMAGE }} pytest --cov=src --cov-fail-under=${{ env.COVERAGE_THRESHOLD }}
     services:
       postgres:
         image: postgres:15.1-alpine
