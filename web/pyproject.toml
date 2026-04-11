@@ -1,15 +1,16 @@
 [tool.poetry]
 name = "Django Template"
-version = "2.0.2"
-description = "Django template with REST API, JWT authentication, Celery, Redis, and PostgreSQL"
+version = "2.0.3"
+description = "Django template with REST API, JWT authorization, Celery, Redis, and PostgreSQL"
 license = "MIT"
-authors = ["Nazarii <bandirom@ukr.net>"]
+authors = ["Nazarii <bandirom1@gmail.com>"]
 package-mode = false
 
 classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Framework :: Django",
@@ -24,35 +25,36 @@ repository = "https://github.com/bandirom/django-template"
 
 [tool.poetry.dependencies]
 python = "^3.13"
-django = "~=5.2.5"
-psycopg = {extras = ["binary"], version = "~=3.2"}
-redis = "~=6.4"
-djangorestframework = "~=3.16"
-drf-spectacular = "~=0.28"
-celery = "~=5.5"
-django-filter = "~=25.1"
-django-cors-headers = "~=4.7"
+django = "~=5.2"
+psycopg = {extras = ["binary"], version = "~=3.3"}
+redis = "~=7.4"
+djangorestframework = "~=3.17"
+drf-spectacular = "~=0.29"
+celery = "~=5.6"
+django-filter = "~=25.2"
+django-cors-headers = "~=4.9"
 djangorestframework-simplejwt = "~=5.5"
-pillow = "~=11.3"
+pillow = "~=12.2"
 django-rosetta = "~=0.10"
-sentry-sdk = "~=2.35"
+sentry-sdk = "~=2.57"
 
 [tool.poetry.group.dev.dependencies]
-django-silk = "~=5.4"
+django-silk = "~=5.5"
 factory-boy = "~=3.3"
-black = "~=25.1"
-ruff = "~=0.12"
-pytest = "~=8.4"
-pytest-django = "~=4.11"
-pytest-cov = "~=6.2"
+black = "~=26.3"
+ruff = "~=0.15"
+pytest = "~=9.0"
+pytest-django = "~=4.12"
+pytest-cov = "~=7.1"
 pytest-freezegun = "~=0.4"
+pytest-mock = "~=3.15"
 
 
 [tool.poetry.group.prod]
 optional = true
 [tool.poetry.group.prod.dependencies]
-gunicorn = "~=23.0"
-uvicorn = {extras = ["standard"], version = "~=0.35"}
+gunicorn = "~=25.3"
+uvicorn = {extras = ["standard"], version = "~=0.44"}
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
@@ -146,7 +148,7 @@ select = [
   "W", # pycodestyle warnings
   "F", # pyflakes
   "I", # isort
-  "D",  # pydocstyle
+  "D", # pydocstyle
   "DJ", # Django rules
   "B", # flake8-bugbear
   "C4", # flake8-comprehensions

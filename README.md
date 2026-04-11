@@ -1,8 +1,6 @@
 ![GitHub](https://img.shields.io/github/license/bandirom/DjangoTemplateWithDocker?style=plastic)
 ![Codecov](https://img.shields.io/codecov/c/gh/bandirom/DjangoTemplateWithDocker?style=plastic)
-[![Documentation Status](https://readthedocs.org/projects/djangotemplatewithdocker/badge/?version=latest)](https://djangotemplatewithdocker.readthedocs.io/en/latest/?badge=latest)
-[![Docker Image CI](https://github.com/bandirom/DjangoTemplateWithDocker/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/bandirom/DjangoTemplateWithDocker/actions/workflows/main.yml)
-
+[![Release CI/CD](https://github.com/bandirom/django-template/actions/workflows/release.yml/badge.svg)](https://github.com/bandirom/django-template/actions/workflows/release.yml)
 ---
 
 # Django project template in docker
@@ -118,4 +116,16 @@ or build image directly
 
 ```shell
 docker build -t django-project -f docker/prod/web/Dockerfile .
+```
+
+### Linter
+
+* Run `black` linter
+```shell
+black .
+```
+
+* Run `ruff` linter
+```shell
+ruff check . --fix
 ```

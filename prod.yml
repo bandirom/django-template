@@ -4,6 +4,7 @@ services:
       file: docker/modules/docker-compose.common.yml
       service: web
     image: bandirom/django-template:${DOCKER_TAG:-latest}
+    pull_policy: always
     build:
       context: .
       dockerfile: docker/prod/web/Dockerfile
