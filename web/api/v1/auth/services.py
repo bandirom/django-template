@@ -22,8 +22,11 @@ class LoginService:
     }
 
     def __init__(
-        self, request: "Request", settings: RestAuthSettings, user_query_service: UserQueryService | None = None
-    ) -> None:
+        self,
+        request: "Request",
+        settings: RestAuthSettings,
+        user_query_service: UserQueryService | None = None,
+    ):
         self._request = request
         self.user_query_service = user_query_service or UserQueryService()
         self._settings = settings
