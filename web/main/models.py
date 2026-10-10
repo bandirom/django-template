@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .managers import UserManager
 
-UserType = TypeVar('UserType', bound='User')
+UserT = TypeVar('UserT', bound='User')
 
 
 class User(AbstractUser):
