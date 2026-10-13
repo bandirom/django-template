@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+
 class LoginService:
     _error_messages = {
         'not_active': 'Your account is not active. Please contact Your administrator',
