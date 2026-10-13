@@ -1,12 +1,16 @@
+from typing import TYPE_CHECKING
+
 from django.conf import settings
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny
-from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 
 from . import serializers
 from .services import LoginService
+
+if TYPE_CHECKING:
+    from rest_framework.request import Request
 
 
 class LoginView(GenericAPIView):
@@ -14,7 +18,7 @@ class LoginView(GenericAPIView):
     response_serializer_class = serializers.LoginResponseSerializer
     permission_classes = (AllowAny,)
 
-    def post(self, request: Request) -> Response:
+    def post(self, request: "Request") -> "Response":
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
