@@ -6,13 +6,14 @@ from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.settings import api_settings as jwt_settings
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from api.v1.auth.types import AuthToken, RestAuthSettings, TokenResult
-from main.models import UserT
+from api.v1.auth.types import AuthToken, RestAuthSettings, TokenExpiration, TokenResult
 from main.query_services import UserQueryService
 
 if TYPE_CHECKING:
     from django.http import HttpResponse
     from rest_framework.request import Request
+
+    from main.models import UserT
 
 
 class LoginService:
@@ -24,17 +25,17 @@ class LoginService:
     def __init__(
         self,
         request: "Request",
-        settings: RestAuthSettings,
-        user_query_service: UserQueryService | None = None,
+        settings: "RestAuthSettings",
+        user_query_service: "UserQueryService | None" = None,
     ):
         self._request = request
         self.user_query_service = user_query_service or UserQueryService()
         self._settings = settings
 
-    def _authenticate(self, **kwargs: str) -> UserT | None:
+    def _authenticate(self, **kwargs: str) -> "UserT | None":
         return authenticate(self._request, **kwargs)
 
-    def validate_user_credentials(self, email: str, password: str) -> UserT:
+    def validate_user_credentials(self, email: str, password: str) -> "UserT":
         user = self._authenticate(email=email, password=password)
         if user is not None:
             return user
@@ -64,11 +65,11 @@ class LoginService:
         )
 
     @staticmethod
-    def get_token_expirations():
+    def get_token_expirations() -> TokenExpiration:
         now = timezone.now()
-        return (
-            now + jwt_settings.ACCESS_TOKEN_LIFETIME,
-            now + jwt_settings.REFRESH_TOKEN_LIFETIME,
+        return TokenExpiration(
+            access_token_expiration=now + jwt_settings.ACCESS_TOKEN_LIFETIME,
+            refresh_token_expiration=now + jwt_settings.REFRESH_TOKEN_LIFETIME,
         )
 
     def set_cookies(self, response: "HttpResponse", access_token: str, refresh_token: str):

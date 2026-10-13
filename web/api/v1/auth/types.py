@@ -6,9 +6,13 @@ class AuthToken(TypedDict):
     refresh_token: str
 
 
-class TokenResult(AuthToken):
+class TokenExpiration(TypedDict):
     access_token_expiration: str
     refresh_token_expiration: str
+
+
+class TokenResult(AuthToken, TokenExpiration):
+    pass
 
 
 class RestAuthSettings(TypedDict):
