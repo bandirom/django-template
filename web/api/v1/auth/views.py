@@ -24,5 +24,5 @@ class LoginView(GenericAPIView):
         response_serializer = self.response_serializer_class(tokens)
 
         response = Response(response_serializer.data, status=HTTP_200_OK)
-        service.set_cookies(response, tokens['access_token'], tokens['refresh_token'])
+        service.set_cookies(response, tokens)
         return response

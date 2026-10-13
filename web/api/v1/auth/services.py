@@ -1,12 +1,11 @@
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
 from django.contrib.auth import authenticate
-from django.utils import timezone
 from rest_framework.exceptions import ValidationError
-from rest_framework_simplejwt.settings import api_settings as jwt_settings
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from api.v1.auth.types import AuthToken, RestAuthSettings, TokenExpiration, TokenResult
+from api.v1.auth.types import RestAuthSettings, TokenResult
 from main.query_services import UserQueryService
 
 if TYPE_CHECKING:
@@ -46,42 +45,26 @@ class LoginService:
 
         raise ValidationError({'email': self.error_messages['wrong_credentials']})
 
-    def get_tokens(self, user: "UserT") -> AuthToken:
-        tokens = self.__user_tokens(user)
-        access_token_expiration, refresh_token_expiration = self.get_token_expirations()
-        return TokenResult(
-            access_token=tokens['access_token'],
-            refresh_token=tokens['refresh_token'],
-            access_token_expiration=access_token_expiration,
-            refresh_token_expiration=refresh_token_expiration,
-        )
-
-    @staticmethod
-    def __user_tokens(user: "UserT") -> AuthToken:
+    def get_tokens(self, user: "UserT") -> TokenResult:
         refresh = RefreshToken.for_user(user)
-        return AuthToken(
-            access_token=str(refresh.access_token),
+        access = refresh.access_token
+        return TokenResult(
+            access_token=str(access),
             refresh_token=str(refresh),
+            access_token_expiration=datetime.fromtimestamp(access['exp'], tz=UTC),
+            refresh_token_expiration=datetime.fromtimestamp(refresh['exp'], tz=UTC),
         )
 
-    @staticmethod
-    def get_token_expirations() -> TokenExpiration:
-        now = timezone.now()
-        return TokenExpiration(
-            access_token_expiration=now + jwt_settings.ACCESS_TOKEN_LIFETIME,
-            refresh_token_expiration=now + jwt_settings.REFRESH_TOKEN_LIFETIME,
-        )
-
-    def set_cookies(self, response: "HttpResponse", access_token: str, refresh_token: str):
-        self._set_jwt_access_cookie(response, access_token)
-        self._set_jwt_refresh_cookie(response, refresh_token)
+    def set_cookies(self, response: "HttpResponse", tokens: TokenResult) -> None:
+        self._set_jwt_access_cookie(response, tokens['access_token'], tokens['access_token_expiration'])
+        self._set_jwt_refresh_cookie(response, tokens['refresh_token'], tokens['refresh_token_expiration'])
 
     def __set_jwt_cookie(
         self,
         response: "HttpResponse",
         key: str,
         token_value: str,
-        token_expiration: str,
+        token_expiration: datetime,
     ) -> None:
         response.set_cookie(
             key=key,
@@ -93,12 +76,18 @@ class LoginService:
             domain=self._settings['JWT_COOKIE_DOMAIN'],
         )
 
-    def _set_jwt_access_cookie(self, response: "HttpResponse", access_token: str):
-        access_token_expiration = timezone.now() + jwt_settings.ACCESS_TOKEN_LIFETIME
-        self.__set_jwt_cookie(response, self._settings['JWT_AUTH_COOKIE'], access_token, access_token_expiration)
-
-    def _set_jwt_refresh_cookie(self, response: "HttpResponse", refresh_token: str):
-        refresh_token_expiration = timezone.now() + jwt_settings.REFRESH_TOKEN_LIFETIME
+    def _set_jwt_access_cookie(self, response: "HttpResponse", key: str, expiration: datetime) -> None:
         self.__set_jwt_cookie(
-            response, self._settings['JWT_AUTH_REFRESH_COOKIE'], refresh_token, refresh_token_expiration
+            response,
+            self._settings['JWT_AUTH_COOKIE'],
+            key,
+            expiration,
+        )
+
+    def _set_jwt_refresh_cookie(self, response: "HttpResponse", key: str, expiration: datetime) -> None:
+        self.__set_jwt_cookie(
+            response,
+            self._settings['JWT_AUTH_REFRESH_COOKIE'],
+            key,
+            expiration,
         )
