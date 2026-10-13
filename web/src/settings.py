@@ -214,8 +214,8 @@ REST_AUTH = {
     'JWT_AUTH_COOKIE': 'jwt-auth',
     'JWT_AUTH_HTTPONLY': True,
     'JWT_AUTH_SAMESITE': 'Lax',
-    'JWT_AUTH_SECURE': os.getenv('JWT_AUTH_SECURE', False),
-    'JWT_COOKIE_DOMAIN': os.getenv('JWT_COOKIE_DOMAIN', None),
+    'JWT_AUTH_SECURE': os.getenv('JWT_AUTH_SECURE', 0),
+    'JWT_COOKIE_DOMAIN': os.getenv('JWT_COOKIE_DOMAIN'),
 }
 
 SIMPLE_JWT = {

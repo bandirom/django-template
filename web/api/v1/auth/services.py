@@ -46,7 +46,7 @@ class LoginService:
 
         raise ValidationError({'email': self.error_messages['wrong_credentials']})
 
-    def get_tokens(self, user: UserT) -> AuthToken:
+    def get_tokens(self, user: "UserT") -> AuthToken:
         tokens = self.__user_tokens(user)
         access_token_expiration, refresh_token_expiration = self.get_token_expirations()
         return TokenResult(
@@ -57,7 +57,7 @@ class LoginService:
         )
 
     @staticmethod
-    def __user_tokens(user: UserT) -> AuthToken:
+    def __user_tokens(user: "UserT") -> AuthToken:
         refresh = RefreshToken.for_user(user)
         return AuthToken(
             access_token=str(refresh.access_token),
