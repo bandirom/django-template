@@ -1,8 +1,10 @@
+import logging
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
 from django.contrib.auth import authenticate
 from rest_framework.exceptions import ValidationError
+from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from api.v1.auth.types import RestAuthSettings, TokenResult
@@ -14,6 +16,7 @@ if TYPE_CHECKING:
 
     from main.models import UserT
 
+logger = logging.getLogger(__name__)
 
 class LoginService:
     _error_messages = {
@@ -91,3 +94,32 @@ class LoginService:
             key,
             expiration,
         )
+
+
+class LogoutService:
+    def __init__(
+        self,
+        request: "Request",
+        settings: "RestAuthSettings",
+    ):
+        self.request = request
+        self._access_cookie_name = settings['JWT_AUTH_COOKIE']
+        self._refresh_cookie_name = settings['JWT_AUTH_REFRESH_COOKIE']
+        self._domain = settings['JWT_COOKIE_DOMAIN']
+
+    def _delete_cookies(self, response: "HttpResponse"):
+        response.delete_cookie(self._access_cookie_name, domain=self._domain)
+        response.delete_cookie(self._refresh_cookie_name, domain=self._domain)
+
+    def _blacklist_refresh_token(self, refresh_token: str):
+        try:
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+        except TokenError as e:
+            logger.warning(f'Failed blacklist Token from {self.request.user}.\nException: {e}')
+
+    def logout(self, response: "HttpResponse"):
+        self._delete_cookies(response)
+        if refresh_token := self.request.COOKIES.get(self._refresh_cookie_name):
+            self._blacklist_refresh_token(refresh_token)
+        return response
