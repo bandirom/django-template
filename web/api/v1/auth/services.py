@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 class LoginService:
-    error_messages = {
+    _error_messages = {
         'not_active': 'Your account is not active. Please contact Your administrator',
         'wrong_credentials': 'Entered email or password is incorrect',
     }
@@ -41,9 +41,9 @@ class LoginService:
 
         user = self.user_query_service.get_by_email(email)
         if user is not None and not user.is_active:
-            raise ValidationError({'email': self.error_messages['not_active']})
+            raise ValidationError({'email': self._error_messages['not_active']})
 
-        raise ValidationError({'email': self.error_messages['wrong_credentials']})
+        raise ValidationError({'email': self._error_messages['wrong_credentials']})
 
     def get_tokens(self, user: "UserT") -> TokenResult:
         refresh = RefreshToken.for_user(user)
