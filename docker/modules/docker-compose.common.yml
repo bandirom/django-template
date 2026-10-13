@@ -14,7 +14,7 @@ services:
     extra_hosts:
       - "gateway-host:172.17.0.1"  # Linux OS get access from docker container to localhost
       # host.docker.internal - For docker in Windows and macOS. No other action is required.
-      # If You need to connect to Postgresql in localhost, just use host.docker.internal instead of localhost
+      # If You need to connect to PostgreSQL in localhost, just use host.docker.internal instead of localhost
     networks:
       - separated_network
   celery:
