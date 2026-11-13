@@ -60,8 +60,18 @@ class LoginService:
         )
 
     def set_cookies(self, response: "HttpResponse", tokens: TokenResult) -> None:
-        self._set_jwt_access_cookie(response, tokens['access_token'], tokens['access_token_expiration'])
-        self._set_jwt_refresh_cookie(response, tokens['refresh_token'], tokens['refresh_token_expiration'])
+        self.__set_jwt_cookie(
+            response,
+            self._settings['JWT_AUTH_COOKIE'],
+            tokens['access_token'],
+            tokens['access_token_expiration'],
+        )
+        self.__set_jwt_cookie(
+            response,
+            self._settings['JWT_AUTH_REFRESH_COOKIE'],
+            tokens['refresh_token'],
+            tokens['refresh_token_expiration'],
+        )
 
     def __set_jwt_cookie(
         self,
@@ -78,22 +88,6 @@ class LoginService:
             httponly=self._settings['JWT_AUTH_HTTPONLY'],
             samesite=self._settings['JWT_AUTH_SAMESITE'],
             domain=self._settings['JWT_COOKIE_DOMAIN'],
-        )
-
-    def _set_jwt_access_cookie(self, response: "HttpResponse", key: str, expiration: datetime) -> None:
-        self.__set_jwt_cookie(
-            response,
-            self._settings['JWT_AUTH_COOKIE'],
-            key,
-            expiration,
-        )
-
-    def _set_jwt_refresh_cookie(self, response: "HttpResponse", key: str, expiration: datetime) -> None:
-        self.__set_jwt_cookie(
-            response,
-            self._settings['JWT_AUTH_REFRESH_COOKIE'],
-            key,
-            expiration,
         )
 
 
